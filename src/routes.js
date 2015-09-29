@@ -2,7 +2,6 @@ import React from 'react';
 import {Route} from 'react-router';
 import {
     App,
-    Chat,
     Home,
     Widgets,
     About,
@@ -21,7 +20,6 @@ export default function() {
       <Route path="/about" component={About}/>
       <Route path="/login" component={Login}/>
       <Route component={RequireLogin}>
-        <Route path="/chat" component={Chat}/>
         <Route path="/loginSuccess" component={LoginSuccess}/>
       </Route>
       <Route path="/survey" component={Survey}/>

@@ -9,28 +9,12 @@ import createLocation from 'history/lib/createLocation';
 import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
 import universalRouter from './helpers/universalRouter';
-import io from 'socket.io-client';
 
 const history = createHistory();
 const client = new ApiClient();
 
 const dest = document.getElementById('content');
 const store = createStore(client, window.__data);
-
-function initSocket() {
-  const socket = io('', {path: '/api/ws', transports: ['polling']});
-  socket.on('news', (data) => {
-    console.log(data);
-    socket.emit('my other event', { my: 'data from client' });
-  });
-  socket.on('msg', (data) => {
-    console.log(data);
-  });
-
-  return socket;
-}
-
-window.socket = initSocket();
 
 const location = createLocation(document.location.pathname, document.location.search);
 

@@ -13,7 +13,6 @@ import universalRouter from './helpers/universalRouter';
 import Html from './helpers/Html';
 import PrettyError from 'pretty-error';
 import http from 'http';
-import SocketIo from 'socket.io';
 
 const pretty = new PrettyError();
 const app = new Express();
@@ -85,11 +84,6 @@ app.use((req, res) => {
 });
 
 if (config.port) {
-  if (config.isProduction) {
-    const io = new SocketIo(server);
-    io.path('/api/ws');
-  }
-
   server.listen(config.port, (err) => {
     if (err) {
       console.error(err);
