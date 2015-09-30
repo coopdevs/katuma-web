@@ -62,11 +62,6 @@ app.use((req, res) => {
   }
 });
 
-
-const bufferSize = 100;
-const messageBuffer = new Array(bufferSize);
-let messageIndex = 0;
-
 if (config.apiPort) {
   const runnable = app.listen(config.apiPort, (err) => {
     if (err) {
