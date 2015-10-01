@@ -36,45 +36,37 @@ app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
 
 // Proxy to API server
 app.use('/api/v1', (req, res) => {
-  //req.session.user = user;
   proxy.web(req, res);
 });
 
-proxy.on('proxyReq', function(proxyReq, req, res, options) {
-  debugger;
-  proxyReq.setHeader('X-katuma-user-id', req.session.user_id || '');
-});
+//proxy.on('proxyReq', function(proxyReq, req, res, options) {
+  //proxyReq.setHeader('X-katuma-user-id', req.session.user_id || '');
+//});
 
 //
 // Listen for the `proxyRes` event on `proxy`.
 //
-proxy.on('proxyRes', function (proxyRes, req, res) {
-  var chunks = [];
-  var request = req;
+//proxy.on('proxyRes', function (proxyRes, req, res) {
+  //var chunks = [];
+  //var request = req;
 
-  if (req.session.user_id) {
-    return;
-  }
-  // triggers on data receive
-  proxyRes.on('data', function receiveChunks(chunk) {
-      // add received chunk to chunks array
-      chunks.push(chunk);
-  });
+  //if (req.session.user_id) {
+    //return;
+  //}
+  //proxyRes.on('data', function receiveChunks(chunk) {
+      //chunks.push(chunk);
+  //});
 
-  function proxyResponseEnd(req) {
-      // make string from buffer
-    var buffer = Buffer.concat(chunks);
-    // output buffer
-    var lol = JSON.parse(buffer.toString());
-    console.log('lol', lol);
-    req.session.user_id = lol.user_id;
-  };
-//
-  // triggers on data end
-  proxyRes.on('end', function () {
-    proxyResponseEnd(req);
-  });
-});
+  //function proxyResponseEnd(req) {
+    //var buffer = Buffer.concat(chunks);
+    //var lol = JSON.parse(buffer.toString());
+    //console.log('lol', lol);
+    //req.session.user_id = lol.user_id;
+  //};
+  //proxyRes.on('end', function () {
+    //proxyResponseEnd(req);
+  //});
+//});
 
 // added the error handling to avoid https://github.com/nodejitsu/node-http-proxy/issues/527
 proxy.on('error', (error, req, res) => {

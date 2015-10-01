@@ -42,7 +42,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loggingIn: false,
-        user: action.result
+        user: action.result.user
       };
     case LOGIN_FAIL:
       return {
@@ -80,7 +80,7 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/loadAuth')
+    promise: (client) => client.get('/me')
   };
 }
 
@@ -88,7 +88,7 @@ export function login(email) {
   console.log('email', email);
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: (client) => client.post('/v1/login', {
+    promise: (client) => client.post('/login', {
       data: {
         email: 'foo@example.com',
         password: 'papapa22'
