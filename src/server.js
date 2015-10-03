@@ -6,7 +6,6 @@ import config from './config';
 import favicon from 'serve-favicon';
 import compression from 'compression';
 import httpProxy from 'http-proxy';
-import session from 'express-session';
 import path from 'path';
 import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
@@ -22,13 +21,6 @@ const proxy = httpProxy.createProxyServer({
   target: `http://localhost:${config.apiPort}/api/v1`
 });
 
-app.use(session({
-  secret: 'react and redux rule!!!!',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 60000 }
-}));
-
 app.use(compression());
 app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
 
@@ -38,35 +30,6 @@ app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
 app.use('/api/v1', (req, res) => {
   proxy.web(req, res);
 });
-
-//proxy.on('proxyReq', function(proxyReq, req, res, options) {
-  //proxyReq.setHeader('X-katuma-user-id', req.session.user_id || '');
-//});
-
-//
-// Listen for the `proxyRes` event on `proxy`.
-//
-//proxy.on('proxyRes', function (proxyRes, req, res) {
-  //var chunks = [];
-  //var request = req;
-
-  //if (req.session.user_id) {
-    //return;
-  //}
-  //proxyRes.on('data', function receiveChunks(chunk) {
-      //chunks.push(chunk);
-  //});
-
-  //function proxyResponseEnd(req) {
-    //var buffer = Buffer.concat(chunks);
-    //var lol = JSON.parse(buffer.toString());
-    //console.log('lol', lol);
-    //req.session.user_id = lol.user_id;
-  //};
-  //proxyRes.on('end', function () {
-    //proxyResponseEnd(req);
-  //});
-//});
 
 // added the error handling to avoid https://github.com/nodejitsu/node-http-proxy/issues/527
 proxy.on('error', (error, req, res) => {
