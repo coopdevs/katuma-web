@@ -14,7 +14,7 @@ const fetchDataForContainers = (containers, store, params, query) => {
   const promises = containers
     .filter((component) => getFetchData(component))         // only look at ones with a static fetchData()
     .map(getFetchData)                                      // pull out fetch data methods
-    .map(fetchData => fetchData(store, params, query || {}));  // call fetch data methods and save promises
+    .map((fetchData) => fetchData(store, params, query || {}));  // call fetch data methods and save promises
 
   return Promise.all(promises);
 };

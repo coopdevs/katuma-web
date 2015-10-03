@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import { CounterButton, GithubButton } from 'components';
+import { GithubButton } from 'components';
 
 export default class Home extends Component {
   render() {
@@ -46,9 +46,6 @@ export default class Home extends Component {
         </div>
 
         <div className="container">
-          <div className={styles.counterContainer}>
-            <CounterButton/>
-          </div>
 
           <p>This starter boilerplate app uses the following technologies:</p>
 
