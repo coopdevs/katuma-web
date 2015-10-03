@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 // import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import { InfoBar } from 'components';
 
 const title = 'React Redux Example';
 const description = 'All the modern best practices in one example.';
@@ -92,7 +91,6 @@ export default class App extends Component {
             <ul className="nav navbar-nav">
               <li><Link to="/widgets">Widgets</Link></li>
               <li><Link to="/survey">Survey</Link></li>
-              <li><Link to="/about">About Us</Link></li>
               {!user && <li><Link to="/login">Login</Link></li>}
               {user && <li className="logout-link"><a href="/logout" onClick={::this.handleLogout}>Logout</a></li>}
             </ul>
@@ -109,7 +107,6 @@ export default class App extends Component {
         <div className={styles.appContent}>
           {this.props.children}
         </div>
-        <InfoBar/>
 
         <div className="well text-center">
           Have questions? Ask for help <a

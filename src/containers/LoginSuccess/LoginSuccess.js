@@ -5,8 +5,8 @@ import {isLoaded as isAuthLoaded, load as loadAuth} from 'redux/modules/auth';
 import * as authActions from 'redux/modules/auth';
 
 @connect(
-    state => ({user: state.auth.user}),
-    dispatch => bindActionCreators(authActions, dispatch)
+  state => ({user: state.auth.user}),
+  dispatch => bindActionCreators(authActions, dispatch)
 )
 export default
 class LoginSuccess extends Component {

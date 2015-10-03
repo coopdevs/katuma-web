@@ -4,7 +4,6 @@ import {
     App,
     Home,
     Widgets,
-    About,
     Login,
     RequireLogin,
     LoginSuccess,
@@ -17,7 +16,6 @@ export default function() {
     <Route component={App}>
       <Route path="/" component={Home}/>
       <Route path="/widgets" component={Widgets}/>
-      <Route path="/about" component={About}/>
       <Route path="/login" component={Login}/>
       <Route component={RequireLogin}>
         <Route path="/loginSuccess" component={LoginSuccess}/>
