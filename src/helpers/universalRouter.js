@@ -20,7 +20,7 @@ const fetchDataForContainers = (containers, store, params, query) => {
 };
 
 export default function universalRouter(location, history, store, preload) {
-  const routes = createRoutes();
+  const routes = createRoutes(store);
   return new Promise((resolve, reject) => {
     match({routes, history, location}, (error, redirectLocation, renderProps) => {
       if (error) {
@@ -49,6 +49,7 @@ export default function universalRouter(location, history, store, preload) {
         });
       }
 
+      // preload = 'We are on server side rendering'
       if (preload) {
         fetchDataForContainers(
           renderProps.components,

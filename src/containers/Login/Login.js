@@ -3,7 +3,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 import * as authActions from 'redux/modules/auth';
-import {isLoaded as isAuthLoaded, load as loadAuth} from 'redux/modules/auth';
 
 @connect(
   state => ({user: state.auth.user}),
@@ -14,12 +13,6 @@ export default class Login extends Component {
     user: PropTypes.object,
     login: PropTypes.func,
     logout: PropTypes.func
-  }
-
-  static fetchData(store) {
-    if (!isAuthLoaded(store.getState())) {
-      return store.dispatch(loadAuth());
-    }
   }
 
   handleSubmit(event) {
@@ -33,16 +26,19 @@ export default class Login extends Component {
 
   render() {
     const {user, logout} = this.props;
-    const styles = require('./Login.scss');
     return (
-      <div className={styles.loginPage + ' container'}>
+      <div className="container">
         <DocumentMeta title="React Redux Example: Login"/>
         <h1>Login</h1>
         {!user &&
         <div>
           <form className="login-form" onSubmit={::this.handleSubmit}>
-            <input type="text" ref="email" placeholder="Enter your email"/>
-            <input type="password" ref="password" placeholder="Enter your password"/>
+            <div className="form-group">
+              <input className="form-control" type="email" ref="email" placeholder="Enter your email"/>
+            </div>
+            <div className="form-group">
+              <input className="form-control" type="password" ref="password" placeholder="Enter your password"/>
+            </div>
             <button className="btn btn-success" onClick={::this.handleSubmit}><i className="fa fa-sign-in"/>{' '}Log In
             </button>
           </form>

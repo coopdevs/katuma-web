@@ -8,8 +8,7 @@ import * as authActions from 'redux/modules/auth';
   state => ({user: state.auth.user}),
   dispatch => bindActionCreators(authActions, dispatch)
 )
-export default
-class LoginSuccess extends Component {
+export default class LoginSuccess extends Component {
   static propTypes = {
     user: PropTypes.object,
     logout: PropTypes.func
@@ -45,3 +44,4 @@ class LoginSuccess extends Component {
     );
   }
 }
+
