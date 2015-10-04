@@ -20,15 +20,25 @@ const app = new Express();
 const server = new http.Server(app);
 const proxy = httpProxy('http://localhost', {
   port: config.apiPort,
-  forwardPath: function(req, res) {
+  forwardPath: function (req, res) {
     var original_path = require('url').parse(req.url).path;
     return '/api/v1' + original_path;
   },
-  intercept: function(rsp, data, req, res, callback) {
-    data = JSON.parse(data.toString('utf8'));
-    req.session.user_id = data.user_id;
-    callback(null, JSON.stringify(data));
-  }
+  intercept: function (rsp, data, req, res, callback) {
+    if (req.method == 'POST' && req.path == '/login' && res.statusCode == '200') {
+      data = JSON.parse(data.toString('utf8'));
+      req.session.user_id = data.user_id;
+      data = JSON.stringify(data)
+    }
+    callback(null, data);
+  },
+  decorateRequest: function (req) {
+    if (req.session.user_id) {
+      req.headers['X-katuma-user-id'] = req.session.user_id;
+    }
+    return req;
+  },
+  preserveReqSession: true
 });
 
 app.use(compression());

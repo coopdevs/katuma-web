@@ -83,7 +83,7 @@
     "body-parser": "1.14.0",
     "compression": "1.5.2",
     "express": "4.13.3",
-    "express-http-proxy": "0.6.0",
+    "express-http-proxy": "enricostano/express-http-proxy#3164c57b0c",
     "express-session": "1.11.3",
     "file-loader": "0.8.4",
     "history": "1.11.0",
