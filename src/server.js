@@ -5,7 +5,8 @@ import createLocation from 'history/lib/createLocation';
 import config from './config';
 import favicon from 'serve-favicon';
 import compression from 'compression';
-import httpProxy from 'http-proxy';
+import httpProxy from 'express-http-proxy';
+import session from 'express-session';
 import path from 'path';
 import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
@@ -17,8 +18,27 @@ import http from 'http';
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
-const proxy = httpProxy.createProxyServer({
-  target: `http://localhost:${config.apiPort}/api/v1`
+const proxy = httpProxy('http://localhost', {
+  port: config.apiPort,
+  forwardPath: function (req, res) {
+    var original_path = require('url').parse(req.url).path;
+    return '/api/v1' + original_path;
+  },
+  intercept: function (rsp, data, req, res, callback) {
+    if (req.method == 'POST' && req.path == '/login' && res.statusCode == '200') {
+      data = JSON.parse(data.toString('utf8'));
+      req.session.user_id = data.user_id;
+      data = JSON.stringify(data)
+    }
+    callback(null, data);
+  },
+  decorateRequest: function (req) {
+    if (req.session.user_id) {
+      req.headers['X-katuma-user-id'] = req.session.user_id;
+    }
+    return req;
+  },
+  preserveReqSession: true
 });
 
 app.use(compression());
@@ -26,22 +46,12 @@ app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
 
 app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
 
+app.use(session({
+  secret: 'katuma-to-be-changed'
+}));
+
 // Proxy to API server
-app.use('/api/v1', (req, res) => {
-  proxy.web(req, res);
-});
-
-// added the error handling to avoid https://github.com/nodejitsu/node-http-proxy/issues/527
-proxy.on('error', (error, req, res) => {
-  let json;
-  console.log('proxy error', error);
-  if (!res.headersSent) {
-    res.writeHead(500, {'content-type': 'application/json'});
-  }
-
-  json = { error: 'proxy_error', reason: error.message };
-  res.end(JSON.stringify(json));
-});
+app.use('/api/v1', proxy);
 
 app.use((req, res) => {
   if (__DEVELOPMENT__) {
