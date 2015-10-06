@@ -1,7 +1,6 @@
 /* eslint no-debugger: 0 */
 
 import superagent from 'superagent';
-import config from '../config';
 
 /*
  * This silly underscore is here to avoid a mysterious "ReferenceError: ApiClient is not defined" error.
@@ -10,19 +9,17 @@ import config from '../config';
  * Remove it at your own risk.
  */
 class ApiClient_ {
-  constructor(req) {
+  constructor(req, config) {
     ['get', 'post', 'put', 'patch', 'del'].
       forEach((method) => {
         this[method] = (path, options) => {
           return new Promise((resolve, reject) => {
-            const request = superagent[method](this.formatUrl(path));
+            const request = superagent[method](this.formatUrl(path, config));
             if (options && options.params) {
               request.query(options.params);
             }
             if (__SERVER__) {
-              if (req.get('cookie')) {
-                request.set('cookie', req.get('cookie'));
-              }
+              request.set('X-katuma-user-id', req.session.user_id);
             }
             if (options && options.data) {
               request.send(options.data);
@@ -40,10 +37,10 @@ class ApiClient_ {
   }
 
   /* This was originally a standalone function outside of this class, but babel kept breaking, and this fixes it  */
-  formatUrl(path) {
+  formatUrl(path, config) {
     const adjustedPath = path[0] !== '/' ? '/' + path : path;
     if (__SERVER__) {
-      // Prepend host and port of the API server to the path.
+       // Prepend host and port of the API server to the path.
       return 'http://localhost:' + config.apiPort + '/api/v1' + adjustedPath;
     }
     // Prepend `/api` to relative URL, to proxy to API server.
