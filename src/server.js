@@ -70,7 +70,17 @@ app.use((req, res) => {
     webpackIsomorphicTools.refresh();
   }
   const client = new ApiClient(req, config);
-  const store = createStore(client);
+
+  let data;
+
+  if (req.session.user_id) {
+    data = {
+      auth: {
+        user: {id: req.session.id}
+      }
+    };
+  }
+  const store = createStore(client, data);
   const location = createLocation(req.path, req.query);
 
   function hydrateOnClient() {
