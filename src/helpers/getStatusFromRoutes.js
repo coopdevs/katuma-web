@@ -5,13 +5,5 @@
  * @returns {Number|undefined}
  */
 export default (matchedRoutes) => {
-  return matchedRoutes.reduce((prev, cur) => {
-    if (cur && cur.status) {
-      return cur.status;
-    }
-
-    if (prev && prev.status) {
-      return prev.status;
-    }
-  });
+  return matchedRoutes.reduce((prev, cur) => cur.status || prev, null);
 };
