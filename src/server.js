@@ -45,7 +45,6 @@ const proxy = httpProxy('http://localhost', {
     callback(null, data);
   },
   decorateRequest: function (req) {
-    console.log('decorated user ID', req.session.user_id);
     if (req.session.user_id) {
       req.headers['X-katuma-user-id'] = req.session.user_id;
     }
