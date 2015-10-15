@@ -15,7 +15,7 @@ import getRoutes from './routes';
 const client = new ApiClient();
 
 const dest = document.getElementById('content');
-const store = createStore(reduxReactRouter, null, createHistory, client, window.__data);
+const store = createStore(reduxReactRouter, getRoutes, createHistory, client, window.__data);
 
 const component = (
   <Provider store={store} key="provider">
