@@ -7,13 +7,19 @@ import {
     Login,
     Signup,
     SignupSuccess,
-    RequireLogin,
     LoginSuccess,
     Survey,
     NotFound,
   } from 'containers';
 
 export default (store) => {
+  const requireLogin = (nextState, replaceState) => {
+    const { auth: { user }} = store.getState();
+    if (!user) {
+      replaceState(null, '/login');
+    }
+  };
+
   return (
     <Route component={App}>
       <Route path="/" component={Home}/>
@@ -21,7 +27,7 @@ export default (store) => {
       <Route path="/signup" component={Signup}/>
       <Route path="/login" component={Login}/>
       <Route path="/signup-done" component={SignupSuccess}/>
-      <Route component={RequireLogin} onEnter={RequireLogin.onEnter(store)}>
+      <Route onEnter={requireLogin}>
         <Route path="/loginSuccess" component={LoginSuccess}/>
       </Route>
       <Route path="/survey" component={Survey}/>
