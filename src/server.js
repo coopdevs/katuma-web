@@ -12,7 +12,6 @@ import path from 'path';
 import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
 import Html from './helpers/Html';
-import getDataDependencies from './helpers/getDataDependencies';
 import PrettyError from 'pretty-error';
 import http from 'http';
 
@@ -109,6 +108,27 @@ app.use((req, res) => {
         if (routerState.location.search && !routerState.location.query) {
           routerState.location.query = qs.parse(routerState.location.search);
         }
+
+        store.getState().router.then(() => {
+          const component = (
+            <Provider store={store} key="provider">
+              <ReduxRouter/>
+            </Provider>
+          );
+
+          const status = getStatusFromRoutes(routerState.routes);
+
+          if (status) {
+            res.status(status);
+          }
+          res.send('<!doctype html>\n' +
+            ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store}/>)
+          );
+        }).catch((err) => {
+          console.error('DATA FETCHING ERROR:', pretty.render(err));
+          res.status(500);
+          hydrateOnClient();
+        });
 
         Promise.all(getDataDependencies(
           routerState.components,
