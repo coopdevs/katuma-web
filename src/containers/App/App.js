@@ -3,8 +3,8 @@ import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-// import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
+import { pushState } from 'redux-router';
 
 const title = 'React Redux Example';
 const description = 'All the modern best practices in one example.';
@@ -33,15 +33,23 @@ const meta = {
   }
 };
 
+const NavbarLink = ({to, children}) => (
+  <Link to={to} activeStyle={{
+    color: 'red'
+  }}>
+    {children}
+  </Link>
+);
+
 @connect(
     state => ({user: state.auth.user}),
-    dispatch => bindActionCreators({logout}, dispatch))
+    dispatch => bindActionCreators({logout, pushState}, dispatch))
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object,
     logout: PropTypes.func.isRequired,
-    history: PropTypes.object
+    pushState: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -51,22 +59,20 @@ export default class App extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
       // login
-      this.props.history.pushState(null, '/loginSuccess');
+      this.props.pushState(null, '/loginSuccess');
     } else if (this.props.user && !nextProps.user) {
       // logout
-      this.props.history.pushState(null, '/');
+      this.props.pushState(null, '/login');
     }
   }
 
-  static fetchData(store) {
+  static fetchData(getState, dispatch) {
     const promises = [];
-    // Groups load example
-    // if (!isInfoLoaded(store.getState())) {
-    //   promises.push(store.dispatch(loadInfo()));
-    // }
-    if (!isAuthLoaded(store.getState())) {
-      promises.push(store.dispatch(loadAuth()));
+
+    if (!isAuthLoaded(getState())) {
+      promises.push(dispatch(loadAuth()));
     }
+
     return Promise.all(promises);
   }
 
@@ -78,6 +84,7 @@ export default class App extends Component {
   render() {
     const {user} = this.props;
     const styles = require('./App.scss');
+
     return (
       <div className={styles.app}>
         <DocumentMeta {...meta}/>
@@ -89,15 +96,16 @@ export default class App extends Component {
             </Link>
 
             <ul className="nav navbar-nav">
-              <li><Link to="/widgets">Widgets</Link></li>
-              <li><Link to="/survey">Survey</Link></li>
-              <li><Link to="/loginSuccess">loginSuccess</Link></li>
-              {!user && <li><Link to="/login">Login</Link></li>}
-              {!user && <li><Link to="/signup">Signup</Link></li>}
+              {user && <li><NavbarLink to="/chat">Chat</NavbarLink></li>}
+
+              <li><NavbarLink to="/widgets">Widgets</NavbarLink></li>
+              <li><NavbarLink to="/survey">Survey</NavbarLink></li>
+              <li><NavbarLink to="/loginSuccess">loginSuccess</NavbarLink></li>
+              {!user && <li><NavbarLink to="/login">Login</NavbarLink></li>}
               {user && <li className="logout-link"><a href="/logout" onClick={::this.handleLogout}>Logout</a></li>}
             </ul>
             {user &&
-            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.full_name}</strong>.</p>}
+            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.name}</strong>.</p>}
             <ul className="nav navbar-nav navbar-right">
               <li>
                 <a href="https://github.com/erikras/react-redux-universal-hot-example"
