@@ -39,7 +39,7 @@ const proxy = httpProxy('http://localhost', {
   intercept: function (rsp, data, req, res, callback) {
     if (req.method == 'POST' && req.path == '/login' && res.statusCode == '200') {
       data = JSON.parse(data.toString('utf8'));
-      req.session.user_id = data.user_id;
+      req.session.user_id = data.id;
       data = JSON.stringify(data)
     }
     callback(null, data);
@@ -60,7 +60,9 @@ app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
 
 app.use(session({
   store: new redis_store({port: 6379}),
-  secret: 'katuma-to-be-changed'
+  secret: 'katuma-to-be-changed',
+  resave: true,
+  saveUninitialized: true
 }));
 
 app.use('/api/v1/logout', (req, res) => {
@@ -90,11 +92,8 @@ app.use((req, res) => {
     return;
   }
 
-  const query = qs.stringify(req.query);
-  const url = req.path + (query.length ? '?' + query : '');
-
   const afterAuth = () => {
-    store.dispatch(match(url, (error, redirectLocation, routerState) => {
+    store.dispatch(match(req.originalUrl, (error, redirectLocation, routerState) => {
       if (redirectLocation) {
         res.redirect(redirectLocation.pathname + redirectLocation.search);
       } else if (error) {

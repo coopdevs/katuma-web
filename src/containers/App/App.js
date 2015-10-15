@@ -96,8 +96,6 @@ export default class App extends Component {
             </Link>
 
             <ul className="nav navbar-nav">
-              {user && <li><NavbarLink to="/chat">Chat</NavbarLink></li>}
-
               <li><NavbarLink to="/widgets">Widgets</NavbarLink></li>
               <li><NavbarLink to="/survey">Survey</NavbarLink></li>
               <li><NavbarLink to="/loginSuccess">loginSuccess</NavbarLink></li>
@@ -106,7 +104,7 @@ export default class App extends Component {
               {user && <li className="logout-link"><a href="/logout" onClick={::this.handleLogout}>Logout</a></li>}
             </ul>
             {user &&
-            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.name}</strong>.</p>}
+            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.full_name}</strong>.</p>}
             <ul className="nav navbar-nav navbar-right">
               <li>
                 <a href="https://github.com/erikras/react-redux-universal-hot-example"
