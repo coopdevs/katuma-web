@@ -10,7 +10,7 @@ import ApiClient from './helpers/ApiClient';
 import {Provider} from 'react-redux';
 import {reduxReactRouter, ReduxRouter} from 'redux-router';
 
-import routes from './routes';
+import getRoutes from './routes';
 
 const client = new ApiClient();
 
@@ -19,7 +19,7 @@ const store = createStore(reduxReactRouter, null, createHistory, client, window.
 
 const component = (
   <Provider store={store} key="provider">
-    <ReduxRouter routes={routes} />
+    <ReduxRouter routes={getRoutes(store)} />
   </Provider>
 );
 
