@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import { IndexLink, Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
@@ -33,13 +33,17 @@ const meta = {
   }
 };
 
-const NavbarLink = ({to, children}) => (
-  <Link to={to} activeStyle={{
-    color: 'red'
-  }}>
-    {children}
-  </Link>
-);
+const NavbarLink = ({to, className, component, children}) => {
+  const Comp = component || Link;
+
+  return (
+    <Comp to={to} className={className} activeStyle={{
+      color: '#33e0ff'
+    }}>
+      {children}
+    </Comp>
+  );
+};
 
 @connect(
     state => ({user: state.auth.user}),
@@ -90,10 +94,10 @@ export default class App extends Component {
         <DocumentMeta {...meta}/>
         <nav className="navbar navbar-default navbar-fixed-top">
           <div className="container">
-            <Link to="/" className="navbar-brand">
+            <NavbarLink to="/" className="navbar-brand" component={IndexLink}>
               <div className={styles.brand}/>
               React Redux Example
-            </Link>
+            </NavbarLink>
 
             <ul className="nav navbar-nav">
               <li><NavbarLink to="/widgets">Widgets</NavbarLink></li>

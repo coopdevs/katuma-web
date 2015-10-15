@@ -22,7 +22,6 @@ import {Provider} from 'react-redux';
 import qs from 'query-string';
 import getRoutes from './routes';
 import getStatusFromRoutes from './helpers/getStatusFromRoutes';
-import { load as loadAuth } from './redux/modules/auth';
 
 const pretty = new PrettyError();
 const app = new Express();
@@ -91,79 +90,47 @@ app.use((req, res) => {
     return;
   }
 
-  const afterAuth = () => {
-    store.dispatch(match(req.originalUrl, (error, redirectLocation, routerState) => {
-      if (redirectLocation) {
-        res.redirect(redirectLocation.pathname + redirectLocation.search);
-      } else if (error) {
-        console.error('ROUTER ERROR:', pretty.render(error));
-        res.status(500);
-        hydrateOnClient();
-      } else if (!routerState) {
-        res.status(500);
-        hydrateOnClient();
-      } else {
-        // Workaround redux-router query string issue:
-        // https://github.com/rackt/redux-router/issues/106
-        if (routerState.location.search && !routerState.location.query) {
-          routerState.location.query = qs.parse(routerState.location.search);
+  store.dispatch(match(req.originalUrl, (error, redirectLocation, routerState) => {
+    if (redirectLocation) {
+      res.redirect(redirectLocation.pathname + redirectLocation.search);
+    } else if (error) {
+      console.error('ROUTER ERROR:', pretty.render(error));
+      res.status(500);
+      hydrateOnClient();
+    } else if (!routerState) {
+      res.status(500);
+      hydrateOnClient();
+    } else {
+      // Workaround redux-router query string issue:
+      // https://github.com/rackt/redux-router/issues/106
+      if (routerState.location.search && !routerState.location.query) {
+        routerState.location.query = qs.parse(routerState.location.search);
+      }
+
+      store.getState().router.then(() => {
+        const component = (
+          <Provider store={store} key="provider">
+            <ReduxRouter/>
+          </Provider>
+        );
+
+        const status = getStatusFromRoutes(routerState.routes);
+
+        if (status) {
+          res.status(status);
         }
 
-        store.getState().router.then(() => {
-          const component = (
-            <Provider store={store} key="provider">
-              <ReduxRouter/>
-            </Provider>
-          );
+        res.send('<!doctype html>\n' +
+          ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store}/>)
+        );
 
-          const status = getStatusFromRoutes(routerState.routes);
-
-          if (status) {
-            res.status(status);
-          }
-          res.send('<!doctype html>\n' +
-            ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store}/>)
-          );
-        }).catch((err) => {
-          console.error('DATA FETCHING ERROR:', pretty.render(err));
-          res.status(500);
-          hydrateOnClient();
-        });
-
-        Promise.all(getDataDependencies(
-          routerState.components,
-          store.getState,
-          store.dispatch,
-          routerState.location,
-          routerState.params
-        )).then(() => {
-          const component = (
-            <Provider store={store} key="provider">
-              <ReduxRouter/>
-            </Provider>
-          );
-
-          const status = getStatusFromRoutes(store.getState().router.routes);
-
-          if (status) {
-            res.status(status);
-          }
-
-          res.send('<!doctype html>\n' +
-            ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store}/>)
-          );
-
-        }).catch((err) => {
-          console.error('DATA FETCHING ERROR:', pretty.render(err));
-          res.status(500);
-          hydrateOnClient();
-        });
-      }
-    }));
-  };
-
-  store.dispatch(loadAuth()).then(afterAuth, afterAuth);
-
+      }).catch((err) => {
+        console.error('DATA FETCHING ERROR:', pretty.render(err));
+        res.status(500);
+        hydrateOnClient();
+      });
+    }
+  }));
 });
 
 if (config.port) {
