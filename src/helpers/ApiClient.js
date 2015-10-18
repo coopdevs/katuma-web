@@ -2,6 +2,8 @@
 
 import superagent from 'superagent';
 
+let userId;
+
 /*
  * This silly underscore is here to avoid a mysterious "ReferenceError: ApiClient is not defined" error.
  * See Issue #14. https://github.com/erikras/react-redux-universal-hot-example/issues/14
@@ -10,6 +12,11 @@ import superagent from 'superagent';
  */
 class ApiClient_ {
   constructor(req, config) {
+
+    if (__SERVER__) {
+      userId = req.session.user_id;
+    }
+
     ['get', 'post', 'put', 'patch', 'del'].
       forEach((method) => {
         this[method] = (path, options) => {
@@ -18,9 +25,11 @@ class ApiClient_ {
             if (options && options.params) {
               request.query(options.params);
             }
+
             if (__SERVER__) {
-              request.set('X-katuma-user-id', req.session.user_id);
+              request.set('X-katuma-user-id', userId);
             }
+
             if (options && options.data) {
               request.send(options.data);
             }

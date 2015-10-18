@@ -38,9 +38,12 @@ export default (store) => {
       <Route path="/signup" component={Signup}/>
       <Route path="/login" component={Login}/>
       <Route path="/signup-done" component={SignupSuccess}/>
+
+      { /* Routes requiring login */ }
       <Route onEnter={requireLogin}>
         <Route path="loginSuccess" component={LoginSuccess}/>
       </Route>
+
       <Route path="/survey" component={Survey}/>
       <Route path="*" component={NotFound} status={404} />
     </Route>

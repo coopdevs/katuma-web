@@ -11,11 +11,12 @@ import {Provider} from 'react-redux';
 import {reduxReactRouter, ReduxRouter} from 'redux-router';
 
 import getRoutes from './routes';
+import makeRouteHooksSafe from './helpers/makeRouteHooksSafe';
 
 const client = new ApiClient();
 
 const dest = document.getElementById('content');
-const store = createStore(reduxReactRouter, getRoutes, createHistory, client, window.__data);
+const store = createStore(reduxReactRouter, makeRouteHooksSafe(getRoutes), createHistory, client, window.__data);
 
 const component = (
   <Provider store={store} key="provider">

@@ -1,12 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as authActions from 'redux/modules/auth';
 
 @connect(
-  state => ({user: state.auth.user}),
-  dispatch => bindActionCreators(authActions, dispatch)
-)
+    state => ({user: state.auth.user}),
+    authActions)
 export default class LoginSuccess extends Component {
   static propTypes = {
     user: PropTypes.object,
