@@ -7,7 +7,8 @@ import {
     Widgets,
     Login,
     Signup,
-    SignupSuccess,
+    SignupDone,
+    SignupComplete,
     LoginSuccess,
     Survey,
     NotFound,
@@ -34,10 +35,15 @@ export default (store) => {
   return (
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
-      <Route path="/widgets" component={Widgets}/>
-      <Route path="/signup" component={Signup}/>
-      <Route path="/login" component={Login}/>
-      <Route path="/signup-done" component={SignupSuccess}/>
+      <Route path="widgets" component={Widgets}/>
+      <Route path="login" component={Login}/>
+
+      { /* Routes signup */ }
+      <Route path="signup">
+        <IndexRoute component={Signup}/>
+        <Route path="done" component={SignupDone}/>
+        <Route path="complete/:token" component={SignupComplete} onEnter={SignupComplete.onEnter}/>
+      </Route>
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin}>

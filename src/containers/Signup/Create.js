@@ -31,7 +31,7 @@ export default class Signup extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.signup_done) {
-      this.props.history.pushState(null, '/signup-done');
+      this.props.history.pushState(null, '/signup/done');
     }
   }
 
