@@ -26,7 +26,7 @@ class ApiClient_ {
               request.query(options.params);
             }
 
-            if (__SERVER__) {
+            if (__SERVER__ && userId) {
               request.set('X-katuma-user-id', userId);
             }
 
