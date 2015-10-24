@@ -1,4 +1,4 @@
-+require('babel-core/polyfill');
+require('babel-core/polyfill');
 
 const title = 'Katuma - Collaborative consumption';
 const description = 'Skip the middleman, buy directly from the providers.';
