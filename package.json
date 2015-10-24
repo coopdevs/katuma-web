@@ -18,9 +18,8 @@
   ],
   "main": "bin/server.js",
   "scripts": {
-    "start": "concurrent --kill-others \"npm run start-prod\" \"npm run start-prod-api\"",
+    "start": "concurrent --kill-others \"npm run start-prod\"",
     "start-prod": "node ./node_modules/better-npm-run start-prod",
-    "start-prod-api": "node ./node_modules/better-npm-run start-prod-api",
     "build": "webpack --verbose --colors --display-error-details --config webpack/prod.config.js",
     "postinstall": "webpack --display-error-details --config webpack/prod.config.js",
     "lint": "eslint -c .eslintrc src",
@@ -30,22 +29,6 @@
     "test": "karma start"
   },
   "betterScripts": {
-    "start-prod": {
-      "command": "node ./bin/server.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "production",
-        "APIPORT": 3000
-      }
-    },
-    "start-prod-api": {
-      "command": "node ./bin/api.js",
-      "env": {
-        "NODE_PATH": "./api",
-        "NODE_ENV": "production",
-        "APIPORT": 3030
-      }
-    },
     "start-dev": {
       "command": "node --debug ./bin/server.js",
       "env": {
@@ -55,12 +38,13 @@
         "APIPORT": 3000
       }
     },
-    "start-dev-api": {
-      "command": "node ./bin/api.js",
+    "start-prod": {
+      "command": "node ./bin/server.js",
       "env": {
-        "NODE_PATH": "./api",
-        "NODE_ENV": "development",
-        "APIPORT": 3030
+        "NODE_PATH": "./src",
+        "NODE_ENV": "production",
+        "PORT": 8080,
+        "APIPORT": 3000
       }
     },
     "watch-client": {
@@ -90,7 +74,7 @@
     "pretty-error": "1.2.0",
     "query-string": "3.0.0",
     "react": "^0.14.0",
-    "react-document-meta": "2.0.0-rc2",
+    "react-document-meta": "2.0.0",
     "react-dom": "0.14.0",
     "react-inline-css": "2.0.0",
     "react-redux": "^4.0.0",

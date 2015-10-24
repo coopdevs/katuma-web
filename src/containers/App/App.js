@@ -70,7 +70,7 @@ export default class App extends Component {
           <div className="container">
             <NavbarLink to="/" className="navbar-brand" component={IndexLink}>
               <div className={styles.brand}/>
-              React Redux Example
+              Katuma
             </NavbarLink>
 
             <ul className="nav navbar-nav">
