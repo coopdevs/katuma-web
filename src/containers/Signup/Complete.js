@@ -1,20 +1,27 @@
 import React, {Component, PropTypes} from 'react';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {initialize} from 'redux-form';
 import DocumentMeta from 'react-document-meta';
 import * as signupCompleteActions from 'redux/modules/signup/complete';
+import CompleteSignupForm from 'components/forms/signup/Complete';
 
 @connect(
   state => ({
     validSignup: state.signupCompleteReducer.validSignup
   }),
-  dispatch => bindActionCreators(signupCompleteActions, dispatch)
-)
+  {initialize})
 export default class Complete extends Component {
   static propTypes = {
+    initialize: PropTypes.func.isRequired,
     params: PropTypes.object,
     validSignup: PropTypes.bool,
     token: PropTypes.string
+  }
+
+  componentWillMount() {
+    this.props.initialize('signupComplete', {
+      token: this.props.params.token
+    });
   }
 
   static onEnter(nextState, replaceState, cb) {
@@ -44,17 +51,22 @@ export default class Complete extends Component {
     }
   }
 
-  render() {
-    const {token} = this.props.params;
+  handleSubmit(data) {
+    window.alert('Data submitted! ' + JSON.stringify(data));
+    this.props.initialize('survey', {});
+  }
 
+  render() {
     return (
       <div className="container">
-        <DocumentMeta title="Signup Complete"/>
-        <h1>Signup Complete</h1>
-        <div className="alert" role="alert">
-          <p>this is the token {token}</p>
-        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <DocumentMeta title="Signup Complete"/>
+            <h1>Finaliza el registro</h1>
 
+            <CompleteSignupForm onSubmit={::this.handleSubmit}/>
+          </div>
+        </div>
       </div>
     );
   }
