@@ -1,3 +1,4 @@
+/* eslint no-debugger: 0 */
 import React from 'react';
 import {IndexRoute, Route} from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
@@ -41,8 +42,10 @@ export default (store) => {
       { /* Routes signup */ }
       <Route path="signup">
         <IndexRoute component={Signup}/>
-        <Route path="done" component={SignupDone}/>
-        <Route path="complete/:token" component={SignupComplete} onEnter={SignupComplete.onEnter}/>
+        <Route path="done" component={SignupDone} onEnter={SignupDone.onEnter}/>
+        <Route path="complete" onEnter={SignupComplete.onEnter}>
+          <Route path=":token" component={SignupComplete}/>
+        </Route>
       </Route>
 
       { /* Routes requiring login */ }

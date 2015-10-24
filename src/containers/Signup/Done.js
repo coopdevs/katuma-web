@@ -2,24 +2,24 @@ import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import * as signupActions from 'redux/modules/signup';
+import * as signupActions from 'redux/modules/signup/create';
 
 @connect(
   state => ({
-    signup_done: state.signup.signup_done
+    signup_done: state.signupCreateReducer.signup_done
   }),
   dispatch => bindActionCreators(signupActions, dispatch)
 )
 
-export default class Signup extends Component {
+export default class Done extends Component {
   static propTypes = {
     signup_done: PropTypes.bool,
     history: PropTypes.object
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.signup_done) {
-      this.props.history.pushState(null, '/signup');
+  static onEnter(nextState, replaceState) {
+    if (!nextState.signup_done) {
+      replaceState(null, '/signup');
     }
   }
 

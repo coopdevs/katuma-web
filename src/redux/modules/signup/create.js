@@ -8,7 +8,7 @@ const initialState = {
   signup_done: false
 };
 
-export default function reducer(state = initialState, action = {}) {
+export default function signupCreateReducer(state = initialState, action = {}) {
   switch (action.type) {
     case SIGNUP:
       return {
@@ -35,6 +35,12 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
+/**
+ * Create signup. Now backend sends an email confirmation to user
+ *
+ * @param {String} email
+ * @return {object}
+ */
 export function signup(email) {
   return {
     types: [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL],

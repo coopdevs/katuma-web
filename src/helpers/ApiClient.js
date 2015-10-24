@@ -1,5 +1,3 @@
-/* eslint no-debugger: 0 */
-
 import superagent from 'superagent';
 import config from '../config';
 

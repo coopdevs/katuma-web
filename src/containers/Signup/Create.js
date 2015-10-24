@@ -2,18 +2,18 @@ import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import * as signupActions from 'redux/modules/signup';
+import * as signupActions from 'redux/modules/signup/create';
 
 @connect(
   state => ({
     user: state.auth.user,
-    errors: state.signup.errors,
-    signup_done: state.signup.signup_done
+    errors: state.signupCreateReducer.errors,
+    signup_done: state.signupCreateReducer.signup_done
   }),
   dispatch => bindActionCreators(signupActions, dispatch)
 )
 
-export default class Signup extends Component {
+export default class Create extends Component {
   static propTypes = {
     user: PropTypes.object,
     errors: PropTypes.array,

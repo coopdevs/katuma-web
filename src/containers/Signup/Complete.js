@@ -1,17 +1,32 @@
+/* eslint no-debugger: 0 */
 import React, {Component, PropTypes} from 'react';
 import DocumentMeta from 'react-document-meta';
+import { checkSignup } from 'redux/modules/signup/complete';
 
-export default class Signup extends Component {
+export default class Complete extends Component {
   static propTypes = {
     history: PropTypes.object,
     params: PropTypes.object,
     token: PropTypes.string
   }
 
-  static onEnter(nextState, replaceState) {
-    // Go home if no token present
-    if (!nextState.params.token) {
+  static onEnter(nextState, replaceState, cb) {
+    const token = nextState.params.token;
+
+    console.log('cb', cb);
+
+    function goHome() {
       replaceState(null, '/');
+    }
+
+    function continueOrGoHome(response) {
+      console.log('response', response);
+    }
+
+    if (token) {
+      store.dispatch(checkSignup(token)).then(continueOrGoHome);
+    } else {
+      goHome();
     }
   }
 
