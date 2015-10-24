@@ -8,7 +8,7 @@ import * as signupActions from 'redux/modules/signup/create';
   state => ({
     user: state.auth.user,
     errors: state.signupCreateReducer.errors,
-    signup_done: state.signupCreateReducer.signup_done
+    signupDone: state.signupCreateReducer.signupDone
   }),
   dispatch => bindActionCreators(signupActions, dispatch)
 )
@@ -18,7 +18,7 @@ export default class Create extends Component {
     user: PropTypes.object,
     errors: PropTypes.array,
     signup: PropTypes.func,
-    signup_done: PropTypes.bool,
+    signupDone: PropTypes.bool,
     cleanErrors: PropTypes.func,
     history: PropTypes.object
   }
@@ -30,8 +30,8 @@ export default class Create extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.signup_done) {
-      this.props.history.pushState(null, '/signup/done');
+    if (nextProps.signupDone) {
+      this.refs.email.value = '';
     }
   }
 
@@ -42,17 +42,26 @@ export default class Create extends Component {
   }
 
   render() {
-    const {user, errors} = this.props;
+    const {user, errors, signupDone} = this.props;
     let errorMessages;
+    let successMessage;
 
     if (errors.length) {
-      const errorList = errors.map((error, index) => {
-        return (
-          <p key={index}>{error}</p>
-        );
-      });
+      errorMessages = (
+        <div className="alert alert-danger" role="alert">
+          {errors[0]}
+        </div>
+      );
+    }
 
-      errorMessages = (<div className="alert alert-danger" role="alert">{errorList}</div>);
+    if (signupDone) {
+      successMessage =  (
+        <div className="alert alert-success" role="alert">
+          <p>Signup success!</p>
+          <p>We've sent you an email to finish sign up</p>
+          <p>Please, review spam folder</p>
+        </div>
+      );
     }
 
     return (
@@ -60,9 +69,10 @@ export default class Create extends Component {
         <DocumentMeta title="Signup"/>
         <h1>Signup</h1>
 
+        {successMessage}
         {errorMessages}
 
-        {!user &&
+        {!user && !signupDone &&
         <div>
           <form onSubmit={::this.handleSubmit}>
             <div className="form-group">

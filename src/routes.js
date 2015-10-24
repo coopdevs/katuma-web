@@ -8,7 +8,6 @@ import {
     Widgets,
     Login,
     Signup,
-    SignupDone,
     SignupComplete,
     LoginSuccess,
     Survey,
@@ -42,8 +41,7 @@ export default (store) => {
       { /* Routes signup */ }
       <Route path="signup">
         <IndexRoute component={Signup}/>
-        <Route path="done" component={SignupDone} onEnter={SignupDone.onEnter}/>
-        <Route path="complete" onEnter={SignupComplete.onEnter}>
+        <Route path="complete" context={store} onEnter={SignupComplete.onEnter}>
           <Route path=":token" component={SignupComplete}/>
         </Route>
       </Route>

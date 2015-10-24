@@ -5,7 +5,7 @@ const CLEAN_SIGNUP_ERRORS = 'redux-example/signup/CLEAN_SIGNUP_ERRORS';
 
 const initialState = {
   errors: [],
-  signup_done: false
+  signupDone: false
 };
 
 export default function signupCreateReducer(state = initialState, action = {}) {
@@ -18,7 +18,7 @@ export default function signupCreateReducer(state = initialState, action = {}) {
       return {
         ...state,
         errors: [],
-        signup_done: true
+        signupDone: true
       };
     case SIGNUP_FAIL:
       return {

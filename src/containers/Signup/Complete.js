@@ -1,32 +1,46 @@
-/* eslint no-debugger: 0 */
 import React, {Component, PropTypes} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import { checkSignup } from 'redux/modules/signup/complete';
+import * as signupCompleteActions from 'redux/modules/signup/complete';
 
+@connect(
+  state => ({
+    validSignup: state.signupCompleteReducer.validSignup
+  }),
+  dispatch => bindActionCreators(signupCompleteActions, dispatch)
+)
 export default class Complete extends Component {
   static propTypes = {
-    history: PropTypes.object,
     params: PropTypes.object,
+    validSignup: PropTypes.bool,
     token: PropTypes.string
   }
 
   static onEnter(nextState, replaceState, cb) {
+    const context = this.context;
     const token = nextState.params.token;
 
-    console.log('cb', cb);
-
-    function goHome() {
-      replaceState(null, '/');
+    function goSignup() {
+      replaceState(null, '/signup');
     }
 
-    function continueOrGoHome(response) {
-      console.log('response', response);
+    function signupOrCreate() {
+      const {signupCompleteReducer: {validSignup}} = context.getState();
+
+      if (!validSignup) {
+        goSignup();
+      }
+
+      cb();
     }
 
     if (token) {
-      store.dispatch(checkSignup(token)).then(continueOrGoHome);
+      context.dispatch(signupCompleteActions.checkSignup(token))
+        .then(signupOrCreate);
     } else {
-      goHome();
+      goSignup();
+      cb();
     }
   }
 
