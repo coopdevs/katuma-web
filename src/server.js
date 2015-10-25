@@ -28,6 +28,21 @@ const app = new Express();
 const server = new http.Server(app);
 const redis_store = RedisStore(session);
 
+const VALID_END_POINTS_FOR_SESSION = /\/(login|signups\/complete\/)/;
+
+/**
+ * Check if API response can set session
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @return {Boolean}
+ */
+const canSetSession = function (req, res) {
+  return req.method === 'POST' &&
+        res.statusCode === 200 &&
+        VALID_END_POINTS_FOR_SESSION.test(req.path)
+}
+
 const proxy = httpProxy('http://localhost', {
   port: config.apiPort,
   forwardPath: function (req, res) {
@@ -35,7 +50,7 @@ const proxy = httpProxy('http://localhost', {
     return '/api/v1' + original_path;
   },
   intercept: function (rsp, data, req, res, callback) {
-    if (req.method == 'POST' && req.path == '/login' && res.statusCode == '200') {
+    if (canSetSession(req, res)) {
       data = JSON.parse(data.toString('utf8'));
       req.session.user_id = data.id;
       data = JSON.stringify(data)
