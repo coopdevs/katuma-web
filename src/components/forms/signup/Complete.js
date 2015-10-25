@@ -1,7 +1,36 @@
 import React, {Component, PropTypes} from 'react';
 import {connectReduxForm} from 'redux-form';
 
-import { COMPLETE_SIGNUP_FORM_FIELDS } from 'redux/modules/signup/complete';
+const COMPLETE_SIGNUP_FORM_FIELDS = {
+  username: {
+    type: 'text',
+    label: 'Nombre de usuario',
+    placeholder: 'Elige un nombre de usuario. Ej.: roberto_perez'
+  },
+  first_name: {
+    type: 'text',
+    label: 'Nombre',
+    placeholder: 'Tu nombre'
+  },
+  last_name: {
+    type: 'text',
+    label: 'Apellido',
+    placeholder: 'Tu primer apellido'
+  },
+  password: {
+    type: 'password',
+    label: 'Contraseña',
+    placeholder: 'Elige una contraseña'
+  },
+  password_confirmation: {
+    type: 'password',
+    label: 'Confirmacion de Contraseña',
+    placeholder: 'Repite la misma contraseña'
+  },
+  token: {
+    type: 'hidden'
+  }
+};
 
 @connectReduxForm({
   form: 'signupComplete',
