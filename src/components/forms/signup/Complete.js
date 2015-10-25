@@ -3,32 +3,48 @@ import {connectReduxForm} from 'redux-form';
 
 import { COMPLETE_SIGNUP_FORM_FIELDS } from 'redux/modules/signup/complete';
 
-function asyncValidate(data) {
-  console.log('data', data);
-  return Promise.resolve({});
-}
-
 @connectReduxForm({
   form: 'signupComplete',
-  fields: Object.keys(COMPLETE_SIGNUP_FORM_FIELDS),
-  asyncValidate
+  fields: Object.keys(COMPLETE_SIGNUP_FORM_FIELDS)
 })
 export default class CompleteSignupForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
+    submitting: PropTypes.bool,
     handleSubmit: PropTypes.func.isRequired
   }
 
-  render() {
-    const {handleSubmit, fields} = this.props;
+  /**
+   * Get css classes for field
+   *
+   * @param {Object} field
+   * @param {Sting} type
+   */
+  getInputClasses(field, type) {
+    const classes = [];
 
-    const renderInput = (field) => {
+    if (type !== 'hidden') {
+      classes.push('form-group');
+    }
+
+    if (field.error) {
+      classes.push('has-error');
+    }
+
+    return classes.join(' ');
+  }
+
+  render() {
+    const {handleSubmit, submitting, fields} = this.props;
+
+    const renderInput = (field, index) => {
       const {label, type, placeholder} = COMPLETE_SIGNUP_FORM_FIELDS[field.name];
 
       return (
-        <div className={'form-group' + (field.error ? ' has-error' : '')}>
+        <div key={index} className={this.getInputClasses(field, type)}>
 
-          <label htmlFor={field.name}>{label}</label>
+          {type !== 'hidden' && <label htmlFor={field.name}>{label}</label>}
+
           <div>
             <input
               id={field.name}
@@ -43,7 +59,7 @@ export default class CompleteSignupForm extends Component {
       );
     };
 
-    const inputs = Object.keys(fields).map((key) => renderInput(fields[key]));
+    const inputs = Object.keys(fields).map((key, index) => renderInput(fields[key], index));
 
     return (
       <div>
@@ -53,7 +69,7 @@ export default class CompleteSignupForm extends Component {
 
           <div className="form-group">
             <button className="btn btn-success" onClick={handleSubmit}>
-              Finalizar registro
+              {submitting ? 'Enviando...' : 'Finalizar registro'}
             </button>
           </div>
         </form>

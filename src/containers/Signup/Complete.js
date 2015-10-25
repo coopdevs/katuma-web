@@ -7,14 +7,18 @@ import CompleteSignupForm from 'components/forms/signup/Complete';
 
 @connect(
   state => ({
-    validSignup: state.signupCompleteReducer.validSignup
+    validSignup: state.signupCompleteReducer.validSignup,
+    completeSignupErrors: state.signupCompleteReducer.completeSignupErrors
   }),
-  {initialize})
+  {initialize, complete: signupCompleteActions.complete})
 export default class Complete extends Component {
   static propTypes = {
     initialize: PropTypes.func.isRequired,
+    complete: PropTypes.func.isRequired,
     params: PropTypes.object,
+    completeSignupErrors: PropTypes.object,
     validSignup: PropTypes.bool,
+    history: PropTypes.object,
     token: PropTypes.string
   }
 
@@ -52,8 +56,22 @@ export default class Complete extends Component {
   }
 
   handleSubmit(data) {
-    window.alert('Data submitted! ' + JSON.stringify(data));
-    this.props.initialize('survey', {});
+    // I do not know javascript at all
+    // Why I need self in an arrow function?
+    const self = this;
+
+    return this.props.complete(data).then(() => {
+      const errors = self.props.completeSignupErrors;
+
+      if (Object.keys(errors).length) {
+        return Promise.reject(errors);
+      }
+
+      // do something on success
+      self.props.initialize('signupComplete', {});
+      self.props.history.pushState(null, '/groups');
+      return Promise.resolve({});
+    });
   }
 
   render() {
