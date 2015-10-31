@@ -36,10 +36,8 @@ export default class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
-      // login
-      this.props.pushState(null, '/loginSuccess');
+      this.props.pushState(null, '/groups');
     } else if (this.props.user && !nextProps.user) {
-      // logout
       this.props.pushState(null, '/login');
     }
   }
@@ -76,7 +74,7 @@ export default class App extends Component {
             <ul className="nav navbar-nav">
               <li><NavbarLink to="/widgets">Widgets</NavbarLink></li>
               <li><NavbarLink to="/survey">Survey</NavbarLink></li>
-              <li><NavbarLink to="/loginSuccess">loginSuccess</NavbarLink></li>
+              <li><NavbarLink to="/groups">groups</NavbarLink></li>
               {!user && <li><NavbarLink to="/login">Login</NavbarLink></li>}
               {!user && <li><NavbarLink to="/signup">Signup</NavbarLink></li>}
               {user && <li className="logout-link"><a href="/logout" onClick={::this.handleLogout}>Logout</a></li>}

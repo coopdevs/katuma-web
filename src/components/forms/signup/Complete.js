@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {connectReduxForm} from 'redux-form';
+import {reduxForm} from 'redux-form';
 
 const COMPLETE_SIGNUP_FORM_FIELDS = {
   username: {
@@ -32,7 +32,7 @@ const COMPLETE_SIGNUP_FORM_FIELDS = {
   }
 };
 
-@connectReduxForm({
+@reduxForm({
   form: 'signupComplete',
   fields: Object.keys(COMPLETE_SIGNUP_FORM_FIELDS)
 })
@@ -67,7 +67,13 @@ export default class CompleteSignupForm extends Component {
     const {handleSubmit, submitting, fields} = this.props;
 
     const renderInput = (field, index) => {
-      const {label, type, placeholder} = COMPLETE_SIGNUP_FORM_FIELDS[field.name];
+      const fieldProps = COMPLETE_SIGNUP_FORM_FIELDS[field.name];
+
+      if (!fieldProps) {
+        return null;
+      }
+
+      const {label, type, placeholder} = fieldProps;
 
       return (
         <div key={index} className={this.getInputClasses(field, type)}>
