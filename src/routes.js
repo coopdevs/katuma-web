@@ -9,7 +9,7 @@ import {
     Login,
     Signup,
     SignupComplete,
-    LoginSuccess,
+    GroupsBase,
     Survey,
     NotFound,
   } from 'containers';
@@ -38,7 +38,7 @@ export default (store) => {
       <Route path="widgets" component={Widgets}/>
       <Route path="login" component={Login}/>
 
-      { /* Routes signup */ }
+      {/* Routes signup */}
       <Route path="signup">
         <IndexRoute component={Signup}/>
         <Route path="complete" context={store} onEnter={SignupComplete.onEnter}>
@@ -46,9 +46,9 @@ export default (store) => {
         </Route>
       </Route>
 
-      { /* Routes requiring login */ }
+      {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
-        <Route path="loginSuccess" component={LoginSuccess}/>
+        <Route path="groups" component={GroupsBase}/>
       </Route>
 
       <Route path="/survey" component={Survey}/>
