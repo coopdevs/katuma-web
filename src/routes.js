@@ -2,6 +2,8 @@
 import React from 'react';
 import {IndexRoute, Route} from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
+import { load as loadMemberships } from 'redux/modules/groups/memberships';
+
 import {
     App,
     Home,
@@ -67,6 +69,28 @@ export default (store) => {
     }
   };
 
+  const checkUserGroups = (nextState, replaceState, cb) => {
+    function checkMemberships() {
+      const {membershipsReducer: {memberships}} = store.getState();
+
+      if (!memberships.length) {
+        replaceState(null, '/onboarding');
+      } else if (memberships.length === 1) {
+        replaceState(null, `/groups/${memberships[0].group_id}`);
+      }
+
+      cb();
+    }
+
+    const {membershipsReducer: {memberships}} = store.getState();
+
+    if (!memberships.length) {
+      store.dispatch(loadMemberships()).then(checkMemberships);
+    } else {
+      checkMemberships();
+    }
+  };
+
   return (
     <Route path="/" component={App}>
       <IndexRoute component={Home} onEnter={redirectToGroups}/>
@@ -83,7 +107,7 @@ export default (store) => {
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
-        <Route path="groups" component={GroupsBase}/>
+        <Route path="groups" component={GroupsBase} onEnter={checkUserGroups}/>
       </Route>
 
       <Route path="/survey" component={Survey}/>
