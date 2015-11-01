@@ -92,13 +92,6 @@ export default class App extends Component {
         <div className={styles.appContent}>
           {this.props.children}
         </div>
-
-        <div className="well text-center">
-          Have questions? Ask for help <a
-          href="https://github.com/erikras/react-redux-universal-hot-example/issues"
-          target="_blank">on Github</a> or in the <a
-          href="http://www.reactiflux.com/" target="_blank">#react-redux-universal</a> Slack channel.
-        </div>
       </div>
     );
   }

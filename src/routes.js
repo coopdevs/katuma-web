@@ -11,7 +11,8 @@ import {
     Login,
     Signup,
     SignupComplete,
-    GroupsBase,
+    GroupsList,
+    GroupBase,
     Survey,
     NotFound,
   } from 'containers';
@@ -76,7 +77,7 @@ export default (store) => {
       if (!memberships.length) {
         replaceState(null, '/onboarding');
       } else if (memberships.length === 1) {
-        replaceState(null, `/groups/${memberships[0].group_id}`);
+        replaceState(store, `/groups/${memberships[0].group_id}`);
       }
 
       cb();
@@ -107,7 +108,12 @@ export default (store) => {
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
-        <Route path="groups" component={GroupsBase} onEnter={checkUserGroups}/>
+
+        <Route path="groups">
+          <IndexRoute component={GroupsList} onEnter={checkUserGroups}/>
+          <Route path=":id" component={GroupBase}/>
+        </Route>
+
       </Route>
 
       <Route path="/survey" component={Survey}/>

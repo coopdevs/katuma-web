@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
     memberships: state.membershipsReducer.memberships
   }),
   {})
-export default class Base extends Component {
+export default class GroupsList extends Component {
   static propTypes = {
     user: PropTypes.object,
     logout: PropTypes.func
@@ -15,7 +15,7 @@ export default class Base extends Component {
   render() {
     return (
       <div className="container">
-        <h1>Groups Base</h1>
+        <h1>Groups List</h1>
       </div>
     );
   }
