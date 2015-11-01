@@ -13,6 +13,8 @@ import {
     SignupComplete,
     GroupsList,
     GroupBase,
+    OnboardingCreateGroup,
+    OnboardingMembers,
     Survey,
     NotFound,
   } from 'containers';
@@ -112,6 +114,11 @@ export default (store) => {
         <Route path="groups">
           <IndexRoute component={GroupsList} onEnter={checkUserGroups}/>
           <Route path=":id" component={GroupBase}/>
+        </Route>
+
+        <Route path="onboarding">
+          <IndexRoute component={OnboardingCreateGroup}/>
+          <Route path=":id/members" component={OnboardingMembers}/>
         </Route>
 
       </Route>

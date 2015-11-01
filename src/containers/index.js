@@ -5,5 +5,6 @@ export Login from './Login/Login';
 export { Create as Signup, Complete as SignupComplete } from './Signup';
 export GroupsList from './Groups/List';
 export { GroupBase } from './Group';
+export { OnboardingCreateGroup, OnboardingMembers } from './Onboarding';
 export Survey from './Survey/Survey';
 export NotFound from './NotFound/NotFound';
