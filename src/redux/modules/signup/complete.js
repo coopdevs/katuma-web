@@ -7,6 +7,7 @@ const COMPLETE_SIGNUP_FAIL = 'redux-example/signup/COMPLETE_SIGNUP_FAIL';
 
 const initialState = {
   validSignup: false,
+  complete: false,
   completeSignupErrors: {}
 };
 
@@ -21,6 +22,7 @@ export default function signupCompleteReducer(state = initialState, action = {})
     case COMPLETE_SIGNUP_SUCCESS:
       return {
         ...state,
+        complete: true,
         completeSignupErrors: {}
       };
 

@@ -16,6 +16,21 @@ import {
 
 export default (store) => {
   const requireLogin = (nextState, replaceState, cb) => {
+    /**
+     * Check if user must be refetched.
+     * Cases:
+     *  1. User is not login
+     *  2. After signup complete success
+     *
+     * @param {Redux<Object>} state
+     * @param {function} authLoaded
+     * @return {Boolean}
+     */
+    function needsUserFetch(state, authLoaded) {
+      return !authLoaded(state) ||
+              state.signupCompleteReducer.complete;
+    }
+
     function checkAuth() {
       const { auth: { user }} = store.getState();
       if (!user) {
@@ -25,7 +40,9 @@ export default (store) => {
       cb();
     }
 
-    if (!isAuthLoaded(store.getState())) {
+    const fetchUser = needsUserFetch(store.getState(), isAuthLoaded);
+
+    if (fetchUser) {
       store.dispatch(loadAuth()).then(checkAuth);
     } else {
       checkAuth();
