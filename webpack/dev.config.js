@@ -1,5 +1,4 @@
 require('babel-core/polyfill');
-
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
@@ -35,11 +34,9 @@ babelLoaderQuery.extra = babelLoaderQuery.extra || {};
 if (!babelLoaderQuery.extra['react-transform']) {
   babelLoaderQuery.extra['react-transform'] = {};
 }
-
 if (!babelLoaderQuery.extra['react-transform'].transforms) {
   babelLoaderQuery.extra['react-transform'].transforms = [];
 }
-
 babelLoaderQuery.extra['react-transform'].transforms.push({
   transform: 'react-transform-hmr',
   imports: ['react'],
@@ -67,7 +64,7 @@ module.exports = {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loaders: ['babel?' + JSON.stringify(babelLoaderQuery), 'eslint-loader']},
       { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.less$/, loader: 'style!css!less' },
+      { test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap' },
       { test: /\.scss$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap' },
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
       { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
@@ -88,7 +85,7 @@ module.exports = {
   plugins: [
     // hot reload
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.IgnorePlugin(/\.json$/),
+    new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({
       __CLIENT__: true,
       __SERVER__: false,
