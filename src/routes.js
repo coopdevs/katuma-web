@@ -49,9 +49,27 @@ export default (store) => {
     }
   };
 
+  const redirectToGroups = (nextState, replaceState, cb) => {
+    function checkUser() {
+      const { auth: { user }} = store.getState();
+
+      if (user) {
+        replaceState(null, '/groups');
+      }
+
+      cb();
+    }
+
+    if (!isAuthLoaded(store.getState())) {
+      store.dispatch(loadAuth()).then(checkUser);
+    } else {
+      checkUser();
+    }
+  };
+
   return (
     <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
+      <IndexRoute component={Home} onEnter={redirectToGroups}/>
       <Route path="widgets" component={Widgets}/>
       <Route path="login" component={Login}/>
 
