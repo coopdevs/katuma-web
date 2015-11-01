@@ -1,13 +1,12 @@
 import Express from 'express';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-import createLocation from 'history/lib/createLocation';
 import config from './config';
 import favicon from 'serve-favicon';
 import compression from 'compression';
 import httpProxy from 'express-http-proxy';
 import session from 'express-session';
-import RedisStore from 'connect-redis';
+import redisStore from 'connect-redis';
 import path from 'path';
 import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
@@ -26,7 +25,7 @@ import getStatusFromRoutes from './helpers/getStatusFromRoutes';
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
-const redis_store = RedisStore(session);
+const RedisStore = redisStore(session);
 
 const VALID_END_POINTS_FOR_SESSION = /\/(login|signups\/complete\/)/;
 
@@ -37,27 +36,29 @@ const VALID_END_POINTS_FOR_SESSION = /\/(login|signups\/complete\/)/;
  * @param {Object} res
  * @return {Boolean}
  */
-const canSetSession = function (req, res) {
+const canSetSession = (req, res) => {
   return req.method === 'POST' &&
         res.statusCode === 200 &&
-        VALID_END_POINTS_FOR_SESSION.test(req.path)
-}
+        VALID_END_POINTS_FOR_SESSION.test(req.path);
+};
 
 const proxy = httpProxy('http://localhost', {
   port: config.apiPort,
-  forwardPath: function (req, res) {
-    var original_path = require('url').parse(req.url).path;
-    return '/api/v1' + original_path;
+  forwardPath: (req) => {
+    const originalPath = require('url').parse(req.url).path;
+
+    return '/api/v1' + originalPath;
   },
-  intercept: function (rsp, data, req, res, callback) {
+  intercept: (rsp, data, req, res, callback) =>{
+    let respondData;
     if (canSetSession(req, res)) {
-      data = JSON.parse(data.toString('utf8'));
-      req.session.user_id = data.id;
-      data = JSON.stringify(data)
+      respondData = JSON.parse(data.toString('utf8'));
+      req.session.user_id = respondData.id;
+      respondData = JSON.stringify(respondData);
     }
-    callback(null, data);
+    callback(null, respondData || data);
   },
-  decorateRequest: function (req) {
+  decorateRequest: (req) => {
     if (req.session.user_id) {
       req.headers['X-katuma-user-id'] = req.session.user_id;
     }
@@ -72,7 +73,7 @@ app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
 app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
 
 app.use(session({
-  store: new redis_store({port: 6379}),
+  store: new RedisStore({port: 6379}),
   secret: 'katuma-to-be-changed',
   resave: true,
   saveUninitialized: true
