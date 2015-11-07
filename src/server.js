@@ -42,7 +42,7 @@ const canSetSession = (req, res) => {
         VALID_END_POINTS_FOR_SESSION.test(req.path);
 };
 
-const proxy = httpProxy('http://localhost', {
+const proxy = httpProxy(`http://${(process.env.HOST || 'localhost')}`, {
   port: config.apiPort,
   forwardPath: (req) => {
     const originalPath = require('url').parse(req.url).path;
@@ -155,7 +155,7 @@ if (config.port) {
       console.error(err);
     }
     console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
-    console.info('==> 💻  Open http://localhost:%s in a browser to view the app.', config.port);
+    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', (process.env.HOST || 'localhost'), config.port);
   });
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');

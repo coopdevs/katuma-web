@@ -8,7 +8,7 @@ let userId;
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? '/' + path : path;
   const apiPath = `/api/${config.apiVersion}${adjustedPath}`;
-  const apiDomain = `http://localhost:${config.apiPort}`;
+  const apiDomain = `http://${(process.env.HOST || 'localhost')}:${config.apiPort}`;
 
   if (__SERVER__) {
     return `${apiDomain}${apiPath}`;
