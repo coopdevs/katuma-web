@@ -22,12 +22,6 @@ export default class Complete extends Component {
     token: PropTypes.string
   }
 
-  componentWillMount() {
-    this.props.initialize('signupComplete', {
-      token: this.props.params.token
-    });
-  }
-
   static onEnter(nextState, replaceState, cb) {
     const context = this.context;
     const token = nextState.params.token;
@@ -82,7 +76,10 @@ export default class Complete extends Component {
             <DocumentMeta title="Signup Complete"/>
             <h1>Finaliza el registro</h1>
 
-            <CompleteSignupForm onSubmit={::this.handleSubmit}/>
+            <CompleteSignupForm
+              onSubmit={::this.handleSubmit}
+              initialValues={{token: this.props.params.token}}
+            />
           </div>
         </div>
       </div>
