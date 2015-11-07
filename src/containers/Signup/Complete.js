@@ -50,20 +50,16 @@ export default class Complete extends Component {
   }
 
   handleSubmit(data) {
-    // I do not know javascript at all
-    // Why I need self in an arrow function?
-    const self = this;
-
     return this.props.complete(data).then(() => {
-      const errors = self.props.completeSignupErrors;
+      const errors = this.props.completeSignupErrors;
 
       if (Object.keys(errors).length) {
         return Promise.reject(errors);
       }
 
       // do something on success
-      self.props.initialize('signupComplete', {});
-      self.props.history.pushState(null, '/groups');
+      this.props.initialize('signupComplete', {});
+      this.props.history.pushState(null, '/groups');
       return Promise.resolve({});
     });
   }
@@ -77,7 +73,7 @@ export default class Complete extends Component {
             <h1>Finaliza el registro</h1>
 
             <CompleteSignupForm
-              onSubmit={::this.handleSubmit}
+              onSubmit={this.handleSubmit.bind(this)}
               initialValues={{token: this.props.params.token}}
             />
           </div>
