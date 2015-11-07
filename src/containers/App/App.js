@@ -1,23 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import { IndexLink, Link } from 'react-router';
 import { bindActionCreators } from 'redux';
+import { IndexLink } from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Navbar, NavBrand, Nav, NavItem, CollapsibleNav } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 import { pushState } from 'redux-router';
 import config from '../../config';
-
-const NavbarLink = ({to, className, component, children}) => {
-  const Comp = component || Link;
-
-  return (
-    <Comp to={to} className={className} activeStyle={{
-      color: '#33e0ff'
-    }}>
-      {children}
-    </Comp>
-  );
-};
 
 @connect(
     state => ({user: state.auth.user}),
@@ -64,31 +54,50 @@ export default class App extends Component {
     return (
       <div className={styles.app}>
         <DocumentMeta {...config.app}/>
-        <nav className="navbar navbar-default navbar-fixed-top">
-          <div className="container">
-            <NavbarLink to="/" className="navbar-brand" component={IndexLink}>
+        <Navbar fixedTop toggleNavKey={0}>
+          <NavBrand>
+            <IndexLink to="/" activeStyle={{color: '#33e0ff'}}>
               <div className={styles.brand}/>
-              Katuma
-            </NavbarLink>
+              <span>Katuma</span>
+            </IndexLink>
+          </NavBrand>
 
-            <ul className="nav navbar-nav">
-              <li><NavbarLink to="/widgets">Widgets</NavbarLink></li>
-              <li><NavbarLink to="/survey">Survey</NavbarLink></li>
-              <li><NavbarLink to="/groups">groups</NavbarLink></li>
-              {!user && <li><NavbarLink to="/login">Login</NavbarLink></li>}
-              {!user && <li><NavbarLink to="/signup">Signup</NavbarLink></li>}
-              {user && <li className="logout-link"><a href="/logout" onClick={::this.handleLogout}>Logout</a></li>}
-            </ul>
+          <CollapsibleNav eventKey={0}>
+            <Nav navbar>
+              <LinkContainer to="/widgets">
+                <NavItem eventKey={2}>Widgets</NavItem>
+              </LinkContainer>
+              <LinkContainer to="/survey">
+                <NavItem eventKey={3}>Survey</NavItem>
+              </LinkContainer>
+              <LinkContainer to="/groups">
+                <NavItem eventKey={4}>Groups</NavItem>
+              </LinkContainer>
+
+              {!user &&
+              <LinkContainer to="/login">
+                <NavItem eventKey={5}>Login</NavItem>
+              </LinkContainer>}
+              {!user &&
+              <LinkContainer to="/signup">
+                <NavItem eventKey={5}>Sign Up</NavItem>
+              </LinkContainer>}
+              {user &&
+              <LinkContainer to="/logout">
+                <NavItem eventKey={6} className="logout-link" onClick={::this.handleLogout}>
+                  Logout
+                </NavItem>
+              </LinkContainer>}
+            </Nav>
             {user &&
-            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.full_name}</strong>.</p>}
-            <ul className="nav navbar-nav navbar-right">
-              <li>
-                <a href="https://github.com/erikras/react-redux-universal-hot-example"
-                   target="_blank" title="View on Github"><i className="fa fa-github"/></a>
-              </li>
-            </ul>
-          </div>
-        </nav>
+            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.full_name}</strong></p>}
+            <Nav navbar right>
+              <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/erikras/react-redux-universal-hot-example">
+                <i className="fa fa-github"/>
+              </NavItem>
+            </Nav>
+          </CollapsibleNav>
+        </Navbar>
         <div className={styles.appContent}>
           {this.props.children}
         </div>
