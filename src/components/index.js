@@ -1,5 +1,5 @@
 /**
- *  Point of contact for component modules
+ *  DEPRECATED: remove this file once we remove this form examples
  *
  *  ie: import { CounterButton } from 'components';
  *
