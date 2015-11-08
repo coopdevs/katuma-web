@@ -50,7 +50,7 @@ export default class Complete extends Component {
   }
 
   handleSubmit(data) {
-    return this.props.complete(data).then(() => {
+    return this.props.complete(this.props.params.token, data).then(() => {
       const errors = this.props.completeSignupErrors;
 
       if (Object.keys(errors).length) {
@@ -74,7 +74,6 @@ export default class Complete extends Component {
 
             <CompleteSignupForm
               onSubmit={this.handleSubmit.bind(this)}
-              initialValues={{token: this.props.params.token}}
             />
           </div>
         </div>

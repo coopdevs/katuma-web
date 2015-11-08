@@ -70,13 +70,14 @@ export function checkSignup(token) {
 /**
  * Complete signup
  *
+ * @param {String} token
  * @param {Object} data
  * @return {Object}
  */
-export function complete(data) {
+export function complete(token, data) {
   return {
     types: [COMPLETE_SIGNUP, COMPLETE_SIGNUP_SUCCESS, COMPLETE_SIGNUP_FAIL],
-    promise: (client) => client.post(`/signups/complete/${data.token}`, {
+    promise: (client) => client.post(`/signups/complete/${token}`, {
       data: data
     })
   };

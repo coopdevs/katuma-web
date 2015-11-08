@@ -27,9 +27,6 @@ const COMPLETE_SIGNUP_FORM_FIELDS = {
     label: 'Confirmacion de Contraseña',
     placeholder: 'Repite la misma contraseña'
   },
-  token: {
-    type: 'hidden'
-  }
 };
 
 @reduxForm({
@@ -77,9 +74,7 @@ export default class CompleteSignupForm extends Component {
 
       return (
         <div key={index} className={this.getInputClasses(field, type)}>
-
-          {type !== 'hidden' && <label htmlFor={field.name}>{label}</label>}
-
+          <label htmlFor={field.name}>{label}</label>
           <div>
             <input
               id={field.name}
