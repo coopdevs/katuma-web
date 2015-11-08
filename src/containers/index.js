@@ -3,6 +3,7 @@ export Home from './Home/Home';
 export Widgets from './Widgets/Widgets';
 export Login from './Login/Login';
 export { Create as Signup, Complete as SignupComplete } from './Signup';
+export InvitationComplete from './Invitation/Complete';
 export GroupsList from './Groups/List';
 export { GroupBase } from './Group';
 export { OnboardingCreateGroup, OnboardingMembers } from './Onboarding';

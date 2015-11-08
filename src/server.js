@@ -27,7 +27,7 @@ const app = new Express();
 const server = new http.Server(app);
 const RedisStore = redisStore(session);
 
-const VALID_END_POINTS_FOR_SESSION = /\/(login|signups\/complete\/)/;
+const VALID_END_POINTS_FOR_SESSION = /\/(login|signups\/complete\/|invitations\/accept)/;
 
 /**
  * Check if API response can set session

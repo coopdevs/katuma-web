@@ -15,6 +15,7 @@ import {
     GroupBase,
     OnboardingCreateGroup,
     OnboardingMembers,
+    InvitationComplete,
     Survey,
     NotFound,
   } from 'containers';
@@ -33,6 +34,7 @@ export default (store) => {
      */
     function needsUserFetch(state, authLoaded) {
       return !authLoaded(state) ||
+              state.completeInvitationReducer.complete ||
               state.signupCompleteReducer.complete;
     }
 
@@ -99,6 +101,7 @@ export default (store) => {
       <IndexRoute component={Home} onEnter={redirectToGroups}/>
       <Route path="widgets" component={Widgets}/>
       <Route path="login" component={Login}/>
+      <Route path="invitation/accept/:token" context={store} component={InvitationComplete} onEnter={InvitationComplete.onEnter} />
 
       {/* Routes signup */}
       <Route path="signup">
