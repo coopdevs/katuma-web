@@ -9,7 +9,7 @@ import session from 'express-session';
 import redisStore from 'connect-redis';
 import path from 'path';
 import createStore from './redux/create';
-import ApiClient from './helpers/ApiClient';
+import ApiHttp from './helpers/api/apiHttp';
 import Html from './helpers/Html';
 import PrettyError from 'pretty-error';
 import http from 'http';
@@ -60,7 +60,8 @@ app.use((req, res, next) => {
     // hot module replacement is enabled in the development env
     webpackIsomorphicTools.refresh();
   }
-  const client = new ApiClient(req);
+
+  const client = new ApiHttp(req.session.user_id);
   const history = createHistory(req.originalUrl);
   const store = createStore(history, client);
 
@@ -108,14 +109,21 @@ app.use((req, res, next) => {
   });
 });
 
-if (config.port) {
-  server.listen(config.port, (err) => {
+const listenTo = config.isProduction ? process.env.SOCK_PATH : process.env.PORT;
+
+if (listenTo) {
+  server.listen(listenTo, (err) => {
     if (err) {
       console.error(err);
     }
-    console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
-    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', (process.env.HOST || 'localhost'), config.port);
+    console.info('----\n==> ✅  %s is running, talking to API server on port %s.', config.app.title, config.apiPort);
+    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, listenTo);
   });
 } else {
-  console.error('==>     ERROR: No PORT environment variable has been specified');
+  console.error('==>     ERROR: No SOCK_PATH or PORT environment variable has been specified');
 }
+
+process.on('SIGINT', () => {
+  server.close();
+  process.exit();
+});

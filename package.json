@@ -35,7 +35,7 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "PORT": 8000,
-        "APIPORT": 3000
+        "API_PORT": 3000
       }
     },
     "start-prod": {
@@ -43,8 +43,8 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
-        "PORT": 8080,
-        "APIPORT": 3000
+        "SOCK_PATH": "/var/run/node/express.sock",
+        "API_SOCK_PATH": "/var/run/unicorn/unicorn.sock"
       }
     },
     "watch-client": {
@@ -94,6 +94,8 @@
     "webpack-isomorphic-tools": "^2.2.18",
     "underscore": "1.8.3",
     "reselect": "2.0.1"
+    "request": "^2.65.0",
+    "serve-static": "^1.10.0",
   },
   "devDependencies": {
     "autoprefixer-loader": "3.1.0",

@@ -5,7 +5,7 @@ import 'babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createStore from './redux/create';
-import ApiClient from './helpers/ApiClient';
+import ApiAjax from './helpers/api/apiAjax';
 import {Provider} from 'react-redux';
 
 import { Router, browserHistory } from 'react-router';
@@ -14,7 +14,7 @@ import useScroll from 'scroll-behavior/lib/useStandardScroll';
 
 import getRoutes from './routes';
 
-const client = new ApiClient();
+const client = new ApiAjax();
 
 const history = useScroll(() => browserHistory)();
 const dest = document.getElementById('content');
