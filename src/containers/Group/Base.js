@@ -16,12 +16,19 @@ export default class GroupBase extends Component {
   render() {
     const group = this.props.groups.byId[this.props.params.id];
 
+    const groupSection = (g) => {
+      return (
+        <div>
+          <h1>{g.name}</h1>
+          {React.cloneElement(this.props.children, {group: g})}
+        </div>
+      );
+    };
+
     return (
       <div className="container">
-        <h1>{group.name}</h1>
-        <div>
-          {React.cloneElement(this.props.children, {group: group})}
-        </div>
+        {!group && <div>group not found</div>}
+        {group && groupSection(group)}
       </div>
     );
   }
