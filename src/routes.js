@@ -11,8 +11,10 @@ import {
     Login,
     Signup,
     SignupComplete,
+    GroupsBase,
     GroupsList,
     GroupBase,
+    GroupMembers,
     OnboardingCreateGroup,
     OnboardingMembers,
     InvitationComplete,
@@ -75,8 +77,13 @@ export default (store) => {
   };
 
   const checkUserGroups = (nextState, replaceState, cb) => {
+    function getMemberships() {
+      const {membershipsReducer: {memberships: {entities}}} = store.getState();
+      return entities;
+    }
+
     function checkMemberships() {
-      const {membershipsReducer: {memberships}} = store.getState();
+      const memberships = getMemberships();
 
       if (!memberships.length) {
         replaceState(null, '/onboarding');
@@ -87,7 +94,7 @@ export default (store) => {
       cb();
     }
 
-    const {membershipsReducer: {memberships}} = store.getState();
+    const memberships = getMemberships();
 
     if (!memberships.length) {
       store.dispatch(loadMemberships()).then(checkMemberships);
@@ -114,9 +121,12 @@ export default (store) => {
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
 
-        <Route path="groups">
+        <Route path="groups" component={GroupsBase}>
           <IndexRoute component={GroupsList} onEnter={checkUserGroups}/>
-          <Route path=":id" component={GroupBase}/>
+          <Route path=":id" component={GroupBase}>
+            <IndexRoute component={GroupMembers}/>
+            <Route path="members" component={GroupMembers}/>
+          </Route>
         </Route>
 
         <Route path="onboarding">

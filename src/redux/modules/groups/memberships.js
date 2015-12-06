@@ -1,9 +1,10 @@
+import _ from 'underscore';
 const LOAD = 'redux-example/memberships/LOAD';
 const LOAD_SUCCESS = 'redux-example/memberships/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/memberships/LOAD_FAIL';
 
 const initialState = {
-  memberships: []
+  memberships: {entities: [], byGroupID: []}
 };
 
 export default function membershipsReducer(state = initialState, action = {}) {
@@ -14,10 +15,12 @@ export default function membershipsReducer(state = initialState, action = {}) {
         loading: true
       };
     case LOAD_SUCCESS:
+      const entities = action.result;
+
       return {
         ...state,
         loading: false,
-        memberships: action.result
+        memberships: {entities: entities, byGroupID: _.indexBy(entities, 'group_id')},
       };
     case LOAD_FAIL:
       return {

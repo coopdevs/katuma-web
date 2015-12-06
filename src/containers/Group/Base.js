@@ -3,19 +3,25 @@ import {connect} from 'react-redux';
 
 @connect(
   state => ({
-    memberships: state.membershipsReducer.memberships
+    memberships: state.groupsReducer.memberships
   }),
   {})
 export default class GroupBase extends Component {
   static propTypes = {
-    user: PropTypes.object,
-    logout: PropTypes.func
+    children: PropTypes.object.isRequired,
+    groups: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
   }
 
   render() {
+    const group = this.props.groups.byId[this.props.params.id];
+
     return (
       <div className="container">
-        <h1>Group Home</h1>
+        <h1>{group.name}</h1>
+        <div>
+          {React.cloneElement(this.props.children, {group: group})}
+        </div>
       </div>
     );
   }
