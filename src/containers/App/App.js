@@ -5,7 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, NavBrand, Nav, NavItem, CollapsibleNav } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
+import { logout } from 'redux/modules/auth';
 import { pushState } from 'redux-router';
 import config from '../../config';
 
@@ -26,20 +26,12 @@ export default class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
-      this.props.pushState(null, '/groups');
+      // When user log in refresh local data
+      window.location = '/';
     } else if (this.props.user && !nextProps.user) {
-      this.props.pushState(null, '/login');
+      // On log out clean local data with refresh
+      window.location = '/login';
     }
-  }
-
-  static fetchData(getState, dispatch) {
-    const promises = [];
-
-    if (!isAuthLoaded(getState())) {
-      promises.push(dispatch(loadAuth()));
-    }
-
-    return Promise.all(promises);
   }
 
   handleLogout(event) {
