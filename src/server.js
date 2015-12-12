@@ -87,7 +87,15 @@ app.use('/api/v1/logout', (req, res) => {
 // Proxy to API server
 app.use('/api/v1', proxy);
 
-app.use((req, res) => {
+app.use((req, res, next) => {
+  // Nasty bug related with this issue:
+  // https://github.com/erikras/react-redux-universal-hot-example/issues/209
+  // The thing is that websocket request are arriving here in development
+  // it should not happen because this cause a full app repaint
+  if (__DEVELOPMENT__ && /^\/sockjs-node\/.*/.test(req.originalUrl)) {
+    return next();
+  }
+
   if (__DEVELOPMENT__) {
     // Do not cache webpack stats: the script file would change since
     // hot module replacement is enabled in the development env
