@@ -10,8 +10,6 @@ const CREATE_GROUP_FAIL = 'redux-example/groups/CREATE_GROUP_FAIL';
 const initialState = {
   createGroupErrors: {},
   groups: {entities: [], byId: {}},
-  entities: [],
-  byId: {},
 };
 
 export default function groupsReducer(state = initialState, action = {}) {
@@ -24,12 +22,11 @@ export default function groupsReducer(state = initialState, action = {}) {
       };
 
     case CREATE_GROUP_SUCCESS:
-      entities = [...state.entities, action.result];
+      entities = [...state.groups.entities, action.result];
 
       return {
         ...state,
-        entities,
-        byId: _.indexBy(entities, 'id'),
+        groups: {entities, byId: _.indexBy(entities, 'id')},
         createGroupErrors: {},
       };
 
