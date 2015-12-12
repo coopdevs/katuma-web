@@ -26,7 +26,7 @@ export default class GroupBase extends Component {
     };
 
     return (
-      <div className="container">
+      <div>
         {!group && <div>group not found</div>}
         {group && groupSection(group)}
       </div>

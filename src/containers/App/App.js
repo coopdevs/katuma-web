@@ -26,8 +26,7 @@ export default class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
-      // When user log in refresh local data
-      window.location = '/';
+      this.props.pushState(null, '/groups');
     } else if (this.props.user && !nextProps.user) {
       // On log out clean local data with refresh
       window.location = '/login';
