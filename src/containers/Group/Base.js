@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
+import { loadEntity as loadGroup } from 'redux/modules/groups/groups';
+
 @connect(
   state => ({
     memberships: state.groupsReducer.memberships
@@ -11,6 +13,16 @@ export default class GroupBase extends Component {
     children: PropTypes.object.isRequired,
     groups: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+  }
+
+  static fetchData(getState, dispatch, location, params) {
+    const { groupsReducer: {groups: { byId }}} = getState();
+    const id = params.id;
+    const group = byId[id];
+
+    if (!group) {
+      return dispatch(loadGroup(id));
+    }
   }
 
   render() {
