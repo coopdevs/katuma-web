@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
@@ -78,11 +79,18 @@ export default (store) => {
   };
 
   const redirectToGroupsDetail = (nextState, replaceState, cb) => {
-    function goToGroupDetail() {
+    function getGroupIds() {
       const {membershipsReducer: {memberships: {entities}}} = store.getState();
+      return _.uniq(_.pluck(entities, 'group_id'));
+    }
 
-      if (entities && entities.length === 1) {
-        replaceState(null, `/groups/${entities[0].group_id}`);
+    function goToGroupDetail() {
+      const groupIds = getGroupIds();
+
+      if (groupIds.length === 0) {
+        replaceState(null, '/onboarding');
+      } else if (groupIds.length === 1) {
+        replaceState(null, `/groups/${groupIds[0]}`);
       }
 
       cb();
