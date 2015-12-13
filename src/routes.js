@@ -1,8 +1,9 @@
-/* eslint no-debugger: 0 */
 import React from 'react';
-import {IndexRoute, Route} from 'react-router';
+import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
+
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
+import { load as loadGroups } from 'redux/modules/groups/groups';
 
 import {
     App,
@@ -11,10 +12,11 @@ import {
     Login,
     Signup,
     SignupComplete,
+    GroupsBase,
     GroupsList,
     GroupBase,
+    GroupMembers,
     OnboardingCreateGroup,
-    OnboardingMembers,
     InvitationComplete,
     Survey,
     NotFound,
@@ -27,15 +29,15 @@ export default (store) => {
      * Cases:
      *  1. User is not login
      *  2. After signup complete success
+     *  3. After inviation complete success
      *
      * @param {Redux<Object>} state
-     * @param {function} authLoaded
      * @return {Boolean}
      */
-    function needsUserFetch(state, authLoaded) {
-      return !authLoaded(state) ||
-              state.completeInvitationReducer.complete ||
-              state.signupCompleteReducer.complete;
+    function needsUserFetch(state) {
+      return !isAuthLoaded(state) ||
+             state.completeInvitationReducer.complete ||
+             state.signupCompleteReducer.complete;
     }
 
     function checkAuth() {
@@ -47,7 +49,7 @@ export default (store) => {
       cb();
     }
 
-    const fetchUser = needsUserFetch(store.getState(), isAuthLoaded);
+    const fetchUser = needsUserFetch(store.getState());
 
     if (fetchUser) {
       store.dispatch(loadAuth()).then(checkAuth);
@@ -57,8 +59,8 @@ export default (store) => {
   };
 
   const redirectToGroups = (nextState, replaceState, cb) => {
-    function checkUser() {
-      const { auth: { user }} = store.getState();
+    function goToGroups() {
+      const {auth: { user }} = store.getState();
 
       if (user) {
         replaceState(null, '/groups');
@@ -68,32 +70,29 @@ export default (store) => {
     }
 
     if (!isAuthLoaded(store.getState())) {
-      store.dispatch(loadAuth()).then(checkUser);
+      store.dispatch(loadAuth())
+        .then(goToGroups);
     } else {
-      checkUser();
+      goToGroups();
     }
   };
 
-  const checkUserGroups = (nextState, replaceState, cb) => {
-    function checkMemberships() {
-      const {membershipsReducer: {memberships}} = store.getState();
+  const redirectToGroupsDetail = (nextState, replaceState, cb) => {
+    function goToGroupDetail() {
+      const {membershipsReducer: {memberships: {entities}}} = store.getState();
 
-      if (!memberships.length) {
-        replaceState(null, '/onboarding');
-      } else if (memberships.length === 1) {
-        replaceState(store, `/groups/${memberships[0].group_id}`);
+      if (entities && entities.length === 1) {
+        replaceState(null, `/groups/${entities[0].group_id}`);
       }
 
       cb();
     }
 
-    const {membershipsReducer: {memberships}} = store.getState();
-
-    if (!memberships.length) {
-      store.dispatch(loadMemberships()).then(checkMemberships);
-    } else {
-      checkMemberships();
-    }
+    Promise.all([
+      store.dispatch(loadMemberships()),
+      store.dispatch(loadGroups()),
+    ])
+      .then(goToGroupDetail);
   };
 
   return (
@@ -113,15 +112,16 @@ export default (store) => {
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
-
-        <Route path="groups">
-          <IndexRoute component={GroupsList} onEnter={checkUserGroups}/>
-          <Route path=":id" component={GroupBase}/>
+        <Route path="groups" component={GroupsBase}>
+          <IndexRoute component={GroupsList} onEnter={redirectToGroupsDetail}/>
+          <Route path=":id" component={GroupBase}>
+            <IndexRoute component={GroupMembers}/>
+            <Route path="members" component={GroupMembers}/>
+          </Route>
         </Route>
 
         <Route path="onboarding">
           <IndexRoute component={OnboardingCreateGroup}/>
-          <Route path=":id/members" component={OnboardingMembers}/>
         </Route>
 
       </Route>

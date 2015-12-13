@@ -28,18 +28,15 @@ export default class App extends Component {
     if (!this.props.user && nextProps.user) {
       this.props.pushState(null, '/groups');
     } else if (this.props.user && !nextProps.user) {
-      this.props.pushState(null, '/login');
+      // On log out clean local data with refresh
+      window.location = '/login';
     }
   }
 
   static fetchData(getState, dispatch) {
-    const promises = [];
-
     if (!isAuthLoaded(getState())) {
-      promises.push(dispatch(loadAuth()));
+      return dispatch(loadAuth());
     }
-
-    return Promise.all(promises);
   }
 
   handleLogout(event) {

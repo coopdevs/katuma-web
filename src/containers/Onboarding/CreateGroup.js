@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
@@ -15,7 +16,7 @@ export default class Complete extends Component {
   static propTypes = {
     initialize: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
-    groups: PropTypes.array,
+    groups: PropTypes.object,
     createGroupErrors: PropTypes.object,
     history: PropTypes.object,
   }
@@ -34,8 +35,8 @@ export default class Complete extends Component {
 
       // do something on success
       self.props.initialize('onboardingCreateGroup', {});
-      const group = self.props.groups[self.props.groups.length - 1];
-      self.props.history.pushState(null, `/onboarding/${group.id}/members`);
+      const group = _.last(self.props.groups.entities);
+      self.props.history.pushState(null, `/groups/${group.id}/members`);
       return Promise.resolve({});
     });
   }
@@ -47,7 +48,6 @@ export default class Complete extends Component {
           <div className="col-sm-12">
             <DocumentMeta title="Signup Complete"/>
             <h1>Crea un grupo</h1>
-
             <CreateGroup onSubmit={::this.handleSubmit}/>
           </div>
         </div>
