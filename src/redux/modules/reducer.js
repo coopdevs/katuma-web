@@ -5,6 +5,7 @@ import auth from './auth';
 import signupCreateReducer from './signup/create';
 import signupCompleteReducer from './signup/complete';
 import membershipsReducer from './groups/memberships';
+import usersReducer from './users/users';
 import bulkInvitationsReducer from './invitations/bulk';
 import completeInvitationReducer from './invitations/complete';
 import groupsReducer from './groups/groups';
@@ -19,6 +20,7 @@ export default combineReducers({
   signupCreateReducer,
   signupCompleteReducer,
   membershipsReducer,
+  usersReducer,
   groupsReducer,
   bulkInvitationsReducer,
   completeInvitationReducer,
