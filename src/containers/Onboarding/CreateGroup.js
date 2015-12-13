@@ -36,7 +36,7 @@ export default class Complete extends Component {
       // do something on success
       self.props.initialize('onboardingCreateGroup', {});
       const group = _.last(self.props.groups.entities);
-      self.props.history.pushState(null, `/onboarding/${group.id}/members`);
+      self.props.history.pushState(null, `/groups/${group.id}/members`);
       return Promise.resolve({});
     });
   }
@@ -48,7 +48,6 @@ export default class Complete extends Component {
           <div className="col-sm-12">
             <DocumentMeta title="Signup Complete"/>
             <h1>Crea un grupo</h1>
-
             <CreateGroup onSubmit={::this.handleSubmit}/>
           </div>
         </div>

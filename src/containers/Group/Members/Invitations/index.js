@@ -1,27 +1,29 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import DocumentMeta from 'react-document-meta';
+import {initialize} from 'redux-form';
 import BulkInvitationsForm from 'components/forms/invitations/Bulk';
 import {send} from 'redux/modules/invitations/bulk';
 
 const mapStateToProps = (state) => ({
   bulkErrors: state.bulkInvitationsReducer.bulkErrors,
 });
-const mapDispatchToProps = {send};
+
+const mapDispatchToProps = { initialize, send };
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class OnboardingMembers extends Component {
+export default class GroupMembersInvitations extends Component {
   static propTypes = {
-    params: PropTypes.object,
+    initialize: PropTypes.func.isRequired,
+    group: PropTypes.object,
     send: PropTypes.func.isRequired,
     bulkErrors: PropTypes.object,
-    history: PropTypes.object,
   }
 
-  handleSubmit(data) {
+  sendInvitations(data) {
+    const self = this;
     const dataWithGroupId = {
       ...data,
-      group_id: this.props.params.id
+      group_id: this.props.group.id
     };
 
     return this.props.send(dataWithGroupId).then(() => {
@@ -31,21 +33,19 @@ export default class OnboardingMembers extends Component {
         return Promise.reject(errors);
       }
 
-      this.props.history.pushState(null, `/groups/${this.props.params.id}/members`);
+      self.props.initialize('bulkInvitations', {emails: ''});
       return Promise.resolve({});
     });
   }
 
   render() {
     return (
-      <div className="container">
-          <DocumentMeta title="Invite your friends"/>
-          <h1>Onboarding members</h1>
-          <BulkInvitationsForm
-            onSubmit={this.handleSubmit.bind(this)}
-          />
+      <div>
+        <h3>Invitaciones</h3>
+        <BulkInvitationsForm
+        onSubmit={::this.sendInvitations}
+        />
       </div>
     );
   }
 }
-

@@ -58,9 +58,7 @@ export default class Complete extends Component {
       }
 
       // do something on success
-      this.props.initialize('signupComplete', {});
-      this.props.history.pushState(null, '/groups');
-      return Promise.resolve({});
+      window.location = '/onboarding';
     });
   }
 

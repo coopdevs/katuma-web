@@ -17,7 +17,6 @@ import {
     GroupBase,
     GroupMembers,
     OnboardingCreateGroup,
-    OnboardingMembers,
     InvitationComplete,
     Survey,
     NotFound,
@@ -123,7 +122,6 @@ export default (store) => {
 
         <Route path="onboarding">
           <IndexRoute component={OnboardingCreateGroup}/>
-          <Route path=":id/members" component={OnboardingMembers}/>
         </Route>
 
       </Route>
