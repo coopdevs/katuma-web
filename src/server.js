@@ -109,7 +109,10 @@ app.use((req, res, next) => {
   });
 });
 
-const listenTo = config.isProduction ? process.env.SOCK_PATH : process.env.PORT;
+const listenTo = {
+  host: process.env.NODE_HOST,
+  port: process.env.NODE_PORT
+}
 
 if (listenTo) {
   server.listen(listenTo, (err) => {
@@ -117,13 +120,8 @@ if (listenTo) {
       console.error(err);
     }
     console.info('----\n==> ✅  %s is running, talking to API server on port %s.', config.app.title, config.apiPort);
-    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, listenTo);
+    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, listenTo.port);
   });
 } else {
-  console.error('==>     ERROR: No SOCK_PATH or PORT environment variable has been specified');
+  console.error('==>     ERROR: No NODE_PATH or NODE_PORT environment variable has been specified');
 }
-
-process.on('SIGINT', () => {
-  server.close();
-  process.exit();
-});

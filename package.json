@@ -34,7 +34,8 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
-        "PORT": 8000,
+        "NODE_PORT": 8000,
+        "NODE_HOST": "localhost",
         "API_PORT": 3000
       }
     },
@@ -43,7 +44,8 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
-        "SOCK_PATH": "/var/run/node/express.sock",
+        "NODE_PORT": 8080,
+        "NODE_HOST": "127.0.0.1",
         "API_SOCK_PATH": "/var/run/unicorn/unicorn.sock"
       }
     },
