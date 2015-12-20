@@ -3,17 +3,14 @@ import {connect} from 'react-redux';
 
 import { loadEntity as loadGroup } from 'redux/modules/groups/groups';
 import { load as loadUsers } from 'redux/modules/users/users';
+import { membersWithUserSelector } from 'selectors/members';
 
-@connect(
-  state => ({
-    memberships: state.membershipsReducer.memberships
-  }),
-  {})
+@connect(membersWithUserSelector, {})
 export default class GroupBase extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     groups: PropTypes.object.isRequired,
-    memberships: PropTypes.object.isRequired,
+    members: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
   }
 
@@ -38,14 +35,14 @@ export default class GroupBase extends Component {
   }
 
   render() {
-    const { groups, memberships, params: { id }} = this.props;
+    const { groups, members, params: { id }} = this.props;
     const group = groups.byId[id];
 
     const groupSection = () => {
       return (
         <div>
           <h1 className="h4">{group.name}</h1>
-          {React.cloneElement(this.props.children, {group: group, memberships: memberships})}
+          {React.cloneElement(this.props.children, {group: group, members: members})}
         </div>
       );
     };

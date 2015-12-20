@@ -4,7 +4,7 @@ const LOAD_SUCCESS = 'redux-example/memberships/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/memberships/LOAD_FAIL';
 
 const initialState = {
-  memberships: {entities: [], byGroupID: []}
+  memberships: {entities: [], byUserId: []}
 };
 
 export default function membershipsReducer(state = initialState, action = {}) {
@@ -20,7 +20,10 @@ export default function membershipsReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        memberships: {entities: entities, byGroupID: _.indexBy(entities, 'group_id')},
+        memberships: {
+          entities: entities,
+          byUserID: _.indexBy(entities, 'user_id'),
+        },
       };
     case LOAD_FAIL:
       return {
