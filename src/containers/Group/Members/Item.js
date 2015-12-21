@@ -10,7 +10,7 @@ export default class GroupMembersItem extends Component {
 
     return (
       <div>
-        {member.id}
+        {member.full_name}
       </div>
     );
   }
