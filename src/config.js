@@ -7,7 +7,8 @@ const logo = 'https://pbs.twimg.com/profile_images/439758163680571393/4-Ety8fn.p
 const environment = {
   development: {
     isProduction: false,
-    apiPort: process.env.API_PORT
+    apiPort: process.env.API_PORT,
+    apiHost: process.env.API_HOST || 'localhost'
   },
   production: {
     isProduction: true,
@@ -16,8 +17,8 @@ const environment = {
 }[process.env.NODE_ENV || 'development'];
 
 module.exports = Object.assign({
-  host: `http://${(process.env.HOST || 'localhost')}`,
-  port: process.env.PORT,
+  host: process.env.NODE_HOST || 'localhost',
+  port: process.env.NODE_PORT,
   apiVersion: process.env.APIVERSION || 'v1',
   app: {
     title: title,

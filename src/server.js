@@ -110,8 +110,8 @@ app.use((req, res, next) => {
 });
 
 const listenTo = {
-  host: process.env.NODE_HOST,
-  port: process.env.NODE_PORT
+  host: config.host,
+  port: config.port
 }
 
 if (listenTo) {

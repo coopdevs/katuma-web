@@ -35,7 +35,6 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "NODE_PORT": 8000,
-        "NODE_HOST": "localhost",
         "API_PORT": 3000
       }
     },

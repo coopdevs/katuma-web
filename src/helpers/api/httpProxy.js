@@ -16,7 +16,7 @@ const canSetSession = (req, res) => {
         VALID_END_POINTS_FOR_SESSION.test(req.path);
 };
 
-export default httpProxy('localhost', {
+export default httpProxy(config.apiHost, {
   forwardPath: (req) => {
     const originalPath = require('url').parse(req.url).path;
 

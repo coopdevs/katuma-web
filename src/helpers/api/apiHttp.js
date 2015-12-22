@@ -11,7 +11,7 @@ const baseUrl = () => {
     return `unix:${config.apiSocketPath}:`;
   }
 
-  return `localhost:${config.apiPort}`;
+  return `${config.apiHost}:${config.apiPort}`;
 }
 
 /**
