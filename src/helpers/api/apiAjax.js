@@ -10,7 +10,7 @@ function formatUrl(path) {
 class ApiAjax {
   constructor() {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) =>
-      this[method] = (path, { params, data } = {}) => new Promise((resolve, reject) => {
+      this[method] = (path, { data } = {}) => new Promise((resolve, reject) => {
         const url = formatUrl(path);
         const options = {
           method: method,
