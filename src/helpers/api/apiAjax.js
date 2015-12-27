@@ -24,7 +24,7 @@ class ApiAjax {
 
         fetch(url, options)
         .then(function(response) {
-          if (response.status === 401) {
+          if (response.status === 401 || response.bodyUsed === false) {
             resolve(null);
             return;
           }
