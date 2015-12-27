@@ -31,7 +31,6 @@ class ApiHttp {
   constructor(userId) {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) => {
       this[method] = (path, { params, data } = {}) => new Promise((resolve, reject) => {
-
         const req = request[method];
         const options = {
           url: completeUrl(path),
@@ -39,6 +38,7 @@ class ApiHttp {
             'X-katuma-user-id': userId || ''
           },
           body: data,
+          qs: params,
           json: true
         };
 
