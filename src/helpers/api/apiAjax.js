@@ -14,14 +14,24 @@ class ApiAjax {
         const req = new XMLHttpRequest();
         const url = formatUrl(path);
 
-        req.onload = function() {
+        req.onload = () => {
+          if (req.status === 500) {
+            reject(req.response);
+            return;
+          }
+
           if (req.response.length > 0) {
             resolve(JSON.parse(req.response));
+            return;
           }
 
           resolve(null);
         };
-        req.onerror = function() {
+
+        /**
+         * Only covers network errors between the browser and the Express HTTP proxy
+         */
+        req.onerror = () => {
           reject(null);
         };
 
