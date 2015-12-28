@@ -11,36 +11,24 @@ class ApiAjax {
   constructor() {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) =>
       this[method] = (path, { data } = {}) => new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest();
         const url = formatUrl(path);
-        const options = {
-          method: method,
-          body: JSON.stringify(data),
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          credentials: 'same-origin'
-        };
 
-        fetch(url, options)
-        .then(function(response) {
-          if (response.status === 401 || response.bodyUsed === false) {
-            resolve(null);
-            return;
+        req.onload = function() {
+          if (req.response.length > 0) {
+            resolve(JSON.parse(req.response));
           }
 
-          response
-            .json()
-            .then(function(json) {
-              resolve(json);
-            })
-            .catch(function(err) {
-              reject(err);
-            });
-        })
-        .catch(function(err) {
-          reject(err);
-        });
+          resolve(null);
+        };
+        req.onerror = function() {
+          reject(null);
+        };
+
+        req.open(method, url);
+        req.setRequestHeader('Accept', 'application/json');
+        req.setRequestHeader('Content-Type', 'application/json');
+        req.send(JSON.stringify(data));
       })
     );
   }
