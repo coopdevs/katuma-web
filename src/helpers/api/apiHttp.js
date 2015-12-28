@@ -27,7 +27,7 @@ const completeUrl = (path) => {
   return `http://${baseUrl()}${apiPath}`;
 }
 
-class ApiHttp {
+class _ApiHttp {
   constructor(userId) {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) => {
       this[method] = (path, { params, data } = {}) => new Promise((resolve, reject) => {
@@ -55,5 +55,9 @@ class ApiHttp {
     });
   }
 }
+
+// This is just ridiculous:
+// http://discuss.babeljs.io/t/referenceerror-apiclient-is-not-defined/51
+const ApiHttp = _ApiHttp;
 
 export default ApiHttp;
