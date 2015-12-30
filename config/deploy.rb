@@ -1,7 +1,7 @@
 require 'mina/bundler'
 require 'mina/git'
 
-set :domain, '10.0.3.52' # TODO: remove hardcoded IP
+set :domain, 'alfa.katuma.org'
 set :deploy_to, '/opt/app/katuma-web'
 set :repository, 'https://github.com/coopdevs/katuma-web.git'
 set :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
@@ -11,7 +11,8 @@ set :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 set :shared_paths, ['log']
 
 # SSH settings:
-set :user, 'katuma'
+set :user, 'ubuntu'
+set :port, '22666'
 set :forward_agent, true
 
 # This task is the environment that is loaded for most commands, such as
