@@ -15,13 +15,10 @@ export default class Login extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const login = this.refs.login;
+    const email = this.refs.email;
     const password = this.refs.password;
-    this.props.login({
-      login: login.value,
-      password: password.value,
-    });
-    login.value = '';
+    this.props.login(email.value, password.value);
+    email.value = '';
     password.value = '';
   }
 
@@ -33,7 +30,7 @@ export default class Login extends Component {
         <div>
           <form className="login-form" onSubmit={::this.handleSubmit}>
             <div className="form-group">
-              <input className="form-control" type="text" ref="login" placeholder="Enter your email or username"/>
+              <input className="form-control" type="email" ref="email" placeholder="Enter your email or username"/>
             </div>
             <div className="form-group">
               <input className="form-control" type="password" ref="password" placeholder="Enter your password"/>
