@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import { loadEntity as loadGroup } from 'redux/modules/groups/groups';
 import { load as loadUsers } from 'redux/modules/users/users';
+import { load as loadMemberships } from 'redux/modules/groups/memberships';
 import { membersWithUserSelector } from 'selectors/members';
 
 @connect(membersWithUserSelector, {})
@@ -18,6 +19,7 @@ export default class GroupBase extends Component {
     const {
       groupsReducer: {groups: { byId }},
       usersReducer: { users },
+      membershipsReducer: { memberships },
     } = getState();
     const promises = [];
     const id = params.id;
@@ -25,6 +27,10 @@ export default class GroupBase extends Component {
 
     if (!users.entities.length) {
       promises.push(dispatch(loadUsers()));
+    }
+
+    if (!memberships.entities.length) {
+      promises.push(dispatch(loadMemberships()));
     }
 
     if (!group) {

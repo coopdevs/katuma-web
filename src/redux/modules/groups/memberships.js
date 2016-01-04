@@ -4,7 +4,7 @@ const LOAD_SUCCESS = 'redux-example/memberships/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/memberships/LOAD_FAIL';
 
 const initialState = {
-  memberships: {entities: [], byUserId: []}
+  memberships: {entities: [], byUserID: []}
 };
 
 export default function membershipsReducer(state = initialState, action = {}) {
