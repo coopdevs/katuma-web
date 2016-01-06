@@ -5,14 +5,13 @@ import Item from './Item';
 export default class GroupMembersList extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
-    members: PropTypes.object.isRequired,
+    members: PropTypes.array.isRequired,
   }
 
   render() {
-    const { members, group: {id}} = this.props;
-    const membersOfGroup = members.byGroupID[id] || [];
+    const { members } = this.props;
 
-    const memberList = membersOfGroup.map((member) => {
+    const memberList = members.map((member) => {
       return (<li key={member.id}><Item member={member} /></li>);
     });
 

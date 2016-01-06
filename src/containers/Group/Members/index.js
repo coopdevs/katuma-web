@@ -6,12 +6,15 @@ import List from './List';
 
 export default class GroupMembers extends Component {
   static propTypes = {
-    group: PropTypes.object,
-    members: PropTypes.object,
+    group: PropTypes.object.isRequired,
+    currentUser: PropTypes.object.isRequired,
+    members: PropTypes.array.isRequired,
+    invitations: PropTypes.object.isRequired,
   }
 
   render() {
-    const { group, members } = this.props;
+
+    const { currentUser, group, members, invitations } = this.props;
 
     return (
       <div>
@@ -22,7 +25,11 @@ export default class GroupMembers extends Component {
         <div className="row">
 
           <div className="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
-            <Invitations group={group} />
+          <Invitations
+            group={group}
+            invitations={invitations}
+            currentUser={currentUser}
+          />
           </div>
 
           <div className="col-xs-12 col-sm-6 col-sm-pull-6 col-md-8 col-md-pull-4">

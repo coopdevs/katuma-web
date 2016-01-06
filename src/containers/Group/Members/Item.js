@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
+import { getRole } from 'helpers/entities/member';
+
 export default class GroupMembersItem extends Component {
   static propTypes = {
     member: PropTypes.object,
@@ -10,7 +12,9 @@ export default class GroupMembersItem extends Component {
 
     return (
       <div>
-        {member.full_name}
+        {`${member.full_name} - `}
+
+        <span className="badge">{getRole(member)}</span>
       </div>
     );
   }
