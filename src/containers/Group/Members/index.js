@@ -6,10 +6,10 @@ import List from './List';
 
 export default class GroupMembers extends Component {
   static propTypes = {
-    group: PropTypes.object.isRequired,
-    currentUser: PropTypes.object.isRequired,
-    members: PropTypes.array.isRequired,
-    invitations: PropTypes.object.isRequired,
+    group: PropTypes.object,
+    currentUser: PropTypes.object,
+    members: PropTypes.array,
+    invitations: PropTypes.object,
   }
 
   render() {
