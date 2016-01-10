@@ -21,7 +21,7 @@ export default class GroupBase extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     groups: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object,
     invitations: PropTypes.object.isRequired,
     members: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
