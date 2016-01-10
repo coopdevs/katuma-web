@@ -24,12 +24,15 @@ const dest = document.getElementById('content');
 const store = createStore(reduxReactRouter, makeRouteHooksSafe(getRoutes), scrollablehistory, client, window.__data);
 
 const component = (
-  <Provider store={store} key="provider">
-    <ReduxRouter routes={getRoutes(store)} />
-  </Provider>
+  <ReduxRouter routes={getRoutes(store)} />
 );
 
-ReactDOM.render(component, dest);
+ReactDOM.render(
+  <Provider store={store} key="provider">
+    {component}
+  </Provider>,
+  dest
+);
 
 if (process.env.NODE_ENV !== 'production') {
   window.React = React; // enable debugger
@@ -39,12 +42,15 @@ if (process.env.NODE_ENV !== 'production') {
   }
 }
 
-if (__DEVTOOLS__) {
-  const { DevTools, DebugPanel, LogMonitor } = require('redux-devtools/lib/react');
-  ReactDOM.render(<div>
-    {component}
-    <DebugPanel top right bottom key="debugPanel">
-      <DevTools store={store} monitor={LogMonitor}/>
-    </DebugPanel>
-  </div>, dest);
+if (__DEVTOOLS__ && !window.devToolsExtension) {
+  const DevTools = require('./containers/DevTools/DevTools');
+  ReactDOM.render(
+    <Provider store={store} key="provider">
+      <div>
+        {component}
+        <DevTools />
+      </div>
+    </Provider>,
+    dest
+  );
 }
