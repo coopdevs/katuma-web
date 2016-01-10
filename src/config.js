@@ -1,6 +1,6 @@
 require('babel/polyfill');
 
-const title = 'Katuma - Collaborative consumption';
+const title = 'katuma';
 const description = 'Skip the middleman, buy directly from the providers.';
 const logo = 'https://pbs.twimg.com/profile_images/439758163680571393/4-Ety8fn.png';
 
