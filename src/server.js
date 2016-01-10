@@ -70,7 +70,7 @@ const proxy = httpProxy(`http://${(process.env.HOST || 'localhost')}`, {
 app.use(compression());
 app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
 
-app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
+app.use(Express.static(path.join(__dirname, '..', 'static')));
 
 app.use(session({
   store: new RedisStore({port: 6379}),
