@@ -28,8 +28,9 @@ export default class App extends Component {
     if (!this.props.user && nextProps.user) {
       this.props.pushState(null, '/groups');
     } else if (this.props.user && !nextProps.user) {
-      // On log out clean local data with refresh
-      window.location = '/login';
+      this.props.pushState(null, '/login');
+      // Full real page reload to clean local data
+      window.location.reload();
     }
   }
 

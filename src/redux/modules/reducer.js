@@ -5,8 +5,10 @@ import auth from './auth';
 import signupCreateReducer from './signup/create';
 import signupCompleteReducer from './signup/complete';
 import membershipsReducer from './groups/memberships';
+import usersReducer from './users/users';
 import bulkInvitationsReducer from './invitations/bulk';
 import completeInvitationReducer from './invitations/complete';
+import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
 import {reducer as form} from 'redux-form';
 import info from './info';
@@ -19,7 +21,9 @@ export default combineReducers({
   signupCreateReducer,
   signupCompleteReducer,
   membershipsReducer,
+  usersReducer,
   groupsReducer,
+  invitationsReducer,
   bulkInvitationsReducer,
   completeInvitationReducer,
   form,

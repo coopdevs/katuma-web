@@ -1,13 +1,13 @@
 import _ from 'underscore';
-const LOAD = 'redux-example/memberships/LOAD';
-const LOAD_SUCCESS = 'redux-example/memberships/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/memberships/LOAD_FAIL';
+const LOAD = 'redux-example/users/LOAD';
+const LOAD_SUCCESS = 'redux-example/users/LOAD_SUCCESS';
+const LOAD_FAIL = 'redux-example/users/LOAD_FAIL';
 
 const initialState = {
-  memberships: {entities: [], byUserID: []}
+  users: {entities: [], byID: []}
 };
 
-export default function membershipsReducer(state = initialState, action = {}) {
+export default function usersReducer(state = initialState, action = {}) {
   switch (action.type) {
     case LOAD:
       return {
@@ -20,10 +20,7 @@ export default function membershipsReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        memberships: {
-          entities: entities,
-          byUserID: _.indexBy(entities, 'user_id'),
-        },
+        users: {entities: entities, byID: _.indexBy(entities, 'id')},
       };
     case LOAD_FAIL:
       return {
@@ -39,6 +36,6 @@ export default function membershipsReducer(state = initialState, action = {}) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/memberships')
+    promise: (client) => client.get('/users')
   };
 }

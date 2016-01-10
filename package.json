@@ -89,7 +89,8 @@
     "superagent": "^1.4.0",
     "url-loader": "^0.5.6",
     "webpack-isomorphic-tools": "^2.2.4",
-    "underscore": "1.8.3"
+    "underscore": "1.8.3",
+    "reselect": "2.0.1"
   },
   "devDependencies": {
     "autoprefixer-loader": "3.1.0",
