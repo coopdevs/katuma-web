@@ -3,14 +3,16 @@ import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
 
 import BulkInvitationsForm from 'components/forms/invitations/Bulk';
-import { send } from 'redux/modules/invitations/bulk';
+import { send as sendBulk } from 'redux/modules/invitations/bulk';
+import { send } from 'redux/modules/invitations/list';
 import { isRole } from 'helpers/entities/member';
 
 const mapStateToProps = (state) => ({
   bulkErrors: state.bulkInvitationsReducer.bulkErrors,
+  invitationStatusByID: state.invitationsReducer.invitationStatusByID,
 });
 
-const mapDispatchToProps = { initialize, send };
+const mapDispatchToProps = { initialize, send, sendBulk };
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class GroupMembersInvitations extends Component {
@@ -18,7 +20,9 @@ export default class GroupMembersInvitations extends Component {
     initialize: PropTypes.func.isRequired,
     invitations: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
+    invitationStatusByID: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
+    sendBulk: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
     bulkErrors: PropTypes.object,
   }
@@ -30,7 +34,7 @@ export default class GroupMembersInvitations extends Component {
       group_id: this.props.group.id,
     };
 
-    return this.props.send(dataWithGroupId).then(() => {
+    return this.props.sendBulk(dataWithGroupId).then(() => {
       const errors = this.props.bulkErrors;
 
       if (Object.keys(errors).length) {
@@ -42,26 +46,42 @@ export default class GroupMembersInvitations extends Component {
     });
   }
 
-  resendInvitation(invitationId) {
-    console.log(invitationId);
+  resendInvitation(id, email, groupId) {
+    return this.props.send({
+      id,
+      email,
+      groupId,
+    });
   }
 
   render() {
-    const { currentUser, invitations, group } = this.props;
+    const {
+      currentUser,
+      invitations,
+      invitationStatusByID,
+      group,
+    } = this.props;
     const invitationsByGroup = invitations.byGroupID[group.id];
     const isAdmin = isRole(currentUser, 'admin');
 
     const invitationsList = invitationsByGroup.map((invitation) => {
+      const invitationState = invitationStatusByID[invitation.id];
+      const label = invitationState.sending ? 'Enviando...' : 'Reenviar';
+
       return (<li key={invitation.id}>
               {`${invitation.email} - `}
 
-        {isAdmin &&
+        {isAdmin && !invitationState.sent &&
          <button
           className="btn btn-default btn-xs"
-         onClick={this.resendInvitation.bind(this, invitation.id)}
+          disabled={invitationState.sending}
+          onClick={this.resendInvitation.bind(this, invitation.id, invitation.email, group.id)}
          >
-          Reenviar
+          {label}
          </button>
+        }
+        {isAdmin && invitationState.sent &&
+         <i style={{color: 'green'}} className="fa fa-check"></i>
         }
       </li>);
     });
