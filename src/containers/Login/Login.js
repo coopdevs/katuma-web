@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 
 import * as authActions from 'redux/modules/auth';
-import config from '../../config';
 
 @connect(
   () => ({}),
@@ -30,7 +29,7 @@ export default class Login extends Component {
   render() {
     return (
       <div className="container">
-        <DocumentMeta title={config.app.title + ': Login'}/>
+        <Helmet title="Login"/>
         <h1>Login</h1>
         <div>
           <form className="login-form" onSubmit={::this.handleSubmit}>

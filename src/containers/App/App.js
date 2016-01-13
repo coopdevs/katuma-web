@@ -4,7 +4,7 @@ import { IndexLink } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 import { pushState } from 'redux-router';
 import connectData from 'helpers/connectData';
@@ -53,7 +53,7 @@ export default class App extends Component {
 
     return (
       <div className={styles.app}>
-        <DocumentMeta {...config.app}/>
+        <Helmet {...config.app.head}/>
         <Navbar fixedTop>
           <Navbar.Header>
             <Navbar.Brand>
