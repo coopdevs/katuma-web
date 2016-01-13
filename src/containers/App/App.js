@@ -2,13 +2,21 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { IndexLink } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, NavBrand, Nav, NavItem, CollapsibleNav } from 'react-bootstrap';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 import { pushState } from 'redux-router';
+import connectData from 'helpers/connectData';
 import config from '../../config';
 
+function fetchData(getState, dispatch) {
+  if (!isAuthLoaded(getState())) {
+    return dispatch(loadAuth());
+  }
+}
+
+@connectData(fetchData)
 @connect(
     state => ({user: state.auth.user}),
     dispatch => bindActionCreators({logout, pushState}, dispatch))
@@ -34,12 +42,6 @@ export default class App extends Component {
     }
   }
 
-  static fetchData(getState, dispatch) {
-    if (!isAuthLoaded(getState())) {
-      return dispatch(loadAuth());
-    }
-  }
-
   handleLogout(event) {
     event.preventDefault();
     this.props.logout();
@@ -51,16 +53,19 @@ export default class App extends Component {
 
     return (
       <div className={styles.app}>
-        <DocumentMeta {...config.app}/>
-        <Navbar fixedTop toggleNavKey={0}>
-          <NavBrand>
-            <IndexLink to="/" activeStyle={{color: '#33e0ff'}}>
-              <div className={styles.brand}/>
-              <span>Katuma</span>
-            </IndexLink>
-          </NavBrand>
+        <Helmet {...config.app.head}/>
+        <Navbar fixedTop>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <IndexLink to="/" activeStyle={{color: '#33e0ff'}}>
+                <div className={styles.brand}/>
+                <span>{config.app.title}</span>
+              </IndexLink>
+            </Navbar.Brand>
+            <Navbar.Toggle/>
+          </Navbar.Header>
 
-          <CollapsibleNav eventKey={0}>
+          <Navbar.Collapse eventKey={0}>
             <Nav navbar>
               <LinkContainer to="/widgets">
                 <NavItem eventKey={2}>Widgets</NavItem>
@@ -89,13 +94,14 @@ export default class App extends Component {
             </Nav>
             {user &&
             <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.full_name}</strong></p>}
-            <Nav navbar right>
+            <Nav navbar pullRight>
               <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/erikras/react-redux-universal-hot-example">
                 <i className="fa fa-github"/>
               </NavItem>
             </Nav>
-          </CollapsibleNav>
+          </Navbar.Collapse>
         </Navbar>
+
         <div className={styles.appContent}>
           {this.props.children}
         </div>

@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
 import * as widgetActions from 'redux/modules/widgets';
-import {isLoaded, load as loadWidgets} from 'redux/modules/widgets';
 import {initializeWithKey} from 'redux-form';
 import { WidgetForm } from 'components';
 
@@ -33,12 +32,6 @@ class Widgets extends Component {
     editStart: PropTypes.func.isRequired
   }
 
-  static fetchDataDeferred(getState, dispatch) {
-    if (!isLoaded(getState())) {
-      return dispatch(loadWidgets());
-    }
-  }
-
   handleEdit(widget) {
     const {editStart} = this.props; // eslint-disable-line no-shadow
     return () => {
@@ -61,7 +54,9 @@ class Widgets extends Component {
             className={refreshClassName}/> {' '} Reload Widgets
           </button>
         </h1>
-        <DocumentMeta title="React Redux Example: Widgets"/>
+
+        <Helmet title="Widgets"/>
+
         <p>
           If you hit refresh on your browser, the data loading will take place on the server before the page is returned.
           If you navigated here from another page, the data was fetched from the client after the route transition.
