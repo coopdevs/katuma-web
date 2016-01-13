@@ -7,8 +7,16 @@ import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 import { pushState } from 'redux-router';
+import connectData from 'helpers/connectData';
 import config from '../../config';
 
+function fetchData(getState, dispatch) {
+  if (!isAuthLoaded(getState())) {
+    return dispatch(loadAuth());
+  }
+}
+
+@connectData(fetchData)
 @connect(
     state => ({user: state.auth.user}),
     dispatch => bindActionCreators({logout, pushState}, dispatch))
@@ -31,12 +39,6 @@ export default class App extends Component {
       this.props.pushState(null, '/login');
       // Full real page reload to clean local data
       window.location.reload();
-    }
-  }
-
-  static fetchData(getState, dispatch) {
-    if (!isAuthLoaded(getState())) {
-      return dispatch(loadAuth());
     }
   }
 

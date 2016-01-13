@@ -67,6 +67,7 @@
     "file-loader": "^0.8.5",
     "invariant": "^2.2.0",
     "history": "1.17.0",
+    "hoist-non-react-statics": "^1.0.3",
     "less": "^2.5.3",
     "less-loader": "^2.2.1",
     "lru-memoize": "^1.0.0",

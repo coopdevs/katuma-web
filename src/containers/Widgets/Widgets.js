@@ -3,7 +3,6 @@ import {bindActionCreators} from 'redux';
 import DocumentMeta from 'react-document-meta';
 import {connect} from 'react-redux';
 import * as widgetActions from 'redux/modules/widgets';
-import {isLoaded, load as loadWidgets} from 'redux/modules/widgets';
 import {initializeWithKey} from 'redux-form';
 import { WidgetForm } from 'components';
 
@@ -31,12 +30,6 @@ class Widgets extends Component {
     editing: PropTypes.object.isRequired,
     load: PropTypes.func.isRequired,
     editStart: PropTypes.func.isRequired
-  }
-
-  static fetchDataDeferred(getState, dispatch) {
-    if (!isLoaded(getState())) {
-      return dispatch(loadWidgets());
-    }
   }
 
   handleEdit(widget) {
