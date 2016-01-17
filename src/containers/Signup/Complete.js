@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
+
 import * as signupCompleteActions from 'redux/modules/signup/complete';
 import CompleteSignupForm from 'components/forms/signup/Complete';
 
@@ -67,7 +68,7 @@ export default class Complete extends Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
-            <DocumentMeta title="Signup Complete"/>
+            <Helmet title="Signup Complete"/>
             <h1>Finaliza el registro</h1>
 
             <CompleteSignupForm

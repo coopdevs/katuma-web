@@ -2,8 +2,8 @@ import _ from 'underscore';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
-import DocumentMeta from 'react-document-meta';
 import { create } from 'redux/modules/groups/groups';
+import Helmet from 'react-helmet';
 import CreateGroup from 'components/forms/onboarding/Group';
 
 @connect(
@@ -46,7 +46,7 @@ export default class Complete extends Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
-            <DocumentMeta title="Signup Complete"/>
+            <Helmet title="Signup Complete"/>
             <h1>Crea un grupo</h1>
             <CreateGroup onSubmit={::this.handleSubmit}/>
           </div>

@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 
 import Invitations from './Invitations';
 import List from './List';
@@ -18,7 +18,7 @@ export default class GroupMembers extends Component {
 
     return (
       <div>
-        <DocumentMeta title={`Miembros de ${group.name}`}/>
+        <Helmet title={`Miembros de ${group.name}`}/>
 
         <h2>Miembros</h2>
 

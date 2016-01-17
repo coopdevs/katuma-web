@@ -1,25 +1,17 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { IndexLink } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import { routeActions } from 'redux-simple-router';
+
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import { pushState } from 'redux-router';
-import connectData from 'helpers/connectData';
 import config from '../../config';
 
-function fetchData(getState, dispatch) {
-  if (!isAuthLoaded(getState())) {
-    return dispatch(loadAuth());
-  }
-}
-
-@connectData(fetchData)
 @connect(
-    state => ({user: state.auth.user}),
-    dispatch => bindActionCreators({logout, pushState}, dispatch))
+  state => ({user: state.auth.user}),
+  {logout, pushState: routeActions.push})
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
@@ -34,12 +26,21 @@ export default class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
-      this.props.pushState(null, '/groups');
+      this.props.pushState('/groups');
     } else if (this.props.user && !nextProps.user) {
-      this.props.pushState(null, '/login');
+      this.props.pushState('/login');
       // Full real page reload to clean local data
       window.location.reload();
     }
+  }
+
+  static loadProps(params) {
+    const {dispatch, getState} = params.store;
+    const promises = [];
+    if (!isAuthLoaded(getState())) {
+      promises.push(dispatch(loadAuth()));
+    }
+    return Promise.all(promises);
   }
 
   handleLogout(event) {

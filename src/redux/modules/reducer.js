@@ -13,10 +13,10 @@ import groupsReducer from './groups/groups';
 import {reducer as form} from 'redux-form';
 import info from './info';
 import widgets from './widgets';
-import { routerStateReducer } from 'redux-router';
+import { routeReducer } from 'redux-simple-router';
 
 export default combineReducers({
-  router: routerStateReducer,
+  routing: routeReducer,
   auth,
   signupCreateReducer,
   signupCompleteReducer,
