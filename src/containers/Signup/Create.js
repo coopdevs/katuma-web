@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 import * as signupActions from 'redux/modules/signup/create';
 
 @connect(
@@ -66,7 +66,7 @@ export default class Create extends Component {
 
     return (
       <div className="container">
-        <DocumentMeta title="Signup"/>
+        <Helmet title="Signup"/>
         <h1>Signup</h1>
 
         {successMessage}

@@ -1,52 +1,46 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 import * as invitationCompleteActions from 'redux/modules/invitations/complete';
 import CompleteSignupForm from 'components/forms/signup/Complete';
 
 @connect(
   state => ({
     validInvitation: state.completeInvitationReducer.validInvitation,
+    user: state.auth.user,
     completeInvitationErrors: state.completeInvitationReducer.completeInvitationErrors
   }),
   {initialize, complete: invitationCompleteActions.complete})
 export default class InvitationComplete extends Component {
   static propTypes = {
     initialize: PropTypes.func.isRequired,
+    user: PropTypes.object,
     complete: PropTypes.func.isRequired,
     params: PropTypes.object,
     completeInvitationErrors: PropTypes.object,
     validInvitation: PropTypes.bool,
     history: PropTypes.object,
     token: PropTypes.string
+  };
+
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
+
+  componentWillMount() {
+    const { validInvitation, user } = this.props;
+
+    if (!validInvitation || user) {
+      this.context.router.replace('/');
+    }
   }
 
-  static onEnter(nextState, replaceState, cb) {
-    const context = this.context;
-    const token = nextState.params.token;
+  static reduxAsyncConnect(params, store) {
+    const { dispatch } = store;
+    const { token } = params;
 
-    function goHome() {
-      replaceState(null, '/');
-    }
-
-    function signupOrHome() {
-      const {completeInvitationReducer: {validInvitation}} = context.getState();
-
-      if (!validInvitation) {
-        goHome();
-      }
-
-      cb();
-    }
-
-    if (token) {
-      context.dispatch(invitationCompleteActions.checkInvitation(token))
-        .then(signupOrHome);
-    } else {
-      goSignup();
-      cb();
-    }
+    return dispatch(invitationCompleteActions.checkInvitation(token));
   }
 
   handleSubmit(data) {
@@ -57,7 +51,7 @@ export default class InvitationComplete extends Component {
         return Promise.reject(errors);
       }
 
-      this.props.history.pushState(null, '/groups');
+      this.props.history.push('/groups');
       return Promise.resolve({});
     });
   }
@@ -67,7 +61,7 @@ export default class InvitationComplete extends Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
-            <DocumentMeta title="Complete your registration"/>
+            <Helmet title="Complete your registration"/>
             <h1>Finaliza el registro</h1>
 
             <CompleteSignupForm

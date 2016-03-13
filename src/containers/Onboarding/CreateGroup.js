@@ -2,7 +2,7 @@ import _ from 'underscore';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 import { create } from 'redux/modules/groups/groups';
 import CreateGroup from 'components/forms/onboarding/Group';
 
@@ -19,7 +19,11 @@ export default class Complete extends Component {
     groups: PropTypes.object,
     createGroupErrors: PropTypes.object,
     history: PropTypes.object,
-  }
+  };
+
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
 
   handleSubmit(data) {
     // I do not know javascript at all
@@ -35,8 +39,9 @@ export default class Complete extends Component {
 
       // do something on success
       self.props.initialize('onboardingCreateGroup', {});
+
       const group = _.last(self.props.groups.entities);
-      self.props.history.pushState(null, `/groups/${group.id}/members`);
+      self.context.router.push(`/groups/${group.id}/members`);
       return Promise.resolve({});
     });
   }
@@ -46,7 +51,7 @@ export default class Complete extends Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
-            <DocumentMeta title="Signup Complete"/>
+            <Helmet title="Signup Complete"/>
             <h1>Crea un grupo</h1>
             <CreateGroup onSubmit={::this.handleSubmit}/>
           </div>

@@ -1,31 +1,41 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { IndexLink } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import Navbar from 'react-bootstrap/lib/Navbar';
+import Nav from 'react-bootstrap/lib/Nav';
+import NavItem from 'react-bootstrap/lib/NavItem';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import { pushState } from 'redux-router';
-import connectData from 'helpers/connectData';
+import { routeActions } from 'react-router-redux';
+import { asyncConnect } from 'redux-async-connect';
+
 import config from '../../config';
 
-function fetchData(getState, dispatch) {
-  if (!isAuthLoaded(getState())) {
-    return dispatch(loadAuth());
-  }
-}
+@asyncConnect([{
+  promise: (options) => {
+    const {
+      store: { dispatch, getState },
+    } = options;
+    const promises = [];
 
-@connectData(fetchData)
+    if (!isAuthLoaded(getState())) {
+      promises.push(dispatch(loadAuth()));
+    }
+
+    return Promise.all(promises);
+  }
+}])
 @connect(
-    state => ({user: state.auth.user}),
-    dispatch => bindActionCreators({logout, pushState}, dispatch))
+  state => ({user: state.auth.user}),
+  {logout, push: routeActions.push}
+)
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object,
     logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -33,10 +43,12 @@ export default class App extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
+    const { push } = this.props;
+
     if (!this.props.user && nextProps.user) {
-      this.props.pushState(null, '/groups');
+      push('/groups');
     } else if (this.props.user && !nextProps.user) {
-      this.props.pushState(null, '/login');
+      push('/login');
       // Full real page reload to clean local data
       window.location.reload();
     }

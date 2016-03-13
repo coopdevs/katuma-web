@@ -17,7 +17,7 @@ export default class Html extends Component {
     assets: PropTypes.object,
     component: PropTypes.object,
     store: PropTypes.object
-  }
+  };
 
   render() {
     const {assets, component, store} = this.props;

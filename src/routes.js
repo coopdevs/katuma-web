@@ -24,7 +24,7 @@ import {
   } from 'containers';
 
 export default (store) => {
-  const requireLogin = (nextState, replaceState, cb) => {
+  const requireLogin = (nextState, replace, cb) => {
     /**
      * Check if user must be refetched.
      * Cases:
@@ -45,7 +45,7 @@ export default (store) => {
       const { auth: { user }} = store.getState();
       if (!user) {
         // oops, not logged in, so can't be here!
-        replaceState(null, '/login');
+        replace('/login');
       }
       cb();
     }
@@ -59,12 +59,12 @@ export default (store) => {
     }
   };
 
-  const redirectToGroups = (nextState, replaceState, cb) => {
+  const redirectToGroups = (nextState, replace, cb) => {
     function goToGroups() {
       const {auth: { user }} = store.getState();
 
       if (user) {
-        replaceState(null, '/groups');
+        replace('/groups');
       }
 
       cb();
@@ -78,7 +78,7 @@ export default (store) => {
     }
   };
 
-  const redirectToGroupsDetail = (nextState, replaceState, cb) => {
+  const redirectToGroupsDetail = (nextState, replace, cb) => {
     function getGroupIds() {
       const {membershipsReducer: {memberships: {entities}}} = store.getState();
       return _.uniq(_.pluck(entities, 'group_id'));
@@ -88,9 +88,9 @@ export default (store) => {
       const groupIds = getGroupIds();
 
       if (groupIds.length === 0) {
-        replaceState(null, '/onboarding');
+        replace('/onboarding');
       } else if (groupIds.length === 1) {
-        replaceState(null, `/groups/${groupIds[0]}`);
+        replace(`/groups/${groupIds[0]}`);
       }
 
       cb();
@@ -108,12 +108,12 @@ export default (store) => {
       <IndexRoute component={Home} onEnter={redirectToGroups}/>
       <Route path="widgets" component={Widgets}/>
       <Route path="login" component={Login}/>
-      <Route path="invitation/accept/:token" context={store} component={InvitationComplete} onEnter={InvitationComplete.onEnter} />
+      <Route path="invitation/accept/:token" context={store} component={InvitationComplete} />
 
       {/* Routes signup */}
       <Route path="signup">
         <IndexRoute component={Signup}/>
-        <Route path="complete" context={store} onEnter={SignupComplete.onEnter}>
+        <Route path="complete" context={store}>
           <Route path=":token" component={SignupComplete}/>
         </Route>
       </Route>
