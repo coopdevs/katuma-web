@@ -94,9 +94,9 @@
     "warning": "^2.1.0",
     "webpack-isomorphic-tools": "^2.2.18",
     "underscore": "1.8.3",
-    "reselect": "2.0.1"
+    "reselect": "2.0.1",
     "request": "^2.65.0",
-    "serve-static": "^1.10.0",
+    "serve-static": "^1.10.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "3.1.0",
