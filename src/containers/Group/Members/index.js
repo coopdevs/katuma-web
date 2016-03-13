@@ -1,24 +1,36 @@
 import React, {Component, PropTypes} from 'react';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
+import { asyncConnect } from 'redux-async-connect';
 
+import { load as loadInvitations } from 'redux/modules/invitations/list';
 import Invitations from './Invitations';
 import List from './List';
 
+@asyncConnect([{
+  deferred: true,
+  promise: (options) => {
+    const {
+      store: { dispatch },
+      params: { id },
+    } = options;
+
+    return dispatch(loadInvitations(id));
+  },
+}])
 export default class GroupMembers extends Component {
   static propTypes = {
     group: PropTypes.object,
     currentUser: PropTypes.object,
     members: PropTypes.array,
-    invitations: PropTypes.object,
   }
 
   render() {
 
-    const { currentUser, group, members, invitations } = this.props;
+    const { currentUser, group, members } = this.props;
 
     return (
       <div>
-        <DocumentMeta title={`Miembros de ${group.name}`}/>
+        <Helmet title={`Miembros de ${group.name}`}/>
 
         <h2>Miembros</h2>
 
@@ -27,7 +39,6 @@ export default class GroupMembers extends Component {
           <div className="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
           <Invitations
             group={group}
-            invitations={invitations}
             currentUser={currentUser}
           />
           </div>

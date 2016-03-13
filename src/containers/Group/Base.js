@@ -1,64 +1,63 @@
 import _ from 'underscore';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import { asyncConnect } from 'redux-async-connect';
 
-import connectData from 'helpers/connectData';
 import { loadEntity as loadGroup } from 'redux/modules/groups/groups';
 import { load as loadUsers } from 'redux/modules/users/users';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
-import { load as loadInvitations } from 'redux/modules/invitations/list';
 import { membersWithUserSelector } from 'selectors/members';
-
-function fetchData(getState, dispatch, location, params) {
-  const {
-    groupsReducer: {groups: { byId }},
-    usersReducer: { users },
-    membershipsReducer: { memberships },
-  } = getState();
-  const promises = [];
-  const id = params.id;
-  const group = byId[id];
-
-  promises.push(dispatch(loadInvitations(id)));
-
-  if (!users.entities.length) {
-    promises.push(dispatch(loadUsers()));
-  }
-
-  if (!memberships.entities.length) {
-    promises.push(dispatch(loadMemberships()));
-  }
-
-
-  if (!group) {
-    promises.push(dispatch(loadGroup(id)));
-  }
-
-  return Promise.all(promises);
-}
 
 function groupSelector(state) {
   return {
     ...membersWithUserSelector(state),
-    invitations: state.invitationsReducer.invitations,
     user: state.auth.user,
   };
 }
 
-@connectData(fetchData)
+@asyncConnect([{
+  promise: (options) => {
+    const {
+      store: { dispatch, getState },
+      params,
+    } = options;
+
+    const {
+      groupsReducer: {groups: { byId }},
+      usersReducer: { users },
+      membershipsReducer: { memberships },
+    } = getState();
+    const promises = [];
+    const id = params.id;
+    const group = byId[id];
+
+    if (!users.entities.length) {
+      promises.push(dispatch(loadUsers()));
+    }
+
+    if (!memberships.entities.length) {
+      promises.push(dispatch(loadMemberships()));
+    }
+
+    if (!group) {
+      promises.push(dispatch(loadGroup(id)));
+    }
+
+    return Promise.all(promises);
+  }
+}])
 @connect(groupSelector, {})
 export default class GroupBase extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     groups: PropTypes.object.isRequired,
     user: PropTypes.object,
-    invitations: PropTypes.object.isRequired,
     members: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
   }
 
   render() {
-    const { user, invitations, groups, members, params: { id }} = this.props;
+    const { user, groups, members, params: { id }} = this.props;
     const group = groups.byId[id];
 
     const membersOfGroup = members.byGroupID[group.id] || [];
@@ -74,7 +73,6 @@ export default class GroupBase extends Component {
               group: group,
               currentUser: currentUser,
               members: membersOfGroup,
-              invitations: invitations,
             }
           )}
         </div>

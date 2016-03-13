@@ -13,10 +13,12 @@ import groupsReducer from './groups/groups';
 import {reducer as form} from 'redux-form';
 import info from './info';
 import widgets from './widgets';
-import { routerStateReducer } from 'redux-router';
+import { routeReducer } from 'react-router-redux';
+import {reducer as reduxAsyncConnect} from 'redux-async-connect';
 
 export default combineReducers({
-  router: routerStateReducer,
+  routing: routeReducer,
+  reduxAsyncConnect,
   auth,
   signupCreateReducer,
   signupCompleteReducer,

@@ -5,7 +5,13 @@ export default function clientMiddleware(client) {
         return action(dispatch, getState);
       }
 
-      const { promise, types, requestData, ...rest } = action;
+      const {
+        promise,
+        types,
+        requestData,
+        ...rest,
+      } = action;
+
       if (!promise) {
         return next(action);
       }
@@ -16,13 +22,16 @@ export default function clientMiddleware(client) {
 
       next({...rest, type: REQUEST, requestData: data});
 
-      return promise(client).then(
+      const actionPromise = promise(client);
+      actionPromise.then(
         (result) => next({...rest, result, type: SUCCESS}),
         (error) => next({...rest, error, type: FAILURE})
       ).catch((error)=> {
         console.error('MIDDLEWARE ERROR:', error);
         next({...rest, error, type: FAILURE});
       });
+
+      return actionPromise;
     };
   };
 }

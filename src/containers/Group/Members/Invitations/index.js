@@ -9,9 +9,9 @@ import { isRole } from 'helpers/entities/member';
 
 const mapStateToProps = (state) => ({
   bulkErrors: state.bulkInvitationsReducer.bulkErrors,
+  invitations: state.invitationsReducer.invitations,
   invitationStatusByID: state.invitationsReducer.invitationStatusByID,
 });
-
 const mapDispatchToProps = { initialize, send, sendBulk };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -61,7 +61,7 @@ export default class GroupMembersInvitations extends Component {
       invitationStatusByID,
       group,
     } = this.props;
-    const invitationsByGroup = invitations.byGroupID[group.id];
+    const invitationsByGroup = invitations.byGroupID[group.id] || [];
     const isAdmin = isRole(currentUser, 'admin');
 
     const invitationsList = invitationsByGroup.map((invitation) => {

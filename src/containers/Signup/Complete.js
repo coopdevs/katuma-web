@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
-import DocumentMeta from 'react-document-meta';
+import Helmet from 'react-helmet';
 import * as signupCompleteActions from 'redux/modules/signup/complete';
 import CompleteSignupForm from 'components/forms/signup/Complete';
 
@@ -22,31 +22,23 @@ export default class Complete extends Component {
     token: PropTypes.string
   }
 
-  static onEnter(nextState, replaceState, cb) {
-    const context = this.context;
-    const token = nextState.params.token;
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
 
-    function goSignup() {
-      replaceState(null, '/signup');
+  componentWillMount() {
+    const { validSignup } = this.props;
+
+    if (!validSignup) {
+      this.context.router.replace('/signup');
     }
+  }
 
-    function signupOrCreate() {
-      const {signupCompleteReducer: {validSignup}} = context.getState();
+  static reduxAsyncConnect(params, store) {
+    const { dispatch } = store;
+    const { token } = params;
 
-      if (!validSignup) {
-        goSignup();
-      }
-
-      cb();
-    }
-
-    if (token) {
-      context.dispatch(signupCompleteActions.checkSignup(token))
-        .then(signupOrCreate);
-    } else {
-      goSignup();
-      cb();
-    }
+    return dispatch(signupCompleteActions.checkSignup(token));
   }
 
   handleSubmit(data) {
@@ -67,7 +59,7 @@ export default class Complete extends Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
-            <DocumentMeta title="Signup Complete"/>
+            <Helmet title="Signup Complete"/>
             <h1>Finaliza el registro</h1>
 
             <CompleteSignupForm
