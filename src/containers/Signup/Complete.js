@@ -2,9 +2,21 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
 import Helmet from 'react-helmet';
+import { asyncConnect } from 'redux-async-connect';
+
 import * as signupCompleteActions from 'redux/modules/signup/complete';
 import CompleteSignupForm from 'components/forms/signup/Complete';
 
+@asyncConnect([{
+  promise: (options) => {
+    const {
+      store: { dispatch },
+      params: { token },
+    } = options;
+
+    return dispatch(signupCompleteActions.checkSignup(token));
+  },
+}])
 @connect(
   state => ({
     validSignup: state.signupCompleteReducer.validSignup,
@@ -32,13 +44,6 @@ export default class Complete extends Component {
     if (!validSignup) {
       this.context.router.replace('/signup');
     }
-  }
-
-  static reduxAsyncConnect(params, store) {
-    const { dispatch } = store;
-    const { token } = params;
-
-    return dispatch(signupCompleteActions.checkSignup(token));
   }
 
   handleSubmit(data) {

@@ -4,7 +4,18 @@ import {initialize} from 'redux-form';
 import Helmet from 'react-helmet';
 import * as invitationCompleteActions from 'redux/modules/invitations/complete';
 import CompleteSignupForm from 'components/forms/signup/Complete';
+import { asyncConnect } from 'redux-async-connect';
 
+@asyncConnect([{
+  promise: (options) => {
+    const {
+      store: { dispatch },
+      params: { token },
+    } = options;
+
+    return dispatch(invitationCompleteActions.checkInvitation(token));
+  },
+}])
 @connect(
   state => ({
     validInvitation: state.completeInvitationReducer.validInvitation,
@@ -36,13 +47,6 @@ export default class InvitationComplete extends Component {
     }
   }
 
-  static reduxAsyncConnect(params, store) {
-    const { dispatch } = store;
-    const { token } = params;
-
-    return dispatch(invitationCompleteActions.checkInvitation(token));
-  }
-
   handleSubmit(data) {
     return this.props.complete(this.props.params.token, data).then(() => {
       const errors = this.props.completeInvitationErrors;
@@ -51,7 +55,7 @@ export default class InvitationComplete extends Component {
         return Promise.reject(errors);
       }
 
-      this.props.history.push('/groups');
+      this.context.router.push('/groups');
       return Promise.resolve({});
     });
   }
