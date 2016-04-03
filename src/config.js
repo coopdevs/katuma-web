@@ -6,16 +6,19 @@ const logo = 'https://pbs.twimg.com/profile_images/439758163680571393/4-Ety8fn.p
 
 const environment = {
   development: {
-    isProduction: false
+    isProduction: false,
+    apiPort: process.env.API_PORT
   },
   production: {
-    isProduction: true
+    isProduction: true,
+    apiSocketPath: process.env.API_SOCK_PATH
   }
 }[process.env.NODE_ENV || 'development'];
 
 module.exports = Object.assign({
-  port: process.env.PORT,
-  apiPort: process.env.APIPORT,
+  host: process.env.NODE_HOST || 'localhost',
+  port: process.env.NODE_PORT,
+  apiHost: process.env.API_HOST || 'localhost',
   apiVersion: process.env.APIVERSION || 'v1',
   app: {
     title: title,

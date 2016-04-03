@@ -34,8 +34,8 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
-        "PORT": 8000,
-        "APIPORT": 3000
+        "NODE_PORT": 8000,
+        "API_PORT": 3000
       }
     },
     "start-prod": {
@@ -43,8 +43,9 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
-        "PORT": 8080,
-        "APIPORT": 3000
+        "NODE_PORT": 8080,
+        "NODE_HOST": "127.0.0.1",
+        "API_SOCK_PATH": "/var/run/unicorn/unicorn.sock"
       }
     },
     "watch-client": {
@@ -83,7 +84,7 @@
     "react-router-bootstrap": "^0.20.1",
     "react-router-redux": "^3.0.0",
     "redux": "^3.0.4",
-    "redux-async-connect": "andresgutgon/redux-async-connect#feature/deferred-first-class-citizen",
+    "redux-async-connect": "andresgutgon/redux-async-connect#fix/precompiled-lib",
     "redux-form": "^3.0.12",
     "scroll-behavior": "^0.3.2",
     "serialize-javascript": "^1.1.2",
@@ -93,7 +94,9 @@
     "warning": "^2.1.0",
     "webpack-isomorphic-tools": "^2.2.18",
     "underscore": "1.8.3",
-    "reselect": "2.0.1"
+    "reselect": "2.0.1",
+    "request": "^2.65.0",
+    "serve-static": "^1.10.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "3.1.0",
@@ -125,6 +128,7 @@
     "mocha": "2.3.3",
     "json-loader": "0.5.4",
     "node-sass": "^3.4.2",
+    "node-inspector": "^0.12.3",
     "react-a11y": "0.2.6",
     "react-addons-test-utils": "0.14.0",
     "react-transform-catch-errors": "^1.0.0",

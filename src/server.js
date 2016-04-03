@@ -4,12 +4,12 @@ import ReactDOM from 'react-dom/server';
 import config from './config';
 import favicon from 'serve-favicon';
 import compression from 'compression';
-import httpProxy from 'express-http-proxy';
+import httpProxy from './helpers/api/httpProxy';
 import session from 'express-session';
 import redisStore from 'connect-redis';
 import path from 'path';
 import createStore from './redux/create';
-import ApiClient from './helpers/ApiClient';
+import ApiHttp from './helpers/api/apiHttp';
 import Html from './helpers/Html';
 import PrettyError from 'pretty-error';
 import http from 'http';
@@ -26,46 +26,6 @@ const app = new Express();
 const server = new http.Server(app);
 const RedisStore = redisStore(session);
 
-const VALID_END_POINTS_FOR_SESSION = /\/(login|signups\/complete\/|invitations\/accept)/;
-
-/**
- * Check if API response can set session
- *
- * @param {Object} req
- * @param {Object} res
- * @return {Boolean}
- */
-const canSetSession = (req, res) => {
-  return req.method === 'POST' &&
-        res.statusCode === 200 &&
-        VALID_END_POINTS_FOR_SESSION.test(req.path);
-};
-
-const proxy = httpProxy(`http://${(process.env.HOST || 'localhost')}`, {
-  port: config.apiPort,
-  forwardPath: (req) => {
-    const originalPath = require('url').parse(req.url).path;
-
-    return '/api/v1' + originalPath;
-  },
-  intercept: (rsp, data, req, res, callback) =>{
-    let respondData;
-    if (canSetSession(req, res)) {
-      respondData = JSON.parse(data.toString('utf8'));
-      req.session.user_id = respondData.id;
-      respondData = JSON.stringify(respondData);
-    }
-    callback(null, respondData || data);
-  },
-  decorateRequest: (req) => {
-    if (req.session.user_id) {
-      req.headers['X-katuma-user-id'] = req.session.user_id;
-    }
-    return req;
-  },
-  preserveReqSession: true
-});
-
 app.use(compression());
 app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
 
@@ -80,11 +40,11 @@ app.use(session({
 
 app.use('/api/v1/logout', (req, res) => {
   req.session.destroy();
-  res.json(req.body);
+  res.json('');
 });
 
 // Proxy to API server
-app.use('/api/v1', proxy);
+app.use('/api/v1', httpProxy);
 
 app.use((req, res, next) => {
   // Nasty bug related with this issue:
@@ -100,7 +60,8 @@ app.use((req, res, next) => {
     // hot module replacement is enabled in the development env
     webpackIsomorphicTools.refresh();
   }
-  const client = new ApiClient(req);
+
+  const client = new ApiHttp(req.session.user_id);
   const history = createHistory(req.originalUrl);
   const store = createStore(history, client);
 
@@ -148,14 +109,19 @@ app.use((req, res, next) => {
   });
 });
 
-if (config.port) {
-  server.listen(config.port, (err) => {
+const listenTo = {
+  host: config.host,
+  port: config.port
+}
+
+if (listenTo) {
+  server.listen(listenTo, (err) => {
     if (err) {
       console.error(err);
     }
-    console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
-    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', (process.env.HOST || 'localhost'), config.port);
+    console.info('----\n==> ✅  %s is running, talking to API server on port %s.', config.app.title, config.apiPort);
+    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, listenTo.port);
   });
 } else {
-  console.error('==>     ERROR: No PORT environment variable has been specified');
+  console.error('==>     ERROR: No NODE_PATH or NODE_PORT environment variable has been specified');
 }
