@@ -12,6 +12,7 @@ function groupSelector(state) {
   return {
     ...membersWithUserSelector(state),
     user: state.auth.user,
+    suppliers: state.suppliersReducer.suppliers.entities
   };
 }
 
@@ -54,10 +55,11 @@ export default class GroupBase extends Component {
     user: PropTypes.object,
     members: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    suppliers: PropTypes.array.isRequired,
   }
 
   render() {
-    const { user, groups, members, params: { id }} = this.props;
+    const { suppliers, user, groups, members, params: { id }} = this.props;
     const group = groups.byId[id];
 
     const membersOfGroup = members.byGroupID[group.id] || [];
@@ -73,6 +75,7 @@ export default class GroupBase extends Component {
               group: group,
               currentUser: currentUser,
               members: membersOfGroup,
+              suppliers,
             }
           )}
         </div>

@@ -6,7 +6,6 @@ import { load as loadSuppliers } from 'redux/modules/suppliers/list';
 import List from './List';
 
 @asyncConnect([{
-  deferred: true,
   promise: (options) => {
     const {
       store: { dispatch },
@@ -16,7 +15,6 @@ import List from './List';
     return dispatch(loadSuppliers(id));
   },
 }])
-
 export default class GroupSuppliers extends Component {
   static propTypes = {
     group: PropTypes.object,
@@ -26,7 +24,7 @@ export default class GroupSuppliers extends Component {
 
   render() {
 
-    const { currentUser, group, suppliers } = this.props;
+    const { group, suppliers } = this.props;
 
     return (
       <div>

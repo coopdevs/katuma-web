@@ -1,4 +1,3 @@
-import _ from 'underscore';
 const LOAD = 'redux-example/suppliers/LOAD';
 const LOAD_SUCCESS = 'redux-example/suppliers/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/suppliers/LOAD_FAIL';

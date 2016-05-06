@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import { asyncConnect } from 'redux-async-connect';
 
@@ -32,6 +33,7 @@ export default class GroupMembers extends Component {
       <div>
         <Helmet title={`Miembros de ${group.name}`}/>
 
+        <Link to={`/groups/${group.id}/suppliers`} style={{float: 'right'}}>Proveedores</Link>
         <h2>Miembros</h2>
 
         <div className="row">
