@@ -7,12 +7,14 @@ import { loadEntity as loadGroup } from 'redux/modules/groups/groups';
 import { load as loadUsers } from 'redux/modules/users/users';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
 import { membersWithUserSelector } from 'selectors/members';
+import { suppliersWithProducerSelector } from 'selectors/producers';
 
 function groupSelector(state) {
   return {
     ...membersWithUserSelector(state),
     user: state.auth.user,
-    suppliers: state.suppliersReducer.suppliers.entities
+    suppliers: state.suppliersReducer.suppliers.entities,
+    ...suppliersWithProducerSelector(state),
   };
 }
 
@@ -56,10 +58,11 @@ export default class GroupBase extends Component {
     members: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     suppliers: PropTypes.array.isRequired,
+    producers: PropTypes.object.isRequired,
   }
 
   render() {
-    const { suppliers, user, groups, members, params: { id }} = this.props;
+    const { producers, suppliers, user, groups, members, params: { id }} = this.props;
     const group = groups.byId[id];
 
     const membersOfGroup = members.byGroupID[group.id] || [];
@@ -76,6 +79,7 @@ export default class GroupBase extends Component {
               currentUser: currentUser,
               members: membersOfGroup,
               suppliers,
+              producers,
             }
           )}
         </div>

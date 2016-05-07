@@ -5,16 +5,16 @@ import Item from './Item';
 export default class GroupSuppliersList extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
-    suppliers: PropTypes.array.isRequired,
+    producers: PropTypes.object.isRequired,
   }
 
   render() {
-    const { suppliers } = this.props;
+    const { producers } = this.props;
 
-    const supplierList = suppliers.map((supplier) => {
-      return (<li key={supplier.id}><Item supplier={supplier} /></li>);
+    const producerList = producers.map((producer) => {
+      return (<li key={producer.id}><Item producer={producer} /></li>);
     });
 
-    return (<ul>{supplierList}</ul>);
+    return (<ul>{producerList}</ul>);
   }
 }

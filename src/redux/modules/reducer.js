@@ -11,6 +11,7 @@ import completeInvitationReducer from './invitations/complete';
 import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
 import suppliersReducer from './suppliers/list';
+import producersReducer from './producers/list';
 import {reducer as form} from 'redux-form';
 import info from './info';
 import widgets from './widgets';
@@ -27,6 +28,7 @@ export default combineReducers({
   usersReducer,
   groupsReducer,
   suppliersReducer,
+  producersReducer,
   invitationsReducer,
   bulkInvitationsReducer,
   completeInvitationReducer,

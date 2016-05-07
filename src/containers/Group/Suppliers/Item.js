@@ -2,15 +2,15 @@ import React, {Component, PropTypes} from 'react';
 
 export default class GroupSuppliersItem extends Component {
   static propTypes = {
-    supplier: PropTypes.object,
+    producer: PropTypes.object,
   }
 
   render() {
-    const { supplier } = this.props;
+    const { producer } = this.props;
 
     return (
       <div>
-        {`${supplier.name}`}
+        {`${producer.name}`}
       </div>
     );
   }

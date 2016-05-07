@@ -3,6 +3,7 @@ import Helmet from 'react-helmet';
 import { asyncConnect } from 'redux-async-connect';
 
 import { load as loadSuppliers } from 'redux/modules/suppliers/list';
+import { load as loadProducers } from 'redux/modules/producers/list';
 import List from './List';
 
 @asyncConnect([{
@@ -12,19 +13,23 @@ import List from './List';
       params: { id },
     } = options;
 
-    return dispatch(loadSuppliers(id));
+    const promises = [];
+    promises.push(dispatch(loadSuppliers(id)));
+    promises.push(dispatch(loadProducers()));
+
+    return Promise.all(promises);
   },
 }])
 export default class GroupSuppliers extends Component {
   static propTypes = {
     group: PropTypes.object,
     currentUser: PropTypes.object,
-    suppliers: PropTypes.array,
+    producers: PropTypes.object,
   }
 
   render() {
 
-    const { group, suppliers } = this.props;
+    const { group, producers } = this.props;
 
     return (
       <div>
@@ -38,7 +43,7 @@ export default class GroupSuppliers extends Component {
           </div>
 
           <div className="col-xs-12 col-sm-6 col-sm-pull-6 col-md-8 col-md-pull-4">
-            <List group={group} suppliers={suppliers} />
+            <List group={group} producers={producers} />
           </div>
 
         </div>
