@@ -1,10 +1,19 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
+import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 
 import { load as loadSuppliers } from 'redux/modules/suppliers/list';
 import { load as loadProducers } from 'redux/modules/producers/list';
+import { suppliersWithProducerSelector } from 'selectors/producers';
 import List from './List';
+
+function suppliersSelector(state) {
+  return {
+    suppliers: state.suppliersReducer.suppliers.entities,
+    ...suppliersWithProducerSelector(state),
+  };
+}
 
 @asyncConnect([{
   promise: (options) => {
@@ -20,11 +29,13 @@ import List from './List';
     return Promise.all(promises);
   },
 }])
+@connect(suppliersSelector, {})
 export default class GroupSuppliers extends Component {
   static propTypes = {
     group: PropTypes.object,
     currentUser: PropTypes.object,
-    producers: PropTypes.object,
+    suppliers: PropTypes.array.isRequired,
+    producers: PropTypes.object.isRequired,
   }
 
   render() {

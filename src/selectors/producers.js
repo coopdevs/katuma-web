@@ -2,11 +2,11 @@ import _ from 'underscore';
 import { createSelector } from 'reselect';
 
 function selectSuppliersWithProducer(suppliers, producers) {
-  const entities = _.map(suppliers, (supplier) => {
-    const producer = _.omit(producers, ['created_at', 'updated_at', 'id']);
+  const entities = _.map(suppliers.entities, (supplier) => {
+    const producerById = producers.byID[supplier.producer_id];
 
     return {
-      ...producer,
+      ...producerById,
       ...supplier,
     };
   });

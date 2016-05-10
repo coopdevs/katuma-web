@@ -1,3 +1,4 @@
+import _ from 'underscore';
 const LOAD = 'redux-example/producers/LOAD';
 const LOAD_SUCCESS = 'redux-example/producers/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/producers/LOAD_FAIL';
@@ -21,7 +22,7 @@ export default function producersReducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         producers: {
-          entities: entities,
+          entities: entities, byID: _.indexBy(entities, 'id'),
         },
       };
 

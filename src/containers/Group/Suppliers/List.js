@@ -11,7 +11,7 @@ export default class GroupSuppliersList extends Component {
   render() {
     const { producers } = this.props;
 
-    const producerList = producers.map((producer) => {
+    const producerList = producers.entities.map((producer) => {
       return (<li key={producer.id}><Item producer={producer} /></li>);
     });
 
