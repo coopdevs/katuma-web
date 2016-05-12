@@ -20,6 +20,11 @@ class ApiAjax {
             return;
           }
 
+          if (req.status === 400) {
+            reject(JSON.parse(req.response));
+            return;
+          }
+
           if (req.response.length > 0) {
             resolve(JSON.parse(req.response));
             return;

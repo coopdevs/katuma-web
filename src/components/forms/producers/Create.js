@@ -8,9 +8,14 @@ const CREATE_PRODUCER_FORM_FIELDS = {
     placeholder: 'Elige un nombre para el proveedor'
   },
   email: {
-    type: 'textarea',
+    type: 'text',
     label: 'Email',
     placeholder: 'Introduce el email del proveedor'
+  },
+  address: {
+    type: 'textarea',
+    label: 'Direccion',
+    placeholder: 'Introduce la direccion del proveedor'
   },
 };
 
@@ -42,27 +47,44 @@ export default class CreateProducerForm extends Component {
 
   render() {
     const {submitting, fields, handleSubmit} = this.props;
-    const field = fields.email;
-    const fieldProps = CREATE_PRODUCER_FORM_FIELDS[field.name];
-    const { label, type, placeholder } = fieldProps;
+
+    const renderInput = (field, index) => {
+      const fieldProps = CREATE_PRODUCER_FORM_FIELDS[field.name];
+
+      if (!fieldProps) {
+        return null;
+      }
+
+      const {label, type, placeholder} = fieldProps;
+
+      const inputProps = {
+        id: field.name,
+        type,
+        className: 'form-control',
+        placeholder,
+        ...field,
+      };
+
+      return (
+        <div key={index} className={this.getInputClasses(field)}>
+          <label htmlFor={field.name}>{label}</label>
+          <div>
+            {type === 'text' && <input {...inputProps}/>}
+            {type === 'textarea' && <textarea rows={5} {...inputProps}/>}
+
+            {field.error && <div className="text-danger">{field.error}</div>}
+          </div>
+        </div>
+      );
+    };
+
+    const inputs = Object.keys(fields).map((key, index) => renderInput(fields[key], index));
 
     return (
       <div>
         <form onSubmit={handleSubmit}>
 
-          <div className={this.getInputClasses(field)}>
-            <label htmlFor={field.name}>{label}</label>
-            <div>
-              <input
-                id={field.name}
-                type={type}
-                className="form-control"
-                placeholder={placeholder}
-                {...field}/>
-
-              {field.error && <div className="text-danger">{field.error}</div>}
-            </div>
-          </div>
+          {inputs}
 
           <div className="form-group">
             <button className="btn btn-success" onClick={handleSubmit}>
