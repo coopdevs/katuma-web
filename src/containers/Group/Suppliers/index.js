@@ -1,19 +1,23 @@
 import React, { Component, PropTypes } from 'react';
+import { initialize } from 'redux-form';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 
+import CreateProducerForm from 'components/forms/producers/Create';
 import { load as loadSuppliers } from 'redux/modules/suppliers/list';
 import { load as loadProducers } from 'redux/modules/producers/list';
+import { create } from 'redux/modules/producers/list';
 import { suppliersWithProducerSelector } from 'selectors/producers';
 import List from './List';
 
-function suppliersSelector(state) {
-  return {
-    suppliers: state.suppliersReducer.suppliers.entities,
-    ...suppliersWithProducerSelector(state),
-  };
-}
+const mapStateToProps = (state) => ({
+  createProducerErrors: state.producersReducer.createProducerErrors,
+  suppliers: state.suppliersReducer.suppliers.entities,
+  ...suppliersWithProducerSelector(state),
+});
+
+const mapDispatchToProps = { initialize, create };
 
 @asyncConnect([{
   promise: (options) => {
@@ -29,13 +33,32 @@ function suppliersSelector(state) {
     return Promise.all(promises);
   },
 }])
-@connect(suppliersSelector, {})
+@connect(mapStateToProps, mapDispatchToProps)
 export default class GroupSuppliers extends Component {
   static propTypes = {
     group: PropTypes.object,
     currentUser: PropTypes.object,
     suppliers: PropTypes.array.isRequired,
     producers: PropTypes.object.isRequired,
+    create: PropTypes.func.isRequired,
+    createProducerErrors: PropTypes.object,
+  }
+
+  handleSubmit(data) {
+    const self = this;
+
+    return this.props.create(data, 1).then(() => {
+      const errors = self.props.createProducerErrors;
+
+      if (Object.keys(errors).length) {
+        return Promise.reject(errors);
+      }
+
+      // do something on success
+      // self.props.initialize('onboardingCreateGroup', {});
+
+      return Promise.resolve({});
+    });
   }
 
   render() {
@@ -55,6 +78,7 @@ export default class GroupSuppliers extends Component {
 
           <div className="col-xs-12 col-sm-6 col-sm-pull-6 col-md-8 col-md-pull-4">
             <List group={group} producers={producers} />
+            <CreateProducerForm onSubmit={this.handleSubmit.bind(this)} />
           </div>
 
         </div>
