@@ -39,9 +39,9 @@ export default class GroupSuppliers extends Component {
     group: PropTypes.object,
     currentUser: PropTypes.object,
     suppliers: PropTypes.array.isRequired,
-    producers: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     createProducerErrors: PropTypes.object,
+    suppliersDecorated: PropTypes.object,
   }
 
   handleSubmit(data) {
@@ -63,7 +63,7 @@ export default class GroupSuppliers extends Component {
 
   render() {
 
-    const { group, producers } = this.props;
+    const { group, suppliersDecorated } = this.props;
 
     return (
       <div>
@@ -77,10 +77,9 @@ export default class GroupSuppliers extends Component {
           </div>
 
           <div className="col-xs-12 col-sm-6 col-sm-pull-6 col-md-8 col-md-pull-4">
-            <List group={group} producers={producers} />
+            <List group={group} suppliers={suppliersDecorated} />
             <CreateProducerForm onSubmit={this.handleSubmit.bind(this)} />
           </div>
-
         </div>
       </div>
     );

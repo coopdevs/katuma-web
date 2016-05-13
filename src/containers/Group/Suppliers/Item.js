@@ -1,17 +1,16 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 export default class GroupSuppliersItem extends Component {
   static propTypes = {
-    producer: PropTypes.object,
+    supplier: PropTypes.object.isRequired,
   }
 
   render() {
-    const { producer } = this.props;
+    const { supplier } = this.props;
 
     return (
-      <div>
-        {`${producer.name}`}
-      </div>
+      <Link to={`/groups/${supplier.group_id}/suppliers/${supplier.id}`}>{`${supplier.name}`}</Link>
     );
   }
 }

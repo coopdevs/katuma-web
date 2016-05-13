@@ -3,10 +3,10 @@ import { createSelector } from 'reselect';
 
 function selectSuppliersWithProducer(suppliers, producers) {
   const entities = _.map(suppliers.entities, (supplier) => {
-    const producerById = producers.byID[supplier.producer_id];
+    const producer = producers.byID[supplier.producer_id];
 
     return {
-      ...producerById,
+      ...producer,
       ...supplier,
     };
   });
@@ -23,7 +23,7 @@ export const suppliersWithProducerSelector = createSelector(
   [suppliersSelector, producersSelector],
   (suppliers, producers) => {
     return {
-      producers: selectSuppliersWithProducer(suppliers, producers),
+      suppliersDecorated: selectSuppliersWithProducer(suppliers, producers),
     };
   }
 );
