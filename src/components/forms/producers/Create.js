@@ -88,7 +88,7 @@ export default class CreateProducerForm extends Component {
 
           <div className="form-group">
             <button className="btn btn-success" onClick={handleSubmit}>
-              {submitting ? 'Enviando...' : 'Enviar invitaciones'}
+              {submitting ? 'Enviando...' : 'Crear proveedor'}
             </button>
           </div>
         </form>

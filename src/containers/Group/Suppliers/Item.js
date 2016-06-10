@@ -10,7 +10,7 @@ export default class GroupSuppliersItem extends Component {
     const { supplier } = this.props;
 
     return (
-      <Link to={`/groups/${supplier.group_id}/suppliers/${supplier.id}`}>{`${supplier.name}`}</Link>
+      <Link to={`/groups/${supplier.group_id}/suppliers/${supplier.producer_id}`}>{`${supplier.name}`}</Link>
     );
   }
 }

@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 
 import { loadEntity as loadGroup } from 'redux/modules/groups/groups';
@@ -57,7 +57,7 @@ export default class GroupBase extends Component {
   }
 
   render() {
-    const { user, groups, members, params: { id }} = this.props;
+    const { user, groups, members, params: { id } } = this.props;
     const group = groups.byId[id];
 
     const membersOfGroup = members.byGroupID[group.id] || [];
@@ -87,4 +87,3 @@ export default class GroupBase extends Component {
     );
   }
 }
-
