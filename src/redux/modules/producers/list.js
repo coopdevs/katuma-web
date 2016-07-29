@@ -121,12 +121,12 @@ export function loadEntity(id) {
   };
 }
 
-export function create(data, groupId) {
+export function create(data) {
   return {
     types: [CREATE_PRODUCER, CREATE_PRODUCER_SUCCESS, CREATE_PRODUCER_FAIL],
     promise: (client) => client.post('/producers', {
-      data: data,
-      header: { key: 'X-katuma-group-id-for-provider', value: groupId },
+      data: _.omit(data, 'group_id'),
+      header: { key: 'X-katuma-group-id-for-provider', value: data.group_id },
     })
   };
 }

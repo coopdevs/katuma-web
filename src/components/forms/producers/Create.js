@@ -21,7 +21,7 @@ const CREATE_PRODUCER_FORM_FIELDS = {
 
 @reduxForm({
   form: 'createProducer',
-  fields: Object.keys(CREATE_PRODUCER_FORM_FIELDS)
+  fields: Object.keys(CREATE_PRODUCER_FORM_FIELDS),
 })
 export default class CreateProducerForm extends Component {
   static propTypes = {

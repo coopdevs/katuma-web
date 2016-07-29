@@ -47,7 +47,9 @@ export default class GroupSuppliersBase extends Component {
   handleSubmit(data) {
     const self = this;
 
-    return this.props.create(data, 1).then(() => {
+    data.group_id = this.props.group.id;
+
+    return this.props.create(data).then(() => {
       const errors = self.props.createProducerErrors;
 
       if (Object.keys(errors).length) {
