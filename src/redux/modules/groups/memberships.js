@@ -23,6 +23,7 @@ export default function membershipsReducer(state = initialState, action = {}) {
         memberships: {
           entities: entities,
           byUserID: _.indexBy(entities, 'user_id'),
+          byBasicResourceGroupId: _.groupBy(entities, 'basic_resource_group_id'),
         },
       };
     case LOAD_FAIL:

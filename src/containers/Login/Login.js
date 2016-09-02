@@ -1,50 +1,56 @@
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
-import Helmet from 'react-helmet';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-import * as authActions from 'redux/modules/auth';
+import LoginForm from 'components/forms/Login';
+import Button from 'components/Button';
 
-@connect(
-  () => ({}),
-  authActions)
-export default class Login extends Component {
+import styles from '../../styles/layouts/index.scss';
+
+class Login extends Component {
   static propTypes = {
-    user: PropTypes.object,
-    login: PropTypes.func,
-    logout: PropTypes.func
+    submitting: PropTypes.bool,
+  };
+
+
+  constructor(props) {
+    super(props);
+    this.onClickLogin = this._onClickLogin.bind(this);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const login = this.refs.login;
-    const password = this.refs.password;
-    this.props.login({
-      login: login.value,
-      password: password.value,
-    });
-    login.value = '';
-    password.value = '';
+  static layoutCentered = true;
+
+  _onClickLogin() {
+    this.refs.login_form.submit();
   }
 
   render() {
+    const { submitting } = this.props;
+
     return (
-      <div className="container">
-        <Helmet title="Login"/>
-        <h1>Login</h1>
-        <div>
-          <form className="login-form" onSubmit={::this.handleSubmit}>
-            <div className="form-group">
-              <input className="form-control" type="text" ref="login" placeholder="Enter your email or username"/>
-            </div>
-            <div className="form-group">
-              <input className="form-control" type="password" ref="password" placeholder="Enter your password"/>
-            </div>
-            <button className="btn btn-success" onClick={::this.handleSubmit}><i className="fa fa-sign-in"/>{' '}Log In
-            </button>
+      <div className={styles.layoutCentered}>
+        <div className={styles.layoutCentered__body}>
+          <form>
+            <LoginForm ref="login_form" />
+
+            <Button
+              primary
+              processing={submitting}
+              onClick={this.onClickLogin}
+              type="submit"
+            >Acceder</Button>
           </form>
-          <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const { form: { login } } = state;
+
+  if (!login) return {};
+
+  return { submitting: login.submitting };
+};
+
+export default connect(mapStateToProps)(Login);

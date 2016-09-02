@@ -1,4 +1,5 @@
 import config from '../../config';
+import handleResponse from './handleResponse';
 
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? '/' + path : path;
@@ -15,22 +16,8 @@ class ApiAjax {
         const url = formatUrl(path);
 
         req.onload = () => {
-          if (req.status === 500) {
-            reject(req.response);
-            return;
-          }
-
-          if (req.status === 400) {
-            reject(JSON.parse(req.response));
-            return;
-          }
-
-          if (req.response.length > 0) {
-            resolve(JSON.parse(req.response));
-            return;
-          }
-
-          resolve(null);
+          const { status, response } = req;
+          return handleResponse(response, status, resolve, reject);
         };
 
         /**

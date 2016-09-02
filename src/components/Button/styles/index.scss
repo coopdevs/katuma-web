@@ -1,0 +1,45 @@
+@import "../../../styles/variables.scss";
+
+@keyframes rotate {
+  0%    { transform: rotate(0deg); }
+  100%  { transform: rotate(360deg); }
+}
+
+.spinner {
+  margin-left: 0.3em;
+  height: 1em;
+  width: 1em;
+  animation: rotate 0.2s infinite linear;
+  border: 2px solid white;
+  border-right-color: transparent;
+  border-radius: 50%;
+}
+
+.buttonInner {
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  background-color: transparent;
+  color: $katuma_active;
+  font-weight: normal;
+  border-radius: 0;
+  padding: 0;
+  margin: 0 0.2em;
+  font-size: inherit;
+  box-shadow: none;
+  border: 0;
+  &:hover {
+    color: $katuma_active;
+    text-decoration: underline;
+    box-shadow: none;
+  }
+
+  &:focus,
+  &:active,
+  &:active:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}

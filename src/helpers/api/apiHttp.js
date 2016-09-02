@@ -1,5 +1,7 @@
-import config from '../../config';
 import request from 'request';
+
+import config from '../../config';
+import handleResponse from './handleResponse';
 
 /**
  * Returns API base URL
@@ -43,13 +45,15 @@ class _ApiHttp {
         };
 
         req(options, (error, response, body) => {
+          const { statusCode } = response;
+
           if (error) {
-            reject(error);
-          } else if (response.statusCode === 401) {
-            resolve(null);
+            return reject(error);
+          } else if (statusCode === 401) {
+            return resolve(null);
           }
 
-          resolve(body);
+          return handleResponse(body, statusCode, resolve, reject);
         });
       });
     });

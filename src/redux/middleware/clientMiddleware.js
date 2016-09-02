@@ -24,11 +24,11 @@ export default function clientMiddleware(client) {
 
       const actionPromise = promise(client);
       actionPromise.then(
-        (result) => {
-          return next({...rest, result, type: SUCCESS});
-        },
+        (result) => next({...rest, result, type: SUCCESS}),
         (error) => {
-          return next({...rest, error, type: FAILURE});
+          // TODO: here we have statusCode
+          // We should manage a UI general error
+          return next({...rest, error: error.errorMessage, type: FAILURE});
         }
       ).catch((error)=> {
         console.error('MIDDLEWARE ERROR:', error);

@@ -7,12 +7,18 @@ const COMPLETE_SIGNUP_FAIL = 'redux-example/signup/COMPLETE_SIGNUP_FAIL';
 
 const initialState = {
   validSignup: false,
-  complete: false,
-  completeSignupErrors: {}
+  signupDone: false,
+  errors: null,
 };
 
 export default function signupCompleteReducer(state = initialState, action = {}) {
   switch (action.type) {
+    case CHECK_SIGNUP:
+    case CHECK_SIGNUP_FAIL:
+      return {
+        ...state,
+        validSignup: false
+      };
     case CHECK_SIGNUP_SUCCESS:
       return {
         ...state,
@@ -22,29 +28,17 @@ export default function signupCompleteReducer(state = initialState, action = {})
     case COMPLETE_SIGNUP_SUCCESS:
       return {
         ...state,
-        complete: true,
-        completeSignupErrors: {}
+        signupDone: true,
+        errors: null,
       };
 
     case COMPLETE_SIGNUP_FAIL:
-      const errorsKeys = Object.keys(action.error);
-      // FIXME: Extract into utils. Here we're parsing API errors.
-      // By default server returns an object with fields with erros.
-      // And each field has an array of errors. Here we're picking
-      // just first error for each field.
-      const completeSignupErrors = errorsKeys.reduce((formatedErrors, key) => {
-        formatedErrors[key] = action.error[key][0];
-        return formatedErrors;
-      }, {});
-
       return {
         ...state,
-        completeSignupErrors: completeSignupErrors
+        errors: action.error,
       };
 
     case COMPLETE_SIGNUP:
-    case CHECK_SIGNUP:
-    case CHECK_SIGNUP_FAIL:
     default:
       return state;
   }
@@ -75,6 +69,12 @@ export function checkSignup(token) {
  * @return {Object}
  */
 export function complete(token, data) {
+  // If password_confirmation is empty we need to send
+  // an empty string to validate password_confirmation if password present
+  if (data.password && !data.password_confirmation) {
+    data.password_confirmation = '';
+  }
+
   return {
     types: [COMPLETE_SIGNUP, COMPLETE_SIGNUP_SUCCESS, COMPLETE_SIGNUP_FAIL],
     promise: (client) => client.post(`/signups/complete/${token}`, {

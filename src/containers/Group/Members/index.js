@@ -7,27 +7,16 @@ import { load as loadInvitations } from 'redux/modules/invitations/list';
 import Invitations from './Invitations';
 import List from './List';
 
-@asyncConnect([{
-  deferred: true,
-  promise: (options) => {
-    const {
-      store: { dispatch },
-      params: { id },
-    } = options;
-
-    return dispatch(loadInvitations(id));
-  },
-}])
-export default class GroupMembers extends Component {
+class GroupMembers extends Component {
   static propTypes = {
-    group: PropTypes.object,
-    currentUser: PropTypes.object,
-    members: PropTypes.array,
+    user: PropTypes.object.isRequired,
+    users: PropTypes.object.isRequired,
+    group: PropTypes.object.isRequired,
+    memberships: PropTypes.array.isRequired,
   }
 
   render() {
-
-    const { currentUser, group, members } = this.props;
+    const { users, user, group, memberships } = this.props;
 
     return (
       <div>
@@ -39,14 +28,11 @@ export default class GroupMembers extends Component {
         <div className="row">
 
           <div className="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
-          <Invitations
-            group={group}
-            currentUser={currentUser}
-          />
+            <Invitations group={group} user={user} />
           </div>
 
           <div className="col-xs-12 col-sm-6 col-sm-pull-6 col-md-8 col-md-pull-4">
-            <List group={group} members={members} />
+            <List group={group} users={users} memberships={memberships} />
           </div>
 
         </div>
@@ -54,3 +40,12 @@ export default class GroupMembers extends Component {
     );
   }
 }
+
+const asyncConnectProps = [{
+  deferred: true,
+  promise: ({ store: { dispatch }, params: { id } }) => {
+    return dispatch(loadInvitations(id));
+  },
+}];
+
+export default asyncConnect(asyncConnectProps)(GroupMembers);

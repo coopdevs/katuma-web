@@ -1,8 +1,9 @@
 require('babel/polyfill');
+
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
-var WebpackIsomorphicTools = require('webpack-isomorphic-tools');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var assetsPath = path.resolve(__dirname, '../static/dist');
 var host = (process.env.NODE_HOST || 'localhost');
 var port = parseInt(process.env.PORT) + 1 || 3001;
@@ -43,16 +44,18 @@ babelLoaderQuery.extra['react-transform'].transforms.push({
   locals: ['module']
 });
 
+var VENDOR_CSS = './src/styles/vendor/index.css';
+
 module.exports = {
   devtool: 'inline-source-map',
   context: path.resolve(__dirname, '..'),
   entry: {
     'main': [
       'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr',
-      'bootstrap-sass!./src/theme/bootstrap.config.js',
-      'font-awesome-webpack!./src/theme/font-awesome.config.js',
+      'bootstrap-sass!./src/styles/bootstrap/config.js',
       './src/client.js'
-    ]
+    ],
+    vendor_styles: VENDOR_CSS,
   },
   output: {
     path: assetsPath,
@@ -62,16 +65,35 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loaders: ['babel?' + JSON.stringify(babelLoaderQuery), 'eslint-loader']},
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: [
+          'babel?' + JSON.stringify(babelLoaderQuery),
+          'eslint-loader',
+        ]
+      },
       { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap' },
-      { test: /\.scss$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap' },
-      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
-      { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream" },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml" },
-      { test: webpackIsomorphicToolsPlugin.regular_expression('images'), loader: 'url-loader?limit=10240' }
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=2'),
+      },
+      {
+        test: /\.scss$/,
+        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap'
+      },
+      {
+        test: webpackIsomorphicToolsPlugin.regular_expression('images'),
+        loader: 'url-loader?limit=10240',
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-sprite',
+        query: {
+          spriteModule: path.resolve(__dirname, '../node_modules/svg-sprite-loader/lib/server-side-sprite.js'),
+        },
+        include: path.resolve(__dirname, '../src/components/Icon/svg'),
+      },
     ]
   },
   progress: true,
@@ -83,6 +105,8 @@ module.exports = {
     extensions: ['', '.json', '.js']
   },
   plugins: [
+    // css files from the extract-text-plugin loader
+    new ExtractTextPlugin('[name]-[chunkhash].css', {allChunks: true}),
     // hot reload
     new webpack.HotModuleReplacementPlugin(),
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
@@ -90,7 +114,7 @@ module.exports = {
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
-      __DEVTOOLS__: false  // <-------- DISABLE redux-devtools HERE
+      __DEVTOOLS__: true  // <-------- DISABLE redux-devtools HERE
     }),
     webpackIsomorphicToolsPlugin.development()
   ]

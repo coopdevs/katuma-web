@@ -1,20 +1,33 @@
 import React, {Component, PropTypes} from 'react';
 
+import { getMember } from 'presenters/member';
+
 import Item from './Item';
 
 export default class GroupMembersList extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
-    members: PropTypes.array.isRequired,
+    memberships: PropTypes.array.isRequired,
+    users: PropTypes.object.isRequired,
   }
 
   render() {
-    const { members } = this.props;
+    const { memberships, users } = this.props;
 
-    const memberList = members.map((member) => {
-      return (<li key={member.id}><Item member={member} /></li>);
-    });
+    return (
+      <ul>
+        {memberships.map((membership) => {
+          const member = getMember(users[membership.user_id], membership);
 
-    return (<ul>{memberList}</ul>);
+          if (!member) return null;
+
+          return (
+            <li key={member.id}>
+              <Item member={member} />
+            </li>
+          );
+        })}
+      </ul>
+    );
   }
 }

@@ -1,0 +1,169 @@
+@import "../../../styles/variables.scss";
+
+@import url('http://fonts.googleapis.com/css?family=Roboto:100,300,400');
+
+$jambotron_inner_padding: 2.5em;
+$jambotron_scale: 0.8rem;
+
+.home {}
+
+.welcome {
+  position: relative;
+  font-weight: 300;
+  background-color: transparent;
+  background-image: url(../images/sheep.jpg);
+  border-bottom: 3px solid $katuma_active;
+  background-size: cover;
+  color: white;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.header {
+  // We set base font in header
+  font-size: $jambotron_scale;
+  font-family: 'Roboto Slab', serif;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 1);
+
+  padding: 4.5em $jambotron_inner_padding 0 $jambotron_inner_padding;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 100;
+    margin-top: 0;
+  }
+}
+
+.services {
+  font-size: $jambotron_scale;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  &_inner {
+    padding: 2.8em $jambotron_inner_padding;
+  }
+
+  &_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    margin-bottom: 1.3em;
+
+    &:last-child {
+      border-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    p {
+      font-size: 1.6em;
+      margin: 0 0 0.8em 0;
+      text-align: center;
+    }
+
+    strong {
+      display: block;
+      font-size: 1.1em;
+      text-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  &_icon {
+    margin-top: 0.4em;
+    margin-right: 1em;
+    border-radius: 0.1em;
+    svg {
+      fill: white;
+      width: 4em;
+      height: 4em;
+    }
+  }
+}
+
+.phrase {
+  padding: 2em;
+  background-color: white;
+
+  &_container {
+    display: flex;
+    justify-content: center;
+  }
+
+  &_inner {
+    font-size: 1.3rem;
+    max-width: 30em;
+  }
+}
+
+.footer {
+  color: $gray_10;
+  margin-bottom: 3em;
+  padding: 1em 0 0 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  ul {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    list-style: none;
+    margin-right: 1em;
+    a {
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      svg {
+        margin-right: 0.3em;
+      }
+    }
+  }
+
+  svg {
+    fill: $gray_10;
+  }
+
+  &_love {
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    svg {
+      margin: 0 0.3em;
+      fill: $gray_10;
+    }
+    a {
+      color: $katuma_primary;
+      margin-left: 0.3em;
+      &:hover,
+      &:visited,
+      &:active {
+        color: $katuma_primary;
+      }
+    }
+  }
+}
+
+.footer_link {
+  composes: defaultLink from "../../App/styles/index.scss";
+  text-decoration: none;
+  color: $gray_6;
+  &:hover,
+  &:active {
+    color: $katuma_primary;
+  }
+}
+
+@media (min-width: $screen-sm-min) {
+  .services {
+    &_item {
+      border-bottom: 0;
+      margin-bottom: 0;
+    }
+  }
+}

@@ -1,59 +1,58 @@
 const SIGNUP = 'redux-example/signup/SIGNUP';
 const SIGNUP_SUCCESS = 'redux-example/signup/SIGNUP_SUCCESS';
 const SIGNUP_FAIL = 'redux-example/signup/SIGNUP_FAIL';
-const CLEAN_SIGNUP_ERRORS = 'redux-example/signup/CLEAN_SIGNUP_ERRORS';
+
 
 const initialState = {
-  errors: [],
-  signupDone: false
+  signupDone: false,
+  errors: null,
 };
 
 export default function signupCreateReducer(state = initialState, action = {}) {
   switch (action.type) {
     case SIGNUP:
       return {
-        ...state
+        ...state,
+        signupDone: false,
+        errors: null,
       };
+
     case SIGNUP_SUCCESS:
       return {
         ...state,
-        errors: [],
-        signupDone: true
+        signupDone: true,
+        errors: null,
       };
+
     case SIGNUP_FAIL:
       return {
         ...state,
-        errors: action.error.errors
+        errors: action.error,
       };
-    case CLEAN_SIGNUP_ERRORS:
-      return {
-        ...state,
-        errors: []
-      };
+
     default:
       return state;
   }
 }
 
 /**
- * Create signup. Now backend sends an email confirmation to user
+ * Restore signup state on componentWillUnmount
  *
- * @param {String} email
  * @return {object}
  */
-export function signup(email) {
-  return {
-    types: [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL],
-    promise: (client) => client.post('/signups', {
-      data: {
-        email: email
-      }
-    })
-  };
+export function resetSignup() {
+  return { type: SIGNUP };
 }
 
-export function cleanErrors() {
+/**
+ * Create signup. Now backend sends an email confirmation to user
+ *
+ * @param {Object} data
+ * @return {object}
+ */
+export function signup(data = { email: '' }) {
   return {
-    type: CLEAN_SIGNUP_ERRORS
+    types: [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL],
+    promise: (client) => client.post('/signups', { data })
   };
 }
