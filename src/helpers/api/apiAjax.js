@@ -10,13 +10,18 @@ function formatUrl(path) {
 class ApiAjax {
   constructor() {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) =>
-      this[method] = (path, { data } = {}) => new Promise((resolve, reject) => {
+      this[method] = (path, { data, header } = {}) => new Promise((resolve, reject) => {
         const req = new XMLHttpRequest();
         const url = formatUrl(path);
 
         req.onload = () => {
           if (req.status === 500) {
             reject(req.response);
+            return;
+          }
+
+          if (req.status === 400) {
+            reject(JSON.parse(req.response));
             return;
           }
 
@@ -38,6 +43,9 @@ class ApiAjax {
         req.open(method, url);
         req.setRequestHeader('Accept', 'application/json');
         req.setRequestHeader('Content-Type', 'application/json');
+        if (Object.keys(header || {}).length) {
+          req.setRequestHeader(header.key, header.value);
+        }
         req.send(JSON.stringify(data));
       })
     );

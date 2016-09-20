@@ -6,6 +6,7 @@ export { Create as Signup, Complete as SignupComplete } from './Signup';
 export InvitationComplete from './Invitation/Complete';
 export { GroupsBase, GroupsList } from './Groups';
 export { GroupBase, GroupMembers } from './Group';
+export { GroupSuppliersBase, GroupSuppliersDetails } from './Group/Suppliers';
 export { OnboardingCreateGroup, OnboardingMembers } from './Onboarding';
 export Survey from './Survey/Survey';
 export NotFound from './NotFound/NotFound';
