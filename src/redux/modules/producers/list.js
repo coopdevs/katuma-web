@@ -107,10 +107,10 @@ export default function producersReducer(state = initialState, action = {}) {
   }
 }
 
-export function load() {
+export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get(`/producers`)
+    promise: (client) => client.get(`/producers?group_id=${groupId}`)
   };
 }
 
