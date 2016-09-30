@@ -13,6 +13,7 @@ import groupsReducer from './groups/groups';
 import suppliersReducer from './suppliers/suppliers';
 import providersReducer from './providers/providers';
 import producersReducer from './producers/list';
+import productsReducer from './products/products';
 import {reducer as form} from 'redux-form';
 import info from './info';
 import widgets from './widgets';
@@ -31,6 +32,7 @@ export default combineReducers({
   suppliersReducer,
   providersReducer,
   producersReducer,
+  productsReducer,
   invitationsReducer,
   bulkInvitationsReducer,
   completeInvitationReducer,
