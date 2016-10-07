@@ -83,7 +83,7 @@ export default (store) => {
   const redirectToGroupsDetail = (nextState, replace, cb) => {
     function getGroupIds() {
       const {membershipsReducer: {memberships: {entities}}} = store.getState();
-      return _.uniq(_.pluck(entities, 'group_id'));
+      return _.uniq(_.pluck(entities, 'basic_resource_group_id'));
     }
 
     function goToGroupDetail() {
