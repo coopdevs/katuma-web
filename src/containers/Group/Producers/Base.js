@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 
 import CreateProducerForm from 'components/forms/producers/Create';
-import { load as loadSuppliers } from 'redux/modules/suppliers/list';
 import { load as loadProducers } from 'redux/modules/producers/list';
 import { create } from 'redux/modules/producers/list';
 import { suppliersWithProducerSelector } from 'selectors/producers';
@@ -27,8 +26,7 @@ const mapDispatchToProps = { initialize, create };
     } = options;
 
     const promises = [];
-    promises.push(dispatch(loadSuppliers(id)));
-    promises.push(dispatch(loadProducers()));
+    promises.push(dispatch(loadProducers(id)));
 
     return Promise.all(promises);
   },

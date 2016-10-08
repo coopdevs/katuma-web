@@ -1,21 +1,20 @@
 import _ from 'underscore';
 
-const LOAD = 'redux-example/producers/LOAD';
-const LOAD_SUCCESS = 'redux-example/producers/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/producers/LOAD_FAIL';
-const LOAD_PRODUCER = 'redux-example/producers/LOAD_PRODUCER';
-const LOAD_PRODUCER_SUCCESS = 'redux-example/producers/LOAD_PRODUCER_SUCCESS';
-const LOAD_PRODUCER_FAIL = 'redux-example/producers/LOAD_PRODUCER_FAIL';
-const CREATE_PRODUCER = 'redux-example/producers/CREATE_PRODUCER';
-const CREATE_PRODUCER_SUCCESS = 'redux-example/producers/CREATE_PRODUCER_SUCCESS';
-const CREATE_PRODUCER_FAIL = 'redux-example/producers/CREATE_PRODUCER_FAIL';
+const LOAD = 'redux-example/products/LOAD';
+const LOAD_SUCCESS = 'redux-example/products/LOAD_SUCCESS';
+const LOAD_FAIL = 'redux-example/products/LOAD_FAIL';
+const LOAD_PRODUCT = 'redux-example/products/LOAD_PRODUCT';
+const LOAD_PRODUCT_SUCCESS = 'redux-example/products/LOAD_PRODUCT_SUCCESS';
+const LOAD_PRODUCT_FAIL = 'redux-example/products/LOAD_PRODUCT_FAIL';
+const CREATE_PRODUCT = 'redux-example/products/CREATE_PRODUCT';
+const CREATE_PRODUCT_SUCCESS = 'redux-example/products/CREATE_PRODUCT_SUCCESS';
+const CREATE_PRODUCT_FAIL = 'redux-example/products/CREATE_PRODUCT_FAIL';
 
 const initialState = {
-  producers: {entities: []},
-  createProducerErrors: {},
+  products: { entities: [], byId: {} },
 };
 
-export default function producersReducer(state = initialState, action = {}) {
+export default function productsReducer(state = initialState, action = {}) {
   let entities;
 
   switch (action.type) {
@@ -31,7 +30,7 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        producers: {
+        products: {
           entities: entities,
           byId: _.indexBy(entities, 'id'),
         },
@@ -44,49 +43,49 @@ export default function producersReducer(state = initialState, action = {}) {
         error: action.error,
       };
 
-    case LOAD_PRODUCER:
+    case LOAD_PRODUCT:
       return {
         ...state,
         loading: true,
       };
 
-    case LOAD_PRODUCER_SUCCESS:
-      entities = [...state.producers.entities, action.result];
+    case LOAD_PRODUCT_SUCCESS:
+      entities = [...state.products.entities, action.result];
 
       return {
         ...state,
         loading: false,
-        producers: {
+        products: {
           entities: entities,
           byId: _.indexBy(entities, 'id'),
         },
       };
 
-    case LOAD_PRODUCER_FAIL:
+    case LOAD_PRODUCT_FAIL:
       return {
         ...state,
         loading: false,
         error: action.error,
       };
 
-    case CREATE_PRODUCER:
+    case CREATE_PRODUCT:
       return {
         ...state,
       };
 
-    case CREATE_PRODUCER_SUCCESS:
-      entities = [...state.producers.entities, action.result];
+    case CREATE_PRODUCT_SUCCESS:
+      entities = [...state.products.entities, action.result];
 
       return {
         ...state,
-        producers: {
+        products: {
           entities,
           byId: _.indexBy(entities, 'id')
         },
         createProducerErrors: {},
       };
 
-    case CREATE_PRODUCER_FAIL:
+    case CREATE_PRODUCT_FAIL:
       const errorsKeys = Object.keys(action.error);
       // FIXME: Extract into utils. Here we're parsing API errors.
       // By default server returns an object with fields with erros.
@@ -110,23 +109,20 @@ export default function producersReducer(state = initialState, action = {}) {
 export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get(`/producers?group_id=${groupId}`)
+    promise: (client) => client.get(`/products?group_id=${groupId}`)
   };
 }
 
 export function loadEntity(id) {
   return {
-    types: [LOAD_PRODUCER, LOAD_PRODUCER_SUCCESS, LOAD_PRODUCER_FAIL],
-    promise: (client) => client.get(`/producers/${id}`)
+    types: [LOAD_PRODUCT, LOAD_PRODUCT_SUCCESS, LOAD_PRODUCT_FAIL],
+    promise: (client) => client.get(`/products/${id}`)
   };
 }
 
 export function create(data) {
   return {
-    types: [CREATE_PRODUCER, CREATE_PRODUCER_SUCCESS, CREATE_PRODUCER_FAIL],
-    promise: (client) => client.post('/producers', {
-      data: _.omit(data, 'group_id'),
-      header: { key: 'X-katuma-group-id-for-provider', value: data.group_id },
-    })
+    types: [CREATE_PRODUCT, CREATE_PRODUCT_SUCCESS, CREATE_PRODUCT_FAIL],
+    promise: (client) => client.post('/products', { data: data })
   };
 }

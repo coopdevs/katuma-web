@@ -1,17 +1,17 @@
 import _ from 'underscore';
 
-const LOAD = 'redux-example/suppliers/LOAD';
-const LOAD_SUCCESS = 'redux-example/suppliers/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/suppliers/LOAD_FAIL';
-const LOAD_SUPPLIER = 'redux-example/suppliers/LOAD_SUPPLIER';
-const LOAD_SUPPLIER_SUCCESS = 'redux-example/suppliers/LOAD_SUPPLIER_SUCCESS';
-const LOAD_SUPPLIER_FAIL = 'redux-example/suppliers/LOAD_SUPPLIER_FAIL';
+const LOAD = 'redux-example/providers/LOAD';
+const LOAD_SUCCESS = 'redux-example/providers/LOAD_SUCCESS';
+const LOAD_FAIL = 'redux-example/providers/LOAD_FAIL';
+const LOAD_PROVIDER = 'redux-example/providers/LOAD_PROVIDER';
+const LOAD_PROVIDER_SUCCESS = 'redux-example/providers/LOAD_PROVIDER_SUCCESS';
+const LOAD_PROVIDER_FAIL = 'redux-example/providers/LOAD_PROVIDER_FAIL';
 
 const initialState = {
-  suppliers: { entities: [], byId: {} },
+  providers: { entities: [], byId: {} },
 };
 
-export default function suppliersReducer(state = initialState, action = {}) {
+export default function providersReducer(state = initialState, action = {}) {
   let entities;
 
   switch (action.type) {
@@ -27,7 +27,7 @@ export default function suppliersReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        suppliers: {
+        providers: {
           entities: entities,
           byId: _.indexBy(entities, 'id'),
         },
@@ -40,25 +40,25 @@ export default function suppliersReducer(state = initialState, action = {}) {
         error: action.error,
       };
 
-    case LOAD_SUPPLIER:
+    case LOAD_PROVIDER:
       return {
         ...state,
         loading: true,
       };
 
-    case LOAD_SUPPLIER_SUCCESS:
-      entities = [...state.suppliers.entities, action.result];
+    case LOAD_PROVIDER_SUCCESS:
+      entities = [...state.providers.entities, action.result];
 
       return {
         ...state,
         loading: false,
-        suppliers: {
+        providers: {
           entities: entities,
           byId: _.indexBy(entities, 'id'),
         },
       };
 
-    case LOAD_SUPPLIER_FAIL:
+    case LOAD_PROVIDER_FAIL:
       return {
         ...state,
         loading: false,
@@ -73,13 +73,13 @@ export default function suppliersReducer(state = initialState, action = {}) {
 export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get(`/suppliers?group_id=${groupId}`)
+    promise: (client) => client.get(`/providers?group_id=${groupId}`)
   };
 }
 
 export function loadEntity(id) {
   return {
-    types: [LOAD_SUPPLIER, LOAD_SUPPLIER_SUCCESS, LOAD_SUPPLIER_FAIL],
-    promise: (client) => client.get(`/suppliers/${id}`)
+    types: [LOAD_PROVIDER, LOAD_PROVIDER_SUCCESS, LOAD_PROVIDER_FAIL],
+    promise: (client) => client.get(`/providers/${id}`)
   };
 }

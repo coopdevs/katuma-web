@@ -16,8 +16,8 @@ import {
     GroupsList,
     GroupBase,
     GroupMembers,
-    GroupSuppliersBase,
-    GroupSuppliersDetails,
+    GroupProvidersBase,
+    GroupProvidersDetails,
     OnboardingCreateGroup,
     InvitationComplete,
     NotFound,
@@ -124,8 +124,8 @@ export default (store) => {
           <Route path=":id" component={GroupBase}>
             <IndexRoute component={GroupMembers}/>
             <Route path="members" component={GroupMembers}/>
-            <Route path="suppliers" component={GroupSuppliersBase}/>
-            <Route path="suppliers/:producer_id" component={GroupSuppliersDetails}/>
+            <Route path="providers" component={GroupProvidersBase}/>
+            <Route path="providers/:provider_id" component={GroupProvidersDetails}/>
           </Route>
         </Route>
 

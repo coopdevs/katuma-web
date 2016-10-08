@@ -10,8 +10,10 @@ import bulkInvitationsReducer from './invitations/bulk';
 import completeInvitationReducer from './invitations/complete';
 import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
-import suppliersReducer from './suppliers/list';
+import suppliersReducer from './suppliers/suppliers';
+import providersReducer from './providers/providers';
 import producersReducer from './producers/list';
+import productsReducer from './products/products';
 import {reducer as form} from 'redux-form';
 import info from './info';
 import widgets from './widgets';
@@ -28,7 +30,9 @@ const appReducers = combineReducers({
   usersReducer,
   groupsReducer,
   suppliersReducer,
+  providersReducer,
   producersReducer,
+  productsReducer,
   invitationsReducer,
   bulkInvitationsReducer,
   completeInvitationReducer,

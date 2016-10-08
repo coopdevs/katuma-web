@@ -22,7 +22,7 @@ class GroupMembers extends Component {
       <div>
         <Helmet title={`Miembros de ${group.name}`}/>
 
-        <Link to={`/groups/${group.id}/suppliers`} style={{float: 'right'}}>Proveedores</Link>
+        <Link to={`/groups/${group.id}/providers`} style={{float: 'right'}}>Proveedores</Link>
         <h2>Miembros</h2>
 
         <div className="row">
