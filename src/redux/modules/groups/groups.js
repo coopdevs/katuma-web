@@ -11,8 +11,9 @@ const CREATE_GROUP_SUCCESS = 'redux-example/groups/CREATE_GROUP_SUCCESS';
 const CREATE_GROUP_FAIL = 'redux-example/groups/CREATE_GROUP_FAIL';
 
 const initialState = {
-  createGroupErrors: {},
-  groups: {entities: [], byId: {}},
+  errors: null,
+  createdGroupId: null,
+  groups: { entities: [], byId: {} },
 };
 
 export default function groupsReducer(state = initialState, action = {}) {
@@ -21,6 +22,7 @@ export default function groupsReducer(state = initialState, action = {}) {
   switch (action.type) {
     case CREATE_GROUP:
       return {
+        createdGroupId: null,
         ...state,
       };
 
@@ -29,24 +31,16 @@ export default function groupsReducer(state = initialState, action = {}) {
 
       return {
         ...state,
-        groups: {entities, byId: _.indexBy(entities, 'id')},
-        createGroupErrors: {},
+        groups: { entities, byId: _.indexBy(entities, 'id')},
+        createdGroupId: action.result.id,
+        errors: null,
       };
 
     case CREATE_GROUP_FAIL:
-      const errorsKeys = Object.keys(action.error);
-      // FIXME: Extract into utils. Here we're parsing API errors.
-      // By default server returns an object with fields with erros.
-      // And each field has an array of errors. Here we're picking
-      // just first error for each field.
-      const createGroupErrors = errorsKeys.reduce((formatedErrors, key) => {
-        formatedErrors[key] = action.error[key][0];
-        return formatedErrors;
-      }, {});
-
       return {
         ...state,
-        createGroupErrors: createGroupErrors
+        createdGroupId: null,
+        errors: action.error,
       };
 
     case LOAD_GROUPS:
@@ -104,7 +98,7 @@ export function load() {
   };
 }
 
-export function loadEntity(id) {
+export function loadGroup(id) {
   return {
     types: [LOAD_GROUP, LOAD_GROUP_SUCCESS, LOAD_GROUP_FAIL],
     promise: (client) => client.get(`/groups/${id}`)
@@ -114,8 +108,6 @@ export function loadEntity(id) {
 export function create(data) {
   return {
     types: [CREATE_GROUP, CREATE_GROUP_SUCCESS, CREATE_GROUP_FAIL],
-    promise: (client) => client.post('/groups', {
-      data: data
-    })
+    promise: (client) => client.post('/groups', { data }),
   };
 }

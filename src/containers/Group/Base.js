@@ -1,89 +1,72 @@
+import React, { Component, PropTypes } from 'react';
 import _ from 'underscore';
-import React, {Component, PropTypes} from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 
-import { loadEntity as loadGroup } from 'redux/modules/groups/groups';
+import { getMember } from 'presenters/member';
+import { loadGroup } from 'redux/modules/groups/groups';
 import { load as loadUsers } from 'redux/modules/users/users';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
-import { membersWithUserSelector } from 'selectors/members';
 
-function groupSelector(state) {
-  return {
-    ...membersWithUserSelector(state),
-    user: state.auth.user,
-  };
-}
+import Sidebar from './Sidebar';
 
-@asyncConnect([{
-  promise: (options) => {
-    const {
-      store: { dispatch, getState },
-      params,
-    } = options;
-
-    const {
-      groupsReducer: {groups: { byId }},
-      usersReducer: { users },
-      membershipsReducer: { memberships },
-    } = getState();
-    const promises = [];
-    const id = params.id;
-    const group = byId[id];
-
-    if (!users.entities.length) {
-      promises.push(dispatch(loadUsers()));
-    }
-
-    if (!memberships.entities.length) {
-      promises.push(dispatch(loadMemberships()));
-    }
-
-    if (!group) {
-      promises.push(dispatch(loadGroup(id)));
-    }
-
-    return Promise.all(promises);
-  }
-}])
-@connect(groupSelector, {})
 export default class GroupBase extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    groups: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    members: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
+    users: PropTypes.object.isRequired,
+    memberships: PropTypes.array.isRequired,
+    user: PropTypes.object.isRequired,
+    group: PropTypes.object,
   }
 
   render() {
-    const { user, groups, members, params: { id } } = this.props;
-    const group = groups.byId[id];
+    const { users, user, memberships, group } = this.props;
 
-    const membersOfGroup = members.byGroupID[group.id] || [];
-    const currentUser = _.findWhere(membersOfGroup, {user_id: user.id});
-
-    const groupSection = () => {
-      return (
-        <div>
-          <h1 className="h4">{group.name}</h1>
-          {React.cloneElement(
-            this.props.children,
-            {
-              group: group,
-              currentUser: currentUser,
-              members: membersOfGroup,
-            }
-          )}
-        </div>
-      );
-    };
+    if (!group) {
+      return (<div>group not found</div>);
+    }
 
     return (
       <div>
-        {!group && <div>group not found</div>}
-        {group && groupSection()}
+        <h1 className="h4">{group.name}</h1>
+        <Sidebar group={group} />
+        {React.cloneElement(
+          this.props.children,
+          { group, user, memberships, users }
+        )}
       </div>
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
+  const { params: { id } } = ownProps;
+  const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id];
+  const membership = _.findWhere(memberships, { user_id: auth.user.id });
+  const user = getMember(auth.user, membership);
+
+  return {
+    memberships,
+    group: groupsReducer.groups.byId[id],
+    users: usersReducer.users.byID,
+    user,
+  };
+};
+
+const asyncConnectProps = [{
+  promise: ({ store: { dispatch }, params: { id } }) => {
+    return Promise.all([
+      dispatch(loadGroup(id)),
+      dispatch(loadUsers(id)),
+      dispatch(loadMemberships()),
+    ]);
+  }
+}];
+
+export default compose(
+  asyncConnect(asyncConnectProps),
+  connect(mapStateToProps)
+)(GroupBase);

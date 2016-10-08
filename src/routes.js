@@ -9,7 +9,6 @@ import { load as loadGroups } from 'redux/modules/groups/groups';
 import {
     App,
     Home,
-    Widgets,
     Login,
     Signup,
     SignupComplete,
@@ -21,7 +20,6 @@ import {
     GroupSuppliersDetails,
     OnboardingCreateGroup,
     InvitationComplete,
-    Survey,
     NotFound,
   } from 'containers';
 
@@ -83,7 +81,7 @@ export default (store) => {
   const redirectToGroupsDetail = (nextState, replace, cb) => {
     function getGroupIds() {
       const {membershipsReducer: {memberships: {entities}}} = store.getState();
-      return _.uniq(_.pluck(entities, 'group_id'));
+      return _.uniq(_.pluck(entities, 'basic_resource_group_id'));
     }
 
     function goToGroupDetail() {
@@ -108,14 +106,13 @@ export default (store) => {
   return (
     <Route path="/" component={App}>
       <IndexRoute component={Home} onEnter={redirectToGroups}/>
-      <Route path="widgets" component={Widgets}/>
-      <Route path="login" component={Login}/>
+      <Route path="login" component={Login} />
       <Route path="invitation/accept/:token" context={store} component={InvitationComplete} />
 
       {/* Routes signup */}
       <Route path="signup">
-        <IndexRoute component={Signup}/>
-        <Route path="complete" context={store}>
+        <IndexRoute component={Signup} />
+        <Route path="complete" context={store} component={SignupComplete}>
           <Route path=":token" component={SignupComplete}/>
         </Route>
       </Route>
@@ -135,10 +132,8 @@ export default (store) => {
         <Route path="onboarding">
           <IndexRoute component={OnboardingCreateGroup}/>
         </Route>
-
       </Route>
 
-      <Route path="/survey" component={Survey}/>
       <Route path="*" component={NotFound} status={404} />
     </Route>
   );

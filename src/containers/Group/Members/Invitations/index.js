@@ -2,26 +2,18 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
 
-import BulkInvitationsForm from 'components/forms/invitations/Bulk';
+/* import BulkInvitationsForm from 'components/forms/invitations/Bulk';*/
 import { send as sendBulk } from 'redux/modules/invitations/bulk';
 import { send } from 'redux/modules/invitations/list';
-import { isRole } from 'helpers/entities/member';
+import { isRole } from 'presenters/member';
 
-const mapStateToProps = (state) => ({
-  bulkErrors: state.bulkInvitationsReducer.bulkErrors,
-  invitations: state.invitationsReducer.invitations,
-  invitationStatusByID: state.invitationsReducer.invitationStatusByID,
-});
-const mapDispatchToProps = { initialize, send, sendBulk };
-
-@connect(mapStateToProps, mapDispatchToProps)
-export default class GroupMembersInvitations extends Component {
+class Invitations extends Component {
   static propTypes = {
     initialize: PropTypes.func.isRequired,
     invitations: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
     invitationStatusByID: PropTypes.object.isRequired,
-    currentUser: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     sendBulk: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
     bulkErrors: PropTypes.object,
@@ -56,13 +48,13 @@ export default class GroupMembersInvitations extends Component {
 
   render() {
     const {
-      currentUser,
+      user,
       invitations,
       invitationStatusByID,
       group,
     } = this.props;
     const invitationsByGroup = invitations.byGroupID[group.id] || [];
-    const isAdmin = isRole(currentUser, 'admin');
+    const isAdmin = isRole(user, 'admin');
 
     const invitationsList = invitationsByGroup.map((invitation) => {
       const invitationState = invitationStatusByID[invitation.id];
@@ -90,10 +82,19 @@ export default class GroupMembersInvitations extends Component {
       <div>
         <h3>Invitaciones</h3>
 
-        {isAdmin && <BulkInvitationsForm onSubmit={this.sendInvitations.bind(this)} />}
+        {/* isAdmin && <BulkInvitationsForm onSubmit={this.sendInvitations.bind(this)} />*/}
 
         <ul>{invitationsList}</ul>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  bulkErrors: state.bulkInvitationsReducer.bulkErrors,
+  invitations: state.invitationsReducer.invitations,
+  invitationStatusByID: state.invitationsReducer.invitationStatusByID,
+});
+const mapDispatchToProps = { initialize, send, sendBulk };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Invitations);

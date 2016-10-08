@@ -1,0 +1,11 @@
+@import "../../../styles/variables.scss";
+
+.accessFooter {
+  color: $gray_11;
+}
+
+@media (min-width: $screen-sm-min) {
+  .accessFooter {
+    font-size: 0.9rem;
+  }
+}

@@ -1,7 +1,7 @@
 /* eslint no-debugger: 0 */
 import { combineReducers } from 'redux';
 
-import auth from './auth';
+import auth, { LOGOUT_SUCCESS } from './auth';
 import signupCreateReducer from './signup/create';
 import signupCompleteReducer from './signup/complete';
 import membershipsReducer from './groups/memberships';
@@ -18,7 +18,7 @@ import widgets from './widgets';
 import { routeReducer } from 'react-router-redux';
 import {reducer as reduxAsyncConnect} from 'redux-async-connect';
 
-export default combineReducers({
+const appReducers = combineReducers({
   routing: routeReducer,
   reduxAsyncConnect,
   auth,
@@ -36,3 +36,17 @@ export default combineReducers({
   info,
   widgets
 });
+
+const rootReducer = (state, action) => {
+  let finalState = state;
+
+  // On logout empty store!
+  // We don't want user data leaks
+  if (action.type === LOGOUT_SUCCESS) {
+    finalState = undefined;
+  }
+
+  return appReducers(finalState, action);
+};
+
+export default rootReducer;

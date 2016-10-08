@@ -1,16 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import { IndexLink } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
+import classNames from 'classnames';
+
+import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { routeActions } from 'react-router-redux';
 import { asyncConnect } from 'redux-async-connect';
 
+import sprite from '../../helpers/Sprite';
 import config from '../../config';
+import styles from './styles/index.scss';
 
 @asyncConnect([{
   promise: (options) => {
@@ -28,13 +27,13 @@ import config from '../../config';
 }])
 @connect(
   state => ({user: state.auth.user}),
-  {logout, push: routeActions.push}
+  {push: routeActions.push}
 )
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
+    route: PropTypes.object.isRequired,
     user: PropTypes.object,
-    logout: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired
   };
 
@@ -42,80 +41,43 @@ export default class App extends Component {
     store: PropTypes.object.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    const { push } = this.props;
+  componentWillMount() {
+    if (__SERVER__) return;
 
-    if (!this.props.user && nextProps.user) {
+    sprite.element = sprite.render(document.body);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { push, user: oldUser } = this.props;
+    const { user } = nextProps;
+
+    if (!oldUser && user) {
       push('/groups');
-    } else if (this.props.user && !nextProps.user) {
+    } else if (oldUser && !user) {
       push('/login');
-      // Full real page reload to clean local data
-      window.location.reload();
     }
   }
 
-  handleLogout(event) {
-    event.preventDefault();
-    this.props.logout();
+  componentWillUnmount() {
+    sprite.element.parentNode.removeChild(sprite.element);
   }
 
   render() {
-    const {user} = this.props;
-    const styles = require('./App.scss');
+    const { children } = this.props;
+    const { app: { head } } = config;
+    const layoutCentered = children && children.type && !!children.type.layoutCentered;
 
     return (
       <div className={styles.app}>
-        <Helmet {...config.app.head}/>
-        <Navbar fixedTop>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <IndexLink to="/" activeStyle={{color: '#33e0ff'}}>
-                <div className={styles.brand}/>
-                <span>{config.app.title}</span>
-              </IndexLink>
-            </Navbar.Brand>
-            <Navbar.Toggle/>
-          </Navbar.Header>
+        <Helmet {...head}/>
 
-          <Navbar.Collapse eventKey={0}>
-            <Nav navbar>
-              <LinkContainer to="/widgets">
-                <NavItem eventKey={2}>Widgets</NavItem>
-              </LinkContainer>
-              <LinkContainer to="/survey">
-                <NavItem eventKey={3}>Survey</NavItem>
-              </LinkContainer>
-              <LinkContainer to="/groups">
-                <NavItem eventKey={4}>Groups</NavItem>
-              </LinkContainer>
-
-              {!user &&
-              <LinkContainer to="/login">
-                <NavItem eventKey={5}>Login</NavItem>
-              </LinkContainer>}
-              {!user &&
-              <LinkContainer to="/signup">
-                <NavItem eventKey={5}>Sign Up</NavItem>
-              </LinkContainer>}
-              {user &&
-              <LinkContainer to="/logout">
-                <NavItem eventKey={6} className="logout-link" onClick={::this.handleLogout}>
-                  Logout
-                </NavItem>
-              </LinkContainer>}
-            </Nav>
-            {user &&
-            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.full_name}</strong></p>}
-            <Nav navbar pullRight>
-              <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/erikras/react-redux-universal-hot-example">
-                <i className="fa fa-github"/>
-              </NavItem>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-
-        <div className={styles.appContent}>
-          {this.props.children}
+        <div
+          className={classNames({
+            [styles.rootComponent]: true,
+            [styles.rootComponent_centered]: layoutCentered,
+          })}
+        >
+          {children}
         </div>
       </div>
     );

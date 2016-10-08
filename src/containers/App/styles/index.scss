@@ -1,0 +1,75 @@
+@import "../../../styles/variables.scss";
+
+:global {
+  * {
+    box-sizing: border-box;
+  }
+
+  // How we manage proportions and font size
+  // relation between components: https://css-tricks.com/rems-ems/
+  html {
+    font-size: 18px;
+    height: 100%;
+  }
+
+  @media (max-width: $screen-md-max) {
+    html { font-size: 16px; }
+  }
+
+  @media (max-width: $screen-xs-max) {
+    html { font-size: 13px; }
+  }
+
+  body {
+    height: 100%;
+    font-size: 1em;
+    line-height: 2em;
+    color: $katuma_primary;
+    background-color: $katuma_soft_gray;
+  }
+
+  .app-content {
+    height: 100%;
+    div[data-reactroot] {
+      height: 100%;
+    }
+  }
+
+  // Set max width of containers
+  .wrap {
+    max-width: 60rem;
+  }
+}
+
+.defaultLink,
+a {
+  color: $katuma_active;
+  &:hover,
+  &:active {
+    color: $katuma_active;
+  }
+}
+
+// Root app class
+//
+// .rootComponent_centered - Vertical centered layout
+//
+.rootComponent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &_centered {
+    margin-top: 2em;
+    align-items: center;
+  }
+}
+
+@media (min-width: $screen-sm-min) {
+  .rootComponent {
+    &_centered {
+      margin-top: 0;
+      justify-content: center;
+    }
+  }
+}

@@ -33,9 +33,9 @@ export default function usersReducer(state = initialState, action = {}) {
   }
 }
 
-export function load() {
+export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/users')
+    promise: (client) => client.get(`/users/?group_id=${groupId}`)
   };
 }

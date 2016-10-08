@@ -1,0 +1,73 @@
+@import "../_katuma-colors.scss";
+
+/**
+ * Override Bootstrap styles that you can't modify via variables here.
+ *
+ */
+
+label {
+  font-weight: normal;
+}
+
+.navbar-brand {
+  position: relative;
+  padding-left: 50px;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #33e0ff;
+  background-color: transparent;
+}
+
+.form-control {
+  box-shadow: none;
+  &:focus {
+    border-color: $katuma_primary;
+    box-shadow: none;
+  }
+}
+
+.modal-backdrop {
+  background-color: white;
+
+  &.in {
+    opacity: 0.9;
+  }
+}
+
+.modal-footer,
+.modal-header {
+  border: 0;
+}
+
+.modal-header {
+  padding-top: 1rem;
+  padding-bottom: 0;
+  .close {
+    font-size: 40px;
+    font-weight: lighter;
+  }
+}
+
+.modal-body {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.modal-footer {
+  padding-top: 0;
+  padding-bottom: 1rem;
+}
+
+.modal-content {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+a.btn,
+a.btn:hover {
+  text-decoration: none;
+}

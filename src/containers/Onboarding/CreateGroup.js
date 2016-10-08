@@ -1,62 +1,61 @@
-import _ from 'underscore';
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
-import {initialize} from 'redux-form';
-import Helmet from 'react-helmet';
+import React, { Component, PropTypes } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { routeActions } from 'react-router-redux';
+
+import layoutCentered from 'components/HOC/LayoutCentered';
+
+import CreateGroupForm from 'components/forms/groups/Create';
+
+import styles from '../../styles/layouts/index.scss';
 import { create } from 'redux/modules/groups/groups';
-import CreateGroup from 'components/forms/onboarding/Group';
 
-@connect(
-  state => ({
-    createGroupErrors: state.groupsReducer.createGroupErrors,
-    groups: state.groupsReducer.groups,
-  }),
-  {initialize, create})
-export default class Complete extends Component {
+class CreateGroup extends Component {
   static propTypes = {
-    initialize: PropTypes.func.isRequired,
-    create: PropTypes.func.isRequired,
-    groups: PropTypes.object,
-    createGroupErrors: PropTypes.object,
-    history: PropTypes.object,
+    createGroup: PropTypes.func.isRequired,
+    createdGroupId: PropTypes.number,
+    params: PropTypes.object.isRequired,
+    push: PropTypes.func.isRequired,
   };
 
-  static contextTypes = {
-    router: React.PropTypes.object.isRequired
-  };
+  constructor(props) {
+    super(props);
 
-  handleSubmit(data) {
-    // I do not know javascript at all
-    // Why I need self in an arrow function?
-    const self = this;
+    this.handleSubmit = this._handleSubmit.bind(this);
+  }
 
-    return this.props.create(data).then(() => {
-      const errors = self.props.createGroupErrors;
+  componentWillReceiveProps(newProps) {
+    const { createdGroupId: oldCreatedGroupId, push } = this.props;
+    const { createdGroupId } = newProps;
 
-      if (Object.keys(errors).length) {
-        return Promise.reject(errors);
-      }
+    if (oldCreatedGroupId === createdGroupId) return;
 
-      // do something on success
-      self.props.initialize('onboardingCreateGroup', {});
+    push(`/groups/${createdGroupId}/members`);
+  }
 
-      const group = _.last(self.props.groups.entities);
-      self.context.router.push(`/groups/${group.id}/members`);
-      return Promise.resolve({});
-    });
+  /**
+  * Submit signup create form
+  *
+  * @param {Object} fields
+  */
+  _handleSubmit(fields) {
+    return this.props.createGroup(fields);
   }
 
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12">
-            <Helmet title="Signup Complete"/>
-            <h1>Crea un grupo</h1>
-            <CreateGroup onSubmit={::this.handleSubmit}/>
-          </div>
+      <div className={styles.layoutCentered}>
+        <div className={styles.layoutCentered__body}>
+          <CreateGroupForm onSubmit={this.handleSubmit} />
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = ({ groupsReducer: { createdGroupId }}) => ({ createdGroupId });
+
+export default compose(
+  layoutCentered,
+  connect(mapStateToProps, { createGroup: create, push: routeActions.push })
+)(CreateGroup);

@@ -1,110 +1,123 @@
-import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
+import React, { Component, PropTypes } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field, stopSubmit } from 'redux-form';
 
-const COMPLETE_SIGNUP_FORM_FIELDS = {
-  username: {
-    type: 'text',
-    label: 'Nombre de usuario',
-    placeholder: 'Elige un nombre de usuario. Ej.: roberto_perez'
-  },
-  first_name: {
-    type: 'text',
-    label: 'Nombre',
-    placeholder: 'Tu nombre'
-  },
-  last_name: {
-    type: 'text',
-    label: 'Apellido',
-    placeholder: 'Tu primer apellido'
-  },
-  password: {
-    type: 'password',
-    label: 'Contraseña',
-    placeholder: 'Elige una contraseña'
-  },
-  password_confirmation: {
-    type: 'password',
-    label: 'Confirmacion de Contraseña',
-    placeholder: 'Repite la misma contraseña'
-  },
-};
+import Input from 'components/Input';
+import Button from 'components/Button';
+// import MessagePane from 'components/MessagePane';
 
-@reduxForm({
-  form: 'signupComplete',
-  fields: Object.keys(COMPLETE_SIGNUP_FORM_FIELDS)
-})
-export default class CompleteSignupForm extends Component {
+const SIGNUP_COMPLETE_FORM = 'signupComplete';
+
+class SignupCompleteForm extends Component {
   static propTypes = {
-    fields: PropTypes.object.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    stopSubmit: PropTypes.func.isRequired,
+    errors: PropTypes.object,
     submitting: PropTypes.bool,
-    handleSubmit: PropTypes.func.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+  }
+
+  componentWillReceiveProps({ errors }) {
+    this.checkErrors(errors);
   }
 
   /**
-   * Get css classes for field
+   * When api request has errors show it
+   * on the form.
    *
-   * @param {Object} field
-   * @param {Sting} type
+   * @param {Object} errors.
    */
-  getInputClasses(field, type) {
-    const classes = [];
+  checkErrors(errors) {
+    if (!errors) return;
 
-    if (type !== 'hidden') {
-      classes.push('form-group');
-    }
-
-    if (field.error) {
-      classes.push('has-error');
-    }
-
-    return classes.join(' ');
+    this.props.stopSubmit(SIGNUP_COMPLETE_FORM, errors);
   }
 
   render() {
-    const {handleSubmit, submitting, fields} = this.props;
-
-    const renderInput = (field, index) => {
-      const fieldProps = COMPLETE_SIGNUP_FORM_FIELDS[field.name];
-
-      if (!fieldProps) {
-        return null;
-      }
-
-      const {label, type, placeholder} = fieldProps;
-
-      return (
-        <div key={index} className={this.getInputClasses(field, type)}>
-          <label htmlFor={field.name}>{label}</label>
-          <div>
-            <input
-              id={field.name}
-              type={type}
-              className="form-control"
-              placeholder={placeholder}
-              {...field}/>
-
-            {field.error && <div className="text-danger">{field.error}</div>}
-          </div>
-        </div>
-      );
-    };
-
-    const inputs = Object.keys(fields).map((key, index) => renderInput(fields[key], index));
+    const { handleSubmit, submitting } = this.props;
 
     return (
-      <div>
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <Field
+            name="username"
+            component={Input}
+            placeholder="Introduce tu nombre de usuario"
+            label="Nombre de usuario"
+            type="text"
+            errorsAlways
+            setInitialFocus
+          />
 
-          {inputs}
+          <Field
+            name="first_name"
+            component={Input}
+            placeholder="Introduce tu nombre"
+            label="Nombre"
+            type="text"
+            errorsAlways
+          />
 
-          <div className="form-group">
-            <button className="btn btn-success" onClick={handleSubmit}>
-              {submitting ? 'Enviando...' : 'Finalizar registro'}
-            </button>
-          </div>
-        </form>
+          <Field
+            name="last_name"
+            component={Input}
+            placeholder="Introduce tu apellido"
+            label="Apellido(s)"
+            type="text"
+            errorsAlways
+          />
 
-      </div>
+          <Field
+            name="password"
+            component={Input}
+            placeholder="Elige un contraseña"
+            label="Contraseña"
+            type="password"
+            errorsAlways
+          />
+
+          <Field
+            name="password_confirmation"
+            component={Input}
+            placeholder="Repite la misma contraseña"
+            label="Confirmacion de contraseña"
+            type="password"
+            errorsAlways
+          />
+        </div>
+        <Button
+          type="submit"
+          primary
+          processing={submitting}
+        >Finaliza el registro</Button>
+      </form>
     );
   }
 }
+
+const reduxFormProps = {
+  form: SIGNUP_COMPLETE_FORM,
+  persistentSubmitErrors: true,
+};
+
+const mapStateToProps = (state) => {
+  const {
+    form: { signupComplete },
+    signupCompleteReducer: { errors },
+  } = state;
+
+  const newState = { errors };
+
+  if (!signupComplete) return newState;
+
+  return { ...newState, submitting: signupComplete.submitting };
+};
+
+export default compose(
+  reduxForm(reduxFormProps),
+  connect(mapStateToProps, { stopSubmit })
+)(SignupCompleteForm);

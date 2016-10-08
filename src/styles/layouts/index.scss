@@ -1,0 +1,12 @@
+.layoutCentered {
+  width: 90%;
+  max-width: 25em;
+  margin: 0 1em;
+
+  &__body {
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: white;
+    padding: 1em;
+  }
+}

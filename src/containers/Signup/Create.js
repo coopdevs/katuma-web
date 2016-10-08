@@ -1,95 +1,55 @@
-import React, {Component, PropTypes} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import Helmet from 'react-helmet';
-import * as signupActions from 'redux/modules/signup/create';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-@connect(
-  state => ({
-    user: state.auth.user,
-    errors: state.signupCreateReducer.errors,
-    signupDone: state.signupCreateReducer.signupDone
-  }),
-  dispatch => bindActionCreators(signupActions, dispatch)
-)
+import SignupCreateForm from 'components/forms/Signup/Create';
+import Button from 'components/Button';
 
-export default class Create extends Component {
+import styles from '../../styles/layouts/index.scss';
+
+class SignupCreate extends Component {
   static propTypes = {
-    user: PropTypes.object,
-    errors: PropTypes.array,
-    signup: PropTypes.func,
-    signupDone: PropTypes.bool,
-    cleanErrors: PropTypes.func,
-    history: PropTypes.object
+    submitting: PropTypes.bool,
+  };
+
+  constructor(props) {
+    super(props);
+    this.onClickSignup = this._onClickSignup.bind(this);
   }
 
-  componentWillMount() {
-    if (this.props.errors.length) {
-      this.props.cleanErrors();
-    }
-  }
+  static layoutCentered = true;
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.signupDone) {
-      this.refs.email.value = '';
-    }
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    const email = this.refs.email;
-    this.props.signup(email.value);
+  _onClickSignup() {
+    this.refs.signup_form.submit();
   }
 
   render() {
-    const {user, errors, signupDone} = this.props;
-    let errorMessages;
-    let successMessage;
-
-    if (errors.length) {
-      errorMessages = (
-        <div className="alert alert-danger" role="alert">
-          {errors[0]}
-        </div>
-      );
-    }
-
-    if (signupDone) {
-      successMessage =  (
-        <div className="alert alert-success" role="alert">
-          <p>Signup success!</p>
-          <p>We've sent you an email to finish sign up</p>
-          <p>Please, review spam folder</p>
-        </div>
-      );
-    }
+    const { submitting } = this.props;
 
     return (
-      <div className="container">
-        <Helmet title="Signup"/>
-        <h1>Signup</h1>
+      <div className={styles.layoutCentered}>
+        <div className={styles.layoutCentered__body}>
+          <form>
+            <SignupCreateForm ref="signup_form" />
 
-        {successMessage}
-        {errorMessages}
-
-        {!user && !signupDone &&
-        <div>
-          <form onSubmit={::this.handleSubmit}>
-            <div className="form-group">
-              <input className="form-control" type="text" ref="email" placeholder="Enter your email"/>
-            </div>
-            <button className="btn btn-success" onClick={::this.handleSubmit}>
-              Sign up
-            </button>
+            <Button
+              primary
+              processing={submitting}
+              onClick={this.onClickSignup}
+              type="submit"
+            >Crear cuenta</Button>
           </form>
         </div>
-        }
-        {user &&
-        <div>
-          <p>You are currently logged in as {user.first_name}.</p>
-        </div>
-        }
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const { form: { signupCreate } } = state;
+
+  if (!signupCreate) return {};
+
+  return { submitting: signupCreate.submitting };
+};
+
+export default connect(mapStateToProps)(SignupCreate);

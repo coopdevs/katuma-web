@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {initialize} from 'redux-form';
 import Helmet from 'react-helmet';
 import * as invitationCompleteActions from 'redux/modules/invitations/complete';
-import CompleteSignupForm from 'components/forms/signup/Complete';
 import { asyncConnect } from 'redux-async-connect';
 
 @asyncConnect([{
@@ -61,6 +60,7 @@ export default class InvitationComplete extends Component {
   }
 
   render() {
+    // <CompleteSignupForm onSubmit={this.handleSubmit.bind(this)} />
     return (
       <div className="container">
         <div className="row">
@@ -68,9 +68,6 @@ export default class InvitationComplete extends Component {
             <Helmet title="Complete your registration"/>
             <h1>Finaliza el registro</h1>
 
-            <CompleteSignupForm
-              onSubmit={this.handleSubmit.bind(this)}
-            />
           </div>
         </div>
       </div>

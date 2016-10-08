@@ -1,78 +1,85 @@
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
-import {initialize} from 'redux-form';
-import Helmet from 'react-helmet';
+import React, { Component, PropTypes } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { routeActions } from 'react-router-redux';
 import { asyncConnect } from 'redux-async-connect';
 
-import * as signupCompleteActions from 'redux/modules/signup/complete';
-import CompleteSignupForm from 'components/forms/signup/Complete';
+import layoutCentered from 'components/HOC/LayoutCentered';
 
-@asyncConnect([{
-  promise: (options) => {
-    const {
-      store: { dispatch },
-      params: { token },
-    } = options;
+import SignupCompleteForm from 'components/forms/signup/Complete';
 
-    return dispatch(signupCompleteActions.checkSignup(token));
-  },
-}])
-@connect(
-  state => ({
-    validSignup: state.signupCompleteReducer.validSignup,
-    completeSignupErrors: state.signupCompleteReducer.completeSignupErrors
-  }),
-  {initialize, complete: signupCompleteActions.complete})
-export default class Complete extends Component {
+import styles from '../../styles/layouts/index.scss';
+import { checkSignup, complete } from 'redux/modules/signup/complete';
+
+class SignupComplete extends Component {
   static propTypes = {
-    initialize: PropTypes.func.isRequired,
-    complete: PropTypes.func.isRequired,
-    params: PropTypes.object,
-    completeSignupErrors: PropTypes.object,
-    validSignup: PropTypes.bool,
-    history: PropTypes.object,
-    token: PropTypes.string
-  }
-
-  static contextTypes = {
-    router: React.PropTypes.object.isRequired
+    completeSignup: PropTypes.func.isRequired,
+    validSignup: PropTypes.bool.isRequired,
+    signupDone: PropTypes.bool.isRequired,
+    params: PropTypes.object.isRequired,
+    push: PropTypes.func.isRequired,
   };
 
-  componentWillMount() {
-    const { validSignup } = this.props;
+  constructor(props) {
+    super(props);
 
-    if (!validSignup) {
-      this.context.router.replace('/signup');
-    }
+    this.handleSubmit = this._handleSubmit.bind(this);
   }
 
-  handleSubmit(data) {
-    return this.props.complete(this.props.params.token, data).then(() => {
-      const errors = this.props.completeSignupErrors;
+  componentWillMount() {
+    const { validSignup, push } = this.props;
 
-      if (Object.keys(errors).length) {
-        return Promise.reject(errors);
-      }
+    if (validSignup) return;
 
-      // do something on success
-      window.location = '/onboarding';
-    });
+    push('/signup');
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { signupDone: oldSignupDone, push } = this.props;
+    const { signupDone } = newProps;
+
+    if (oldSignupDone === signupDone) return;
+
+    push('/onboarding');
+  }
+
+  /**
+  * Submit signup create form
+  *
+  * @param {Object} fields
+  */
+  _handleSubmit(fields) {
+    // do something on success
+    /* window.location = '/onboarding';*/
+    const { params: { token }, completeSignup } = this.props;
+    return completeSignup(token, fields);
   }
 
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12">
-            <Helmet title="Signup Complete"/>
-            <h1>Finaliza el registro</h1>
-
-            <CompleteSignupForm
-              onSubmit={this.handleSubmit.bind(this)}
-            />
-          </div>
+      <div className={styles.layoutCentered}>
+        <div className={styles.layoutCentered__body}>
+          <SignupCompleteForm onSubmit={this.handleSubmit} />
         </div>
       </div>
     );
   }
 }
+
+const asyncConnectProps = [{
+  promise: (options) => {
+    const { store: { dispatch }, params: { token } } = options;
+    return dispatch(checkSignup(token));
+  },
+}];
+
+const mapStateToProps = ({ signupCompleteReducer: { validSignup, signupDone }}) => ({
+  validSignup,
+  signupDone,
+});
+
+export default compose(
+  layoutCentered,
+  asyncConnect(asyncConnectProps),
+  connect(mapStateToProps, { completeSignup: complete, push: routeActions.push })
+)(SignupComplete);
