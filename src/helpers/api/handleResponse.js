@@ -26,7 +26,7 @@ const parseBody = (body, statusCode) => {
   if (_.isObject(body)) return body;
 
   if (isSuccessResponse(statusCode) || statusCode === 400) {
-    return JSON.parse(body);
+    return _.isEmpty(body) ? {} : JSON.parse(body);
   }
 
   return {};

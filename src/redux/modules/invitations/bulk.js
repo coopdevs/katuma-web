@@ -16,7 +16,7 @@ export default function bulkInvitationsReducer(state = initialState, action = {}
     case BULK_SUCCESS:
       return {
         ...state,
-        invitationsSent: false,
+        invitationsSent: true,
       };
 
     case BULK_FAIL:
