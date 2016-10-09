@@ -4,7 +4,9 @@ const LOAD_SUCCESS = 'redux-example/users/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/users/LOAD_FAIL';
 
 const initialState = {
-  users: {entities: [], byID: []}
+  users: {
+    entities: [],
+    byId: {}}
 };
 
 export default function usersReducer(state = initialState, action = {}) {
@@ -20,7 +22,7 @@ export default function usersReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        users: {entities: entities, byID: _.indexBy(entities, 'id')},
+        users: {entities: entities, byId: _.indexBy(entities, 'id')},
       };
     case LOAD_FAIL:
       return {

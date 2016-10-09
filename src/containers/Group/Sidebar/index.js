@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import { Link, IndexLink } from 'react-router';
 
 import styles from './styles/index.scss';
 
@@ -13,8 +13,22 @@ class Sidebar extends Component {
 
     return (
       <ul>
-        <li><Link to={`/groups/${group.id}/members`} activeClassName={styles.activeLink}>Miembros</Link></li>
-        <li><Link to={`/groups/${group.id}/producers`} activeClassName={styles.activeLink}>Productores</Link></li>
+        <li>
+          <IndexLink
+            to={`/groups/${group.id}`}
+            activeClassName={styles.activeLink}
+          >
+            Miembros
+          </IndexLink>
+        </li>
+        <li>
+          <Link
+            to={`/groups/${group.id}/suppliers`}
+            activeClassName={styles.activeLink}
+          >
+            Productores
+          </Link>
+        </li>
       </ul>
     );
   }

@@ -44,14 +44,15 @@ export default class GroupBase extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
   const { params: { id } } = ownProps;
-  const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id];
-  const membership = _.findWhere(memberships, { user_id: auth.user.id });
-  const user = getMember(auth.user, membership);
+  const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id] || [];
+  const userId = auth.user ? auth.user.id : null;
+  const membership = _.findWhere(memberships, { user_id: userId });
+  const user = userId ? getMember(auth.user, membership) : {};
 
   return {
     memberships,
     group: groupsReducer.groups.byId[id],
-    users: usersReducer.users.byID,
+    users: usersReducer.users.byId,
     user,
   };
 };

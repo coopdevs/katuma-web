@@ -40,7 +40,7 @@ app.use(session({
 
 app.use('/api/v1/logout', (req, res) => {
   req.session.destroy();
-  res.json('');
+  res.json({});
 });
 
 // Proxy to API server

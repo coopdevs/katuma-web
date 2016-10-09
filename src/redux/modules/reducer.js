@@ -39,7 +39,7 @@ const rootReducer = (state, action) => {
   // On logout empty store!
   // We don't want user data leaks
   if (action.type === LOGOUT_SUCCESS) {
-    finalState = undefined;
+    finalState = { auth: { loaded: true } };
   }
 
   return appReducers(finalState, action);
