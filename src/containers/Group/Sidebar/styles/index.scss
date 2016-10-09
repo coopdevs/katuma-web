@@ -1,3 +1,6 @@
 .activeLink {
   color: red;
+  &:hover {
+    color: red;
+  }
 }
