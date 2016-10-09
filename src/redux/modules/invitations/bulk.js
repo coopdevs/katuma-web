@@ -1,9 +1,10 @@
-const BULK = 'redux-example/invitations/BULK';
+export const BULK = 'redux-example/invitations/BULK';
 const BULK_SUCCESS = 'redux-example/invitations/BULK_SUCCESS';
 const BULK_FAIL = 'redux-example/invitations/BULK_FAIL';
 
 const initialState = {
   invitationsSent: false,
+  errors: null,
 };
 
 export default function bulkInvitationsReducer(state = initialState, action = {}) {
@@ -12,11 +13,13 @@ export default function bulkInvitationsReducer(state = initialState, action = {}
       return {
         ...state,
         invitationsSent: false,
+        errors: null,
       };
     case BULK_SUCCESS:
       return {
         ...state,
         invitationsSent: true,
+        errors: null,
       };
 
     case BULK_FAIL:

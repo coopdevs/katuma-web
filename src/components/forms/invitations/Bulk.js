@@ -6,11 +6,13 @@ import { reduxForm, Field, stopSubmit, reset } from 'redux-form';
 import Input from 'components/Input';
 import Button from 'components/Button';
 import MessagePane from 'components/MessagePane';
+import { BULK } from 'redux/modules/invitations/bulk';
 
 const BULK_INVITATIONS_FORM = 'bulkInvitations';
 
 class BulkInvitationsForm extends Component {
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     stopSubmit: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
@@ -28,7 +30,7 @@ class BulkInvitationsForm extends Component {
 
   componentWillReceiveProps(newProps) {
     const { resetForm, invitationsSent: oldInvitationsSent } = this.props;
-    const { invitationsSent, errors } = newProps;
+    const { errors, invitationsSent } = newProps;
 
     this.checkErrors(errors);
 
@@ -36,6 +38,12 @@ class BulkInvitationsForm extends Component {
 
     resetForm(BULK_INVITATIONS_FORM);
     this.setState({ invitationsSent });
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+
+    dispatch({ type: BULK });
   }
 
   _onDissmis() {
@@ -101,7 +109,10 @@ const mapStateToProps = (state) => {
 
   if (!form) return newState;
 
-  return { ...newState, submitting: form.submitting };
+  return {
+    ...newState,
+    submitting: form.submitting,
+  };
 };
 
 export default compose(
