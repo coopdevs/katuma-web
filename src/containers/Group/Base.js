@@ -30,7 +30,7 @@ export default class GroupBase extends Component {
 
     return (
       <div>
-        <h1 className="h4">{group.name}</h1>
+        <h1>{group.name}</h1>
         <Sidebar group={group} />
         {React.cloneElement(
           this.props.children,
@@ -41,19 +41,21 @@ export default class GroupBase extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
-  const { params: { id } } = ownProps;
-  const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id] || [];
-  const userId = auth.user ? auth.user.id : null;
-  const membership = _.findWhere(memberships, { user_id: userId });
-  const user = userId ? getMember(auth.user, membership) : {};
+const mapStateToProps = (_state, ownProps) => {
+  return (state) => {
+    const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
+    const { params: { id } } = ownProps;
+    const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id] || [];
+    const userId = auth.user ? auth.user.id : null;
+    const membership = _.findWhere(memberships, { user_id: userId });
+    const user = userId ? getMember(auth.user, membership) : {};
 
-  return {
-    memberships,
-    group: groupsReducer.groups.byId[id],
-    users: usersReducer.users.byId,
-    user,
+    return {
+      memberships,
+      group: groupsReducer.groups.byId[id],
+      users: usersReducer.users.byId,
+      user,
+    };
   };
 };
 

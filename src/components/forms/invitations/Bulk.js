@@ -1,73 +1,85 @@
-import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
+import React, { Component, PropTypes } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field, stopSubmit } from 'redux-form';
 
-const BULK_INVITATIONS_FORM = {
-  emails: {
-    type: 'textarea',
-    label: 'Emails',
-    placeholder: 'Introduce una lista de emails separados por comas. Ej.: ana@gmail.com, hector@hotmail.com, ...'
-  },
-};
+import Input from 'components/Input';
+import Button from 'components/Button';
 
-@reduxForm( {
-  form: 'bulkInvitations',
-  fields: Object.keys(BULK_INVITATIONS_FORM)
-})
-export default class BulkInvitationsForm extends Component {
+const BULK_INVITATIONS_FORM = 'bulkInvitations';
+
+class BulkInvitationsForm extends Component {
   static propTypes = {
-    fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    stopSubmit: PropTypes.func.isRequired,
+    errors: PropTypes.object,
     submitting: PropTypes.bool,
   }
 
-  /**
-   * Get css classes for field
-   *
-   * @param {Object} field
-   */
-  getInputClasses(field) {
-    const classes = ['form-group'];
-
-    if (field.error) {
-      classes.push('has-error');
-    }
-
-    return classes.join(' ');
+  constructor(props) {
+    super(props);
   }
 
+  componentWillReceiveProps({ errors }) {
+    this.checkErrors(errors);
+  }
+
+  /**
+   * When api request has errors show it
+   * on the form.
+   *
+   * @param {Object} errors.
+   */
+  checkErrors(errors) {
+    if (!errors) return;
+
+    this.props.stopSubmit(BULK_INVITATIONS_FORM, errors);
+  }
 
   render() {
-    const {submitting, fields, handleSubmit} = this.props;
-    const field = fields.emails;
-    const label = BULK_INVITATIONS_FORM[field.name].label;
-    const placeholder = BULK_INVITATIONS_FORM[field.name].placeholder;
+    const { handleSubmit, submitting } = this.props;
 
     return (
-      <div>
-        <form onSubmit={handleSubmit}>
-
-          <div className={this.getInputClasses(field)}>
-            <label htmlFor={field.name}>{label}</label>
-            <div>
-              <textarea
-                id={field.name}
-                ref={field.name}
-                className="form-control"
-                placeholder={placeholder}
-                rows="5"
-                {...field}/>
-
-              {field.error && <div className="text-danger">{field.error}</div>}
-            </div>
-          </div>
-
-          <div className="form-group">
-            <button className="btn btn-success" onClick={handleSubmit}>
-              {submitting ? 'Enviando...' : 'Enviar invitaciones'}
-            </button>
-          </div>
-        </form>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <Field
+            name="emails"
+            component={Input}
+            placeholder="Introduce una lista de emails separados por comas. Ej.: ana@gmail.com, hector@hotmail.com, ..."
+            label="Emails"
+            type="textarea"
+            errorsAlways
+            setInitialFocus
+          />
+        </div>
+        <Button
+          type="submit"
+          primary
+          processing={submitting}
+        >Enviar Invitaciones</Button>
+      </form>
     );
   }
 }
+
+const reduxFormProps = {
+  form: BULK_INVITATIONS_FORM,
+  persistentSubmitErrors: true,
+};
+
+const mapStateToProps = (state) => {
+  const { form: allForms, bulkInvitationsReducer: { errors } } = state;
+
+  const form = allForms[BULK_INVITATIONS_FORM];
+
+  const newState = { errors };
+
+  if (!form) return newState;
+
+  return { ...newState, submitting: form.submitting };
+};
+
+export default compose(
+  reduxForm(reduxFormProps),
+  connect(mapStateToProps, { stopSubmit })
+)(BulkInvitationsForm);

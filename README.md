@@ -7,5 +7,5 @@ This project is based on [React Redux universal hot example](https://github.com/
 ## DEBUG Node
 Put `debugger` in the server code you want to debug and then run this on a Terminal.
 ```
-./node_modules/node-inspector/bin/node-debug.js --debug-port=5859
+./node_modules/node-inspector/bin/node-debug.js --debug-port=5999
 ```
