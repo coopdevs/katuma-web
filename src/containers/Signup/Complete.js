@@ -32,7 +32,7 @@ class SignupComplete extends Component {
 
     if (validSignup) return;
 
-    push(getNextOnboardingUrl());
+    push('/signup');
   }
 
   componentWillReceiveProps(newProps) {
@@ -41,7 +41,7 @@ class SignupComplete extends Component {
 
     if (oldSignupDone === signupDone) return;
 
-    push('/onboarding');
+    push(getNextOnboardingUrl());
   }
 
   /**
