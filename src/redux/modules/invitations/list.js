@@ -15,7 +15,7 @@ const invitationBaseState = {
 };
 
 const initialState = {
-  invitations: {entities: [], byGroupID: []},
+  invitations: {entities: [], byGroupId: []},
   invitationStatusByID: {},
 };
 
@@ -51,7 +51,7 @@ export default function invitationsReducer(state = initialState, action = {}) {
         loading: false,
         invitations: {
           entities: entities,
-          byGroupID: _.groupBy(entities, 'group_id'),
+          byGroupId: _.groupBy(entities, 'group_id'),
         },
         invitationStatusByID,
       };

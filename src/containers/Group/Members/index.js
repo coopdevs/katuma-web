@@ -21,19 +21,10 @@ class GroupMembers extends Component {
       <div>
         <Helmet title={`Miembros de ${group.name}`}/>
 
-        <h2>Miembros</h2>
+        <h3>Miembros</h3>
+        <List group={group} users={users} memberships={memberships} />
 
-        <div className="row">
-
-          <div className="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
-            <Invitations group={group} user={user} />
-          </div>
-
-          <div className="col-xs-12 col-sm-6 col-sm-pull-6 col-md-8 col-md-pull-4">
-            <List group={group} users={users} memberships={memberships} />
-          </div>
-
-        </div>
+        <Invitations group={group} user={user} />
       </div>
     );
   }

@@ -5,16 +5,39 @@ import classNames from 'classnames';
 import styles from './styles/index.scss';
 
 /**
+ * Get button size
+ *
+ * @param {String} size
+ * @param {Boolean}
+ */
+function isSize(size) {
+  switch (size) {
+    case 'lg':
+      return true;
+    case 'sm':
+      return true;
+    case 'xs':
+      return true;
+    default:
+      return false;
+  }
+}
+
+/**
  * Get css classes for button
  *
  * @param {String} error
  * @param {Sting}
  */
-function getClasses({ primary, linkLookAndFeel }) {
+function getClasses({ link, primary, linkLookAndFeel, size }) {
   return classNames({
     'btn': true,
-    'btn-primary': !linkLookAndFeel,
+    'btn-primary': (!link && !linkLookAndFeel),
     'btn-success': primary,
+    'btn-link': link,
+    'btn-lg': isSize(size),
+    'btn-sm': isSize(size),
+    'btn-xs': isSize(size),
     [styles.link]: linkLookAndFeel,
   });
 }
@@ -70,8 +93,10 @@ const Button = (props) => {
 Button.PropTypes = {
   children: PropTypes.any,
   primary: PropTypes.bool,
+  link: PropTypes.bool,
   processing: PropTypes.bool,
   processingText: PropTypes.string,
+  size: PropTypes.string,
   linkLookAndFeel: PropTypes.bool,
   linkTo: PropTypes.string,
 };

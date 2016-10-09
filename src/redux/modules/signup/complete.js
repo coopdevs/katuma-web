@@ -2,7 +2,7 @@ const CHECK_SIGNUP = 'redux-example/signup/CHECK_SIGNUP';
 const CHECK_SIGNUP_SUCCESS = 'redux-example/signup/CHECK_SIGNUP_SUCCESS';
 const CHECK_SIGNUP_FAIL = 'redux-example/signup/CHECK_SIGNUP_FAIL';
 const COMPLETE_SIGNUP = 'redux-example/signup/COMPLETE_SIGNUP';
-const COMPLETE_SIGNUP_SUCCESS = 'redux-example/signup/COMPLETE_SIGNUP_SUCCESS';
+export const COMPLETE_SIGNUP_SUCCESS = 'redux-example/signup/COMPLETE_SIGNUP_SUCCESS';
 const COMPLETE_SIGNUP_FAIL = 'redux-example/signup/COMPLETE_SIGNUP_FAIL';
 
 const initialState = {

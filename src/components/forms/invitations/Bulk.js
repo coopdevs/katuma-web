@@ -1,73 +1,119 @@
-import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
+import React, { Component, PropTypes } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field, stopSubmit, reset } from 'redux-form';
 
-const BULK_INVITATIONS_FORM = {
-  emails: {
-    type: 'textarea',
-    label: 'Emails',
-    placeholder: 'Introduce una lista de emails separados por comas. Ej.: ana@gmail.com, hector@hotmail.com, ...'
-  },
-};
+import Input from 'components/Input';
+import MessagePane from 'components/MessagePane';
+import { send as sendBulk, BULK } from 'redux/modules/invitations/bulk';
 
-@reduxForm( {
-  form: 'bulkInvitations',
-  fields: Object.keys(BULK_INVITATIONS_FORM)
-})
-export default class BulkInvitationsForm extends Component {
+export const BULK_INVITATIONS_FORM = 'bulkInvitations';
+
+class BulkInvitationsForm extends Component {
   static propTypes = {
-    fields: PropTypes.object.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    submitting: PropTypes.bool,
+    group: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    stopSubmit: PropTypes.func.isRequired,
+    resetForm: PropTypes.func.isRequired,
+    errors: PropTypes.object,
+    invitationsSent: PropTypes.bool,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.onDissmis = this._onDissmis.bind(this);
+    this.state = { invitationsSent: false };
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { resetForm, invitationsSent: oldInvitationsSent } = this.props;
+    const { errors, invitationsSent } = newProps;
+
+    this.checkErrors(errors);
+
+    if (oldInvitationsSent === invitationsSent) return;
+
+    resetForm(BULK_INVITATIONS_FORM);
+    this.setState({ invitationsSent });
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+
+    dispatch({ type: BULK });
+  }
+
+  _onDissmis() {
+    this.setState({ invitationsSent: false });
   }
 
   /**
-   * Get css classes for field
+   * When api request has errors show it
+   * on the form.
    *
-   * @param {Object} field
+   * @param {Object} errors.
    */
-  getInputClasses(field) {
-    const classes = ['form-group'];
+  checkErrors(errors) {
+    if (!errors) return;
 
-    if (field.error) {
-      classes.push('has-error');
-    }
-
-    return classes.join(' ');
+    this.props.stopSubmit(BULK_INVITATIONS_FORM, errors);
   }
 
-
   render() {
-    const {submitting, fields, handleSubmit} = this.props;
-    const field = fields.emails;
-    const label = BULK_INVITATIONS_FORM[field.name].label;
-    const placeholder = BULK_INVITATIONS_FORM[field.name].placeholder;
+    const { invitationsSent } = this.state;
 
     return (
       <div>
-        <form onSubmit={handleSubmit}>
+        <MessagePane isVisible={invitationsSent} onDissmis={this.onDissmis}>
+          <h4>Invitaciones enviadas</h4>
+          <p>Hemos enviado las invitaciones a los emails que has introducido</p>
+        </MessagePane>
 
-          <div className={this.getInputClasses(field)}>
-            <label htmlFor={field.name}>{label}</label>
-            <div>
-              <textarea
-                id={field.name}
-                ref={field.name}
-                className="form-control"
-                placeholder={placeholder}
-                rows="5"
-                {...field}/>
-
-              {field.error && <div className="text-danger">{field.error}</div>}
-            </div>
-          </div>
-
-          <div className="form-group">
-            <button className="btn btn-success" onClick={handleSubmit}>
-              {submitting ? 'Enviando...' : 'Enviar invitaciones'}
-            </button>
-          </div>
-        </form>
+        <div>
+          <Field
+            name="emails"
+            component={Input}
+            placeholder="Introduce una lista de emails separados por comas. Ej.: ana@gmail.com, hector@hotmail.com, ..."
+            label="Emails"
+            type="textarea"
+            errorsAlways
+            setInitialFocus
+            rows={5}
+          />
+        </div>
       </div>
     );
   }
 }
+
+/**
+ * Submit signup create form
+ *
+ * @param {Object} fields
+ * @param {Function} dispatch
+ * @param {Function} ownProps
+ */
+const onSubmit = (fields, dispatch, ownProps) => {
+  const { group: { id } } = ownProps;
+  const data = {...fields, group_id: id };
+
+  return dispatch(sendBulk(data));
+};
+
+const reduxFormProps = {
+  form: BULK_INVITATIONS_FORM,
+  persistentSubmitErrors: true,
+  onSubmit,
+};
+
+const mapStateToProps = (state) => {
+  const { bulkInvitationsReducer: { invitationsSent, errors } } = state;
+
+  return { invitationsSent, errors };
+};
+
+export default compose(
+  reduxForm(reduxFormProps),
+  connect(mapStateToProps, { stopSubmit, resetForm: reset })
+)(BulkInvitationsForm);

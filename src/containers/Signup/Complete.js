@@ -10,6 +10,7 @@ import SignupCompleteForm from 'components/forms/signup/Complete';
 
 import styles from '../../styles/layouts/index.scss';
 import { checkSignup, complete } from 'redux/modules/signup/complete';
+import { getNextOnboardingUrl } from '../Onboarding/services';
 
 class SignupComplete extends Component {
   static propTypes = {
@@ -40,7 +41,7 @@ class SignupComplete extends Component {
 
     if (oldSignupDone === signupDone) return;
 
-    push('/onboarding');
+    push(getNextOnboardingUrl());
   }
 
   /**

@@ -19,28 +19,13 @@ import {
     GroupSuppliersBase,
     GroupSuppliersDetails,
     OnboardingCreateGroup,
+    OnboardingInvitations,
     InvitationComplete,
     NotFound,
   } from 'containers';
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
-    /**
-     * Check if user must be refetched.
-     * Cases:
-     *  1. User is not login
-     *  2. After signup complete success
-     *  3. After inviation complete success
-     *
-     * @param {Redux<Object>} state
-     * @return {Boolean}
-     */
-    function needsUserFetch(state) {
-      return !isAuthLoaded(state) ||
-             state.completeInvitationReducer.complete ||
-             state.signupCompleteReducer.complete;
-    }
-
     function checkAuth() {
       const { auth: { user }} = store.getState();
       if (!user) {
@@ -50,9 +35,7 @@ export default (store) => {
       cb();
     }
 
-    const fetchUser = needsUserFetch(store.getState());
-
-    if (fetchUser) {
+    if (!isAuthLoaded(store.getState())) {
       store.dispatch(loadAuth()).then(checkAuth);
     } else {
       checkAuth();
@@ -131,6 +114,7 @@ export default (store) => {
 
         <Route path="onboarding">
           <IndexRoute component={OnboardingCreateGroup}/>
+          <Route path=":id/invitations" component={OnboardingInvitations}/>
         </Route>
       </Route>
 

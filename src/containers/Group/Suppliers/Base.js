@@ -56,9 +56,6 @@ export default class GroupSuppliersBase extends Component {
         return Promise.reject(errors);
       }
 
-      // do something on success
-      // self.props.initialize('onboardingCreateGroup', {});
-
       return Promise.resolve({});
     });
   }
@@ -71,7 +68,7 @@ export default class GroupSuppliersBase extends Component {
       <div>
         <Helmet title={`Proveedores de ${group.name}`}/>
 
-        <h2>Proveedores</h2>
+        <h3>Proveedores</h3>
 
         <div className="row">
 

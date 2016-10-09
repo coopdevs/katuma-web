@@ -16,12 +16,29 @@ function getInputClasses(error) {
   });
 }
 
+/**
+ * Get element based on type
+ *
+ * @param {String} type
+ * @param {Sting}
+ */
+function getElement(type) {
+  switch (type) {
+    case 'textarea':
+      return 'textarea';
+    default:
+      return 'input';
+  }
+}
+
 class Input extends Component {
   static propTypes = {
     input: PropTypes.object,
     name: PropTypes.string,
     type: PropTypes.string,
     label: PropTypes.string,
+    element: PropTypes.string,
+    rows: PropTypes.number,
     placeholder: PropTypes.string,
     errorsAlways: PropTypes.bool,
     setInitialFocus: PropTypes.bool,
@@ -37,24 +54,28 @@ class Input extends Component {
   render() {
     const {
       input, name, type, label, placeholder,
-      errorsAlways,
+      errorsAlways, rows,
       meta: { touched, error }
     } = this.props;
+
+    const element = getElement(type);
+
+    const elementProps = {
+      ...input,
+      id: name,
+      ref: (c) => (this.input_el = c),
+      type,
+      placeholder,
+      className: 'form-control',
+    };
 
     const hasErrors = errorsAlways ? !!error : touched && !!error;
 
     return (
       <div className={getInputClasses(error)}>
         <label htmlFor={name}>{label}</label>
-        <input
-          id={name}
-          ref={(c) => this.input_el = c}
-          type={type}
-          placeholder={placeholder}
-          className="form-control"
-          {...input}
-        />
-
+        {element === 'input' && <input {...elementProps} />}
+        {element === 'textarea' && <textarea rows={rows} {...elementProps} />}
         {hasErrors && <div className={`text-danger ${styles.error}`}>{error}</div>}
       </div>
     );

@@ -2,7 +2,7 @@ const CHECK_INVITATION = 'redux-example/invitations/CHECK_INVITATION';
 const CHECK_INVITATION_SUCCESS = 'redux-example/invitations/CHECK_INVITATION_SUCCESS';
 const CHECK_INVITATION_FAIL = 'redux-example/invitations/CHECK_INVITATION_FAIL';
 const COMPLETE_INVITATION = 'redux-example/invitations/COMPLETE_INVITATION';
-const COMPLETE_INVITATION_SUCCESS = 'redux-example/invitations/COMPLETE_INVITATION_SUCCESS';
+export const COMPLETE_INVITATION_SUCCESS = 'redux-example/invitations/COMPLETE_INVITATION_SUCCESS';
 const COMPLETE_INVITATION_FAIL = 'redux-example/invitations/COMPLETE_INVITATION_FAIL';
 
 const initialState = {

@@ -5,7 +5,6 @@ import { reduxForm, Field, stopSubmit } from 'redux-form';
 
 import Input from 'components/Input';
 import Button from 'components/Button';
-// import MessagePane from 'components/MessagePane';
 
 const SIGNUP_COMPLETE_FORM = 'signupComplete';
 

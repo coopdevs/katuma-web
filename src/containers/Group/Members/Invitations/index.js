@@ -1,100 +1,107 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {initialize} from 'redux-form';
 
-/* import BulkInvitationsForm from 'components/forms/invitations/Bulk';*/
-import { send as sendBulk } from 'redux/modules/invitations/bulk';
+import BulkInvitationsForm, { BULK_INVITATIONS_FORM }from 'components/forms/invitations/Bulk';
 import { send } from 'redux/modules/invitations/list';
 import { isRole } from 'presenters/member';
+import Button from 'components/Button';
+import List from './List';
 
 class Invitations extends Component {
   static propTypes = {
-    initialize: PropTypes.func.isRequired,
-    invitations: PropTypes.object.isRequired,
+    invitations: PropTypes.array.isRequired,
     group: PropTypes.object.isRequired,
-    invitationStatusByID: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    sendBulk: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
-    bulkErrors: PropTypes.object,
+    submitting: PropTypes.bool,
   }
 
-  sendInvitations(data) {
-    const self = this;
-    const dataWithGroupId = {
-      ...data,
-      group_id: this.props.group.id,
-    };
+  constructor(props) {
+    super(props);
 
-    return this.props.sendBulk(dataWithGroupId).then(() => {
-      const errors = this.props.bulkErrors;
-
-      if (Object.keys(errors).length) {
-        return Promise.reject(errors);
-      }
-
-      self.props.initialize('bulkInvitations', {emails: ''});
-      return Promise.resolve({});
-    });
+    this.onClickSendInvitations = this._onClickSendInvitations.bind(this);
+    this.onResendInvitation = this._onResendInvitation.bind(this);
   }
 
-  resendInvitation(id, email, groupId) {
-    return this.props.send({
-      id,
-      email,
-      groupId,
-    });
+  /**
+   * Send bulk invitations
+   */
+  _onClickSendInvitations() {
+    this.refs.bulk_invitations_form.submit();
+  }
+
+  /**
+   * Send bulk invitations
+   *
+   * @param {Object} invitation
+   * @param {Number} groupId
+   */
+  _onResendInvitation({ id, email }, groupId) {
+    return this.props.send({ id, email, groupId });
+  }
+
+  /**
+   * Render send bulk invitations form.
+   */
+  renderSendInvitationsForm() {
+    const { user, submitting, group } = this.props;
+    const isAdmin = isRole(user, 'admin');
+
+    if (!isAdmin) return null;
+
+    return (
+      <form>
+        <BulkInvitationsForm group={group} ref="bulk_invitations_form" />
+        <Button
+          type="submit"
+          primary
+          processing={submitting}
+          onClick={this.onClickSendInvitations}
+        >Enviar Invitaciones</Button>
+      </form>
+    );
   }
 
   render() {
-    const {
-      user,
-      invitations,
-      invitationStatusByID,
-      group,
-    } = this.props;
-    const invitationsByGroup = invitations.byGroupID[group.id] || [];
+    const { user, invitations, group } = this.props;
     const isAdmin = isRole(user, 'admin');
 
-    const invitationsList = invitationsByGroup.map((invitation) => {
-      const invitationState = invitationStatusByID[invitation.id];
-      const label = invitationState.sending ? 'Enviando...' : 'Reenviar';
-
-      return (<li key={invitation.id}>
-              {`${invitation.email} - `}
-
-        {isAdmin && !invitationState.sent &&
-         <button
-          className="btn btn-default btn-xs"
-          disabled={invitationState.sending}
-          onClick={this.resendInvitation.bind(this, invitation.id, invitation.email, group.id)}
-         >
-          {label}
-         </button>
-        }
-        {isAdmin && invitationState.sent &&
-         <i style={{color: 'green'}} className="fa fa-check"></i>
-        }
-      </li>);
-    });
+    if (!invitations.length && !isAdmin) return null;
 
     return (
       <div>
         <h3>Invitaciones</h3>
+        {this.renderSendInvitationsForm()}
 
-        {/* isAdmin && <BulkInvitationsForm onSubmit={this.sendInvitations.bind(this)} />*/}
-
-        <ul>{invitationsList}</ul>
+        {invitations.length &&
+          <List
+            invitations={invitations}
+            onResendInvitation={this.onResendInvitation}
+            group={group}
+            user={user}
+          />
+        }
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  bulkErrors: state.bulkInvitationsReducer.bulkErrors,
-  invitations: state.invitationsReducer.invitations,
-  invitationStatusByID: state.invitationsReducer.invitationStatusByID,
-});
-const mapDispatchToProps = { initialize, send, sendBulk };
+const mapStateToProps = (state, ownProps) => {
+  const { invitationsReducer, form: allForms } = state;
+  const { group: { id } } = ownProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Invitations);
+  const newState = {
+    invitations: invitationsReducer.invitations.byGroupId[id] || [],
+  };
+
+  const form = allForms[BULK_INVITATIONS_FORM];
+
+  if (!form) return newState;
+
+  return {
+    ...newState,
+    submitting: form.submitting,
+  };
+};
+
+export default connect(mapStateToProps, { send })(Invitations);
