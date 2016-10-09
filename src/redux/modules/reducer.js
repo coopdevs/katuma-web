@@ -13,8 +13,6 @@ import groupsReducer from './groups/groups';
 import suppliersReducer from './suppliers/list';
 import producersReducer from './producers/list';
 import {reducer as form} from 'redux-form';
-import info from './info';
-import widgets from './widgets';
 import { routeReducer } from 'react-router-redux';
 import {reducer as reduxAsyncConnect} from 'redux-async-connect';
 
@@ -33,8 +31,6 @@ const appReducers = combineReducers({
   bulkInvitationsReducer,
   completeInvitationReducer,
   form,
-  info,
-  widgets
 });
 
 const rootReducer = (state, action) => {
