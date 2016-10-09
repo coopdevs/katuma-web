@@ -4,20 +4,18 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, stopSubmit, reset } from 'redux-form';
 
 import Input from 'components/Input';
-import Button from 'components/Button';
 import MessagePane from 'components/MessagePane';
-import { BULK } from 'redux/modules/invitations/bulk';
+import { send as sendBulk, BULK } from 'redux/modules/invitations/bulk';
 
-const BULK_INVITATIONS_FORM = 'bulkInvitations';
+export const BULK_INVITATIONS_FORM = 'bulkInvitations';
 
 class BulkInvitationsForm extends Component {
   static propTypes = {
+    group: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
     stopSubmit: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
     errors: PropTypes.object,
-    submitting: PropTypes.bool,
     invitationsSent: PropTypes.bool,
   }
 
@@ -63,12 +61,10 @@ class BulkInvitationsForm extends Component {
   }
 
   render() {
-    const { handleSubmit, submitting } = this.props;
     const { invitationsSent } = this.state;
 
     return (
-      <form onSubmit={handleSubmit}>
-
+      <div>
         <MessagePane isVisible={invitationsSent} onDissmis={this.onDissmis}>
           <h4>Invitaciones enviadas</h4>
           <p>Hemos enviado las invitaciones a los emails que has introducido</p>
@@ -83,36 +79,38 @@ class BulkInvitationsForm extends Component {
             type="textarea"
             errorsAlways
             setInitialFocus
+            rows={5}
           />
         </div>
-        <Button
-          type="submit"
-          primary
-          processing={submitting}
-        >Enviar Invitaciones</Button>
-      </form>
+      </div>
     );
   }
 }
 
+/**
+ * Submit signup create form
+ *
+ * @param {Object} fields
+ * @param {Function} dispatch
+ * @param {Function} ownProps
+ */
+const onSubmit = (fields, dispatch, ownProps) => {
+  const { group: { id } } = ownProps;
+  const data = {...fields, group_id: id };
+
+  return dispatch(sendBulk(data));
+};
+
 const reduxFormProps = {
   form: BULK_INVITATIONS_FORM,
   persistentSubmitErrors: true,
+  onSubmit,
 };
 
 const mapStateToProps = (state) => {
-  const { form: allForms, bulkInvitationsReducer: { invitationsSent, errors } } = state;
+  const { bulkInvitationsReducer: { invitationsSent, errors } } = state;
 
-  const form = allForms[BULK_INVITATIONS_FORM];
-
-  const newState = { invitationsSent, errors };
-
-  if (!form) return newState;
-
-  return {
-    ...newState,
-    submitting: form.submitting,
-  };
+  return { invitationsSent, errors };
 };
 
 export default compose(

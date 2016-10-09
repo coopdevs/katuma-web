@@ -10,6 +10,8 @@ import CreateGroupForm from 'components/forms/groups/Create';
 import styles from '../../styles/layouts/index.scss';
 import { create } from 'redux/modules/groups/groups';
 
+import { getNextOnboardingUrl } from './services';
+
 class CreateGroup extends Component {
   static propTypes = {
     createGroup: PropTypes.func.isRequired,
@@ -30,7 +32,7 @@ class CreateGroup extends Component {
 
     if (oldCreatedGroupId === createdGroupId) return;
 
-    push(`/groups/${createdGroupId}/members`);
+    push(getNextOnboardingUrl('send_invitations', createdGroupId));
   }
 
   /**

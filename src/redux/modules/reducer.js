@@ -3,11 +3,11 @@ import { combineReducers } from 'redux';
 
 import auth, { LOGOUT_SUCCESS } from './auth';
 import signupCreateReducer from './signup/create';
-import signupCompleteReducer from './signup/complete';
+import signupCompleteReducer, { COMPLETE_SIGNUP_SUCCESS } from './signup/complete';
 import membershipsReducer from './groups/memberships';
 import usersReducer from './users/users';
 import bulkInvitationsReducer from './invitations/bulk';
-import completeInvitationReducer from './invitations/complete';
+import completeInvitationReducer, { COMPLETE_INVITATION_SUCCESS }from './invitations/complete';
 import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
 import suppliersReducer from './suppliers/list';
@@ -33,16 +33,37 @@ const appReducers = combineReducers({
   form,
 });
 
-const rootReducer = (state, action) => {
-  let finalState = state;
+/**
+ * When something happen and we want to intercept
+ * global state
+ *
+ * @param {Object} state
+ * @param {Object} action
+ * @return {Object}
+ */
+const interceptRootState = (state, action) => {
+  switch (action.type) {
+    case LOGOUT_SUCCESS:
+      return { auth: { loaded: true } };
 
-  // On logout empty store!
-  // We don't want user data leaks
-  if (action.type === LOGOUT_SUCCESS) {
-    finalState = { auth: { loaded: true } };
+    case COMPLETE_INVITATION_SUCCESS:
+    case COMPLETE_SIGNUP_SUCCESS:
+      return {
+        ...state,
+        auth: {
+          ...state.auth,
+          user: action.result,
+          loaded: true,
+        },
+      };
+
+    default:
+      return state;
   }
+};
 
-  return appReducers(finalState, action);
+const rootReducer = (state, action) => {
+  return appReducers(interceptRootState(state, action), action);
 };
 
 export default rootReducer;

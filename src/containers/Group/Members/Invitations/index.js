@@ -1,11 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
-import BulkInvitationsForm from 'components/forms/invitations/Bulk';
-import { send as sendBulk } from 'redux/modules/invitations/bulk';
+import BulkInvitationsForm, { BULK_INVITATIONS_FORM }from 'components/forms/invitations/Bulk';
 import { send } from 'redux/modules/invitations/list';
 import { isRole } from 'presenters/member';
-
+import Button from 'components/Button';
 import List from './List';
 
 class Invitations extends Component {
@@ -13,27 +12,22 @@ class Invitations extends Component {
     invitations: PropTypes.array.isRequired,
     group: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    sendBulk: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
+    submitting: PropTypes.bool,
   }
 
   constructor(props) {
     super(props);
 
-    this.onSendInvitations = this._onSendInvitations.bind(this);
+    this.onClickSendInvitations = this._onClickSendInvitations.bind(this);
     this.onResendInvitation = this._onResendInvitation.bind(this);
   }
 
   /**
    * Send bulk invitations
-   *
-   * @param {Object} fields
    */
-  _onSendInvitations(fields) {
-    const { group: { id } } = this.props;
-    const data = {...fields, group_id: id };
-
-    return this.props.sendBulk(data);
+  _onClickSendInvitations() {
+    this.refs.bulk_invitations_form.submit();
   }
 
   /**
@@ -46,6 +40,28 @@ class Invitations extends Component {
     return this.props.send({ id, email, groupId });
   }
 
+  /**
+   * Render send bulk invitations form.
+   */
+  renderSendInvitationsForm() {
+    const { user, submitting, group } = this.props;
+    const isAdmin = isRole(user, 'admin');
+
+    if (!isAdmin) return null;
+
+    return (
+      <form>
+        <BulkInvitationsForm group={group} ref="bulk_invitations_form" />
+        <Button
+          type="submit"
+          primary
+          processing={submitting}
+          onClick={this.onClickSendInvitations}
+        >Enviar Invitaciones</Button>
+      </form>
+    );
+  }
+
   render() {
     const { user, invitations, group } = this.props;
     const isAdmin = isRole(user, 'admin');
@@ -55,10 +71,7 @@ class Invitations extends Component {
     return (
       <div>
         <h3>Invitaciones</h3>
-
-        {isAdmin &&
-          <BulkInvitationsForm onSubmit={this.onSendInvitations} />
-        }
+        {this.renderSendInvitationsForm()}
 
         {invitations.length &&
           <List
@@ -73,8 +86,22 @@ class Invitations extends Component {
   }
 }
 
-const mapStateToProps = ({ invitationsReducer }, { group: { id }}) => ({
-  invitations: invitationsReducer.invitations.byGroupId[id] || [],
-});
+const mapStateToProps = (state, ownProps) => {
+  const { invitationsReducer, form: allForms } = state;
+  const { group: { id } } = ownProps;
 
-export default connect(mapStateToProps, { send, sendBulk })(Invitations);
+  const newState = {
+    invitations: invitationsReducer.invitations.byGroupId[id] || [],
+  };
+
+  const form = allForms[BULK_INVITATIONS_FORM];
+
+  if (!form) return newState;
+
+  return {
+    ...newState,
+    submitting: form.submitting,
+  };
+};
+
+export default connect(mapStateToProps, { send })(Invitations);

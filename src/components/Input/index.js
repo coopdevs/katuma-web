@@ -38,6 +38,7 @@ class Input extends Component {
     type: PropTypes.string,
     label: PropTypes.string,
     element: PropTypes.string,
+    rows: PropTypes.number,
     placeholder: PropTypes.string,
     errorsAlways: PropTypes.bool,
     setInitialFocus: PropTypes.bool,
@@ -53,7 +54,7 @@ class Input extends Component {
   render() {
     const {
       input, name, type, label, placeholder,
-      errorsAlways,
+      errorsAlways, rows,
       meta: { touched, error }
     } = this.props;
 
@@ -74,7 +75,7 @@ class Input extends Component {
       <div className={getInputClasses(error)}>
         <label htmlFor={name}>{label}</label>
         {element === 'input' && <input {...elementProps} />}
-        {element === 'textarea' && <textarea {...elementProps} />}
+        {element === 'textarea' && <textarea rows={rows} {...elementProps} />}
         {hasErrors && <div className={`text-danger ${styles.error}`}>{error}</div>}
       </div>
     );

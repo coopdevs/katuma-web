@@ -21,7 +21,6 @@ function isSize(size) {
     default:
       return false;
   }
-
 }
 
 /**
@@ -30,11 +29,12 @@ function isSize(size) {
  * @param {String} error
  * @param {Sting}
  */
-function getClasses({ primary, linkLookAndFeel, size }) {
+function getClasses({ link, primary, linkLookAndFeel, size }) {
   return classNames({
     'btn': true,
-    'btn-primary': !linkLookAndFeel,
+    'btn-primary': (!link && !linkLookAndFeel),
     'btn-success': primary,
+    'btn-link': link,
     'btn-lg': isSize(size),
     'btn-sm': isSize(size),
     'btn-xs': isSize(size),
@@ -93,6 +93,7 @@ const Button = (props) => {
 Button.PropTypes = {
   children: PropTypes.any,
   primary: PropTypes.bool,
+  link: PropTypes.bool,
   processing: PropTypes.bool,
   processingText: PropTypes.string,
   size: PropTypes.string,
