@@ -11,7 +11,7 @@ const CREATE_PRODUCER_SUCCESS = 'redux-example/producers/CREATE_PRODUCER_SUCCESS
 const CREATE_PRODUCER_FAIL = 'redux-example/producers/CREATE_PRODUCER_FAIL';
 
 const initialState = {
-  producers: {entities: []},
+  producers: { entities: [] },
   createProducerErrors: {},
 };
 
@@ -107,10 +107,10 @@ export default function producersReducer(state = initialState, action = {}) {
   }
 }
 
-export function load() {
+export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get(`/producers`)
+    promise: (client) => client.get(`/producers?group_id=${groupId}`)
   };
 }
 
@@ -124,9 +124,6 @@ export function loadEntity(id) {
 export function create(data) {
   return {
     types: [CREATE_PRODUCER, CREATE_PRODUCER_SUCCESS, CREATE_PRODUCER_FAIL],
-    promise: (client) => client.post('/producers', {
-      data: _.omit(data, 'group_id'),
-      header: { key: 'X-katuma-group-id-for-provider', value: data.group_id },
-    })
+    promise: (client) => client.post('/producers', { data })
   };
 }

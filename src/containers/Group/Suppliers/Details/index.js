@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 
-import { loadEntity as loadProducer } from 'redux/modules/producers/list';
+import { loadEntity as loadProducer } from 'redux/modules/producers/producers';
 
 const mapStateToProps = (state, ownProps) => {
   const producerId = ownProps.params.producer_id;
