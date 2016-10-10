@@ -6,7 +6,7 @@ import { asyncConnect } from 'redux-async-connect';
 import { initialize } from 'redux-form';
 
 import CreateProductForm from 'components/forms/products/Create';
-import { loadEntity as loadProvider } from 'redux/modules/providers/providers';
+import { loadEntity as loadProducer } from 'redux/modules/producers/list';
 import { create as createProduct } from 'redux/modules/products/products';
 
 const mapStateToProps = (state, ownProps) => {
@@ -39,7 +39,7 @@ const mapDispatchToProps = {
     const provider = byId[id];
 
     if (!provider) {
-      promises.push(dispatch(loadProvider(id)));
+      promises.push(dispatch(loadProducer(id)));
     }
 
     return Promise.all(promises);

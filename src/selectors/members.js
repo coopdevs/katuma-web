@@ -14,7 +14,7 @@ function selectMembersWithUser(members, users) {
 
   return {
     entities: entities,
-    byGroupID: _.groupBy(entities, 'group_id'),
+    byGroupID: _.groupBy(entities, 'basic_resource_group_id'),
   };
 }
 
