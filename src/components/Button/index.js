@@ -1,8 +1,20 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
+import _ from 'underscore';
 
 import styles from './styles/index.scss';
+
+const PROP_TYPES = {
+  children: PropTypes.any,
+  primary: PropTypes.bool,
+  link: PropTypes.bool,
+  processing: PropTypes.bool,
+  processingText: PropTypes.string,
+  size: PropTypes.string,
+  linkTo: PropTypes.string,
+  linkLookAndFeel: PropTypes.bool,
+};
 
 /**
  * Get button size
@@ -87,17 +99,11 @@ const Button = (props) => {
 
   if (attributes.linkTo) return (renderLink(attributes, text, processing));
 
-  return (renderButton(attributes, text, processing));
+  const domAttributes = _.omit(attributes, _.keys(PROP_TYPES));
+
+  return (renderButton(domAttributes, text, processing));
 };
 
-Button.PropTypes = {
-  children: PropTypes.any,
-  primary: PropTypes.bool,
-  link: PropTypes.bool,
-  processing: PropTypes.bool,
-  processingText: PropTypes.string,
-  size: PropTypes.string,
-  linkLookAndFeel: PropTypes.bool,
-  linkTo: PropTypes.string,
-};
+Button.PropTypes = PROP_TYPES;
+
 export default Button;
