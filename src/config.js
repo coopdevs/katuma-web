@@ -1,3 +1,6 @@
+Object.assign = null;
+Object.assign = require('object-assign');
+
 require('babel/polyfill');
 
 const title = 'katuma';
