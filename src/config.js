@@ -1,3 +1,8 @@
+// React 15 uses native Object.assign, but due to a V8 bug we still need to use the polyfill
+// https://github.com/facebook/react/issues/6451
+Object.assign = null;
+Object.assign = require('object-assign');
+
 require('babel/polyfill');
 
 const title = 'katuma';
