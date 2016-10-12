@@ -36,7 +36,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 }])
 @connect(mapStateToProps)
-export default class GroupSuppliersDetails extends Component {
+export default class GroupProducersDetails extends Component {
   static propTypes = {
     producer: PropTypes.object.isRequired,
   }
