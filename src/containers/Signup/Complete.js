@@ -6,7 +6,7 @@ import { asyncConnect } from 'redux-async-connect';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 
-import SignupCompleteForm from 'components/forms/signup/Complete';
+import SignupCompleteForm from 'components/forms/Signup/Complete';
 
 import styles from '../../styles/layouts/index.scss';
 import { checkSignup, complete } from 'redux/modules/signup/complete';
