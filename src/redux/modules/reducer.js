@@ -11,7 +11,7 @@ import completeInvitationReducer, { COMPLETE_INVITATION_SUCCESS }from './invitat
 import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
 import suppliersReducer from './suppliers/list';
-import producersReducer from './producers/list';
+import producersReducer from './producers/producers';
 import {reducer as form} from 'redux-form';
 import { routeReducer } from 'react-router-redux';
 import {reducer as reduxAsyncConnect} from 'redux-async-connect';
