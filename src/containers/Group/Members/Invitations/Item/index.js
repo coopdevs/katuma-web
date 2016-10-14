@@ -1,7 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import _ from 'underscore';
 
 import { isRole } from 'presenters/member';
 import Button from 'components/Button';
+import Icon from 'components/Icon/';
+import { GLYPHS } from 'components/Icon/glyphs';
 
 class Invitation extends Component {
   static propTypes = {
@@ -9,6 +13,8 @@ class Invitation extends Component {
     user: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
     onResendInvitation: PropTypes.func.isRequired,
+    sendingInvitationId: PropTypes.number,
+    sentInvitations: PropTypes.array,
   };
 
   constructor(props) {
@@ -23,18 +29,23 @@ class Invitation extends Component {
   _onResendInvitation() {
     const { invitation, group, onResendInvitation } = this.props;
 
-    onResendInvitation(invitation, group.id);
+    onResendInvitation({ email: invitation.email, id: invitation.id, group_id: group.id });
   }
 
   renderButton() {
-    const { user } = this.props;
+    const { user, invitation, sendingInvitationId, sentInvitations } = this.props;
 
     if (!isRole(user, 'admin')) return null;
+
+    const processing = sendingInvitationId === invitation.id;
+
+    if (_.contains(sentInvitations, invitation.id)) return (<Icon glyph={GLYPHS.check} />);
 
     return (
       <Button
         primary
         size="xs"
+        processing={processing}
         onClick={this.onResendInvitation}
       >
         Reenviar
@@ -54,4 +65,10 @@ class Invitation extends Component {
   }
 }
 
-export default Invitation;
+const mapStateToProps = (state) => {
+  const { invitationsReducer: { sendingInvitationId, sentInvitations }} = state;
+
+  return { sendingInvitationId, sentInvitations };
+};
+
+export default connect(mapStateToProps)(Invitation);
