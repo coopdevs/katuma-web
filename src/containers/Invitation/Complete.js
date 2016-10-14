@@ -1,76 +1,88 @@
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
-import {initialize} from 'redux-form';
-import Helmet from 'react-helmet';
-import * as invitationCompleteActions from 'redux/modules/invitations/complete';
+import React, { Component, PropTypes } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { routeActions } from 'react-router-redux';
 import { asyncConnect } from 'redux-async-connect';
+import Helmet from 'react-helmet';
 
-@asyncConnect([{
-  promise: (options) => {
-    const {
-      store: { dispatch },
-      params: { token },
-    } = options;
+import layoutCentered from 'components/HOC/LayoutCentered';
 
-    return dispatch(invitationCompleteActions.checkInvitation(token));
-  },
-}])
-@connect(
-  state => ({
-    validInvitation: state.completeInvitationReducer.validInvitation,
-    user: state.auth.user,
-    completeInvitationErrors: state.completeInvitationReducer.completeInvitationErrors
-  }),
-  {initialize, complete: invitationCompleteActions.complete})
-export default class InvitationComplete extends Component {
+import ProfileCompleteForm from 'components/forms/Profile/Complete';
+
+import styles from '../../styles/layouts/index.scss';
+import { checkInvitation, complete } from 'redux/modules/invitations/complete';
+
+class InvitationComplete extends Component {
   static propTypes = {
-    initialize: PropTypes.func.isRequired,
-    user: PropTypes.object,
-    complete: PropTypes.func.isRequired,
-    params: PropTypes.object,
-    completeInvitationErrors: PropTypes.object,
-    validInvitation: PropTypes.bool,
-    history: PropTypes.object,
-    token: PropTypes.string
+    completeInvitation: PropTypes.func.isRequired,
+    validInvitation: PropTypes.bool.isRequired,
+    invitationDone: PropTypes.bool.isRequired,
+    params: PropTypes.object.isRequired,
+    push: PropTypes.func.isRequired,
   };
 
-  static contextTypes = {
-    router: React.PropTypes.object.isRequired
-  };
+  constructor(props) {
+    super(props);
 
-  componentWillMount() {
-    const { validInvitation, user } = this.props;
-
-    if (!validInvitation || user) {
-      this.context.router.replace('/');
-    }
+    this.handleSubmit = this._handleSubmit.bind(this);
   }
 
-  handleSubmit(data) {
-    return this.props.complete(this.props.params.token, data).then(() => {
-      const errors = this.props.completeInvitationErrors;
+  componentWillMount() {
+    const { validInvitation, push } = this.props;
 
-      if (Object.keys(errors).length) {
-        return Promise.reject(errors);
-      }
+    if (validInvitation) return;
 
-      this.context.router.push('/groups');
-      return Promise.resolve({});
-    });
+    push('/');
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { invitationDone: oldInvitation, push } = this.props;
+    const { invitationDone } = newProps;
+
+    if (oldInvitation === invitationDone) return;
+
+    push('/');
+  }
+
+  /**
+  * Submit signup create form
+  *
+  * @param {Object} fields
+  */
+  _handleSubmit(fields) {
+    const { params: { token }, completeInvitation } = this.props;
+    return completeInvitation(token, fields);
   }
 
   render() {
-    // <CompleteSignupForm onSubmit={this.handleSubmit.bind(this)} />
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12">
-            <Helmet title="Complete your registration"/>
-            <h1>Finaliza el registro</h1>
-
-          </div>
+      <div className={styles.layoutCentered}>
+        <Helmet title="Completa tu perfil"/>
+        <div className={styles.layoutCentered__body}>
+          <ProfileCompleteForm
+            onSubmit={this.handleSubmit}
+            reducerKey="completeInvitationReducer"
+          />
         </div>
       </div>
     );
   }
 }
+
+const asyncConnectProps = [{
+  promise: (options) => {
+    const { store: { dispatch }, params: { token } } = options;
+    return dispatch(checkInvitation(token));
+  },
+}];
+
+const mapStateToProps = ({ completeInvitationReducer: { validInvitation, invitationDone }}) => ({
+  validInvitation,
+  invitationDone,
+});
+
+export default compose(
+  layoutCentered,
+  asyncConnect(asyncConnectProps),
+  connect(mapStateToProps, { completeInvitation: complete, push: routeActions.push })
+)(InvitationComplete);

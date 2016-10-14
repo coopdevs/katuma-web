@@ -8,8 +8,9 @@ import Button from 'components/Button';
 
 const SIGNUP_COMPLETE_FORM = 'signupComplete';
 
-class SignupCompleteForm extends Component {
+class ProfileCompleteForm extends Component {
   static propTypes = {
+    reducerKey: PropTypes.string.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     stopSubmit: PropTypes.func.isRequired,
     errors: PropTypes.object,
@@ -103,20 +104,17 @@ const reduxFormProps = {
   persistentSubmitErrors: true,
 };
 
-const mapStateToProps = (state) => {
-  const {
-    form: { signupComplete },
-    signupCompleteReducer: { errors },
-  } = state;
-
+const mapStateToProps = (state, { reducerKey }) => {
+  const { form: allForms } = state;
+  const { errors } = state[reducerKey];
   const newState = { errors };
+  const form = allForms[SIGNUP_COMPLETE_FORM];
 
-  if (!signupComplete) return newState;
-
-  return { ...newState, submitting: signupComplete.submitting };
+  if (!form) return newState;
+  return { ...newState, submitting: form.submitting };
 };
 
 export default compose(
   reduxForm(reduxFormProps),
   connect(mapStateToProps, { stopSubmit })
-)(SignupCompleteForm);
+)(ProfileCompleteForm);
