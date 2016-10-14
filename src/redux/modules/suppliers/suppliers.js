@@ -8,7 +8,7 @@ const LOAD_SUPPLIER_SUCCESS = 'redux-example/suppliers/LOAD_SUPPLIER_SUCCESS';
 const LOAD_SUPPLIER_FAIL = 'redux-example/suppliers/LOAD_SUPPLIER_FAIL';
 
 const initialState = {
-  suppliers: { entities: [], byId: {} },
+  suppliers: { entities: [], byId: {}, byProducerId: {} },
 };
 
 export default function suppliersReducer(state = initialState, action = {}) {
@@ -30,6 +30,7 @@ export default function suppliersReducer(state = initialState, action = {}) {
         suppliers: {
           entities: entities,
           byId: _.indexBy(entities, 'id'),
+          byProducerId: _.indexBy(entities, 'producer_id'),
         },
       };
 

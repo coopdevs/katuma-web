@@ -10,7 +10,7 @@ import bulkInvitationsReducer from './invitations/bulk';
 import completeInvitationReducer, { COMPLETE_INVITATION_SUCCESS }from './invitations/complete';
 import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
-import suppliersReducer from './suppliers/list';
+import suppliersReducer from './suppliers/suppliers';
 import producersReducer from './producers/producers';
 import {reducer as form} from 'redux-form';
 import { routeReducer } from 'react-router-redux';
