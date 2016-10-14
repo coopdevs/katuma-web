@@ -52,7 +52,7 @@ export default class App extends Component {
       <div
         className={classNames({
           [styles.rootComponent]: true,
-          [styles.rootComponent_centered]: layoutCentered,
+          [styles.rootComponent__centered]: layoutCentered,
         })}
       >
         <Helmet {...head}/>
@@ -64,7 +64,7 @@ export default class App extends Component {
 
 const asyncConnectProps = [{
   promise: ({ store: { dispatch, getState } }) => {
-    const promises = [];
+    const p
 
     if (!isAuthLoaded(getState())) {
       promises.push(dispatch(loadAuth()));

@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import { MODAL_TYPES } from './constants';
 import Button from 'components/Button';
 import UserAccessModal from './UserAccessModal';
 
-class Anonymous extends Component {
+class LoggedOutMenu extends Component {
   static propTypes = {
     user: PropTypes.object,
   };
@@ -80,4 +81,5 @@ class Anonymous extends Component {
   }
 }
 
-export default Anonymous;
+const mapStateToProps = (state) => ({user: state.auth.user});
+export default connect(mapStateToProps)(LoggedOutMenu);

@@ -59,7 +59,7 @@ a {
   display: flex;
   flex-direction: column;
 
-  &_centered {
+  &__centered {
     margin-top: 2em;
     align-items: center;
   }
@@ -67,7 +67,7 @@ a {
 
 @media (min-width: $screen-sm-min) {
   .rootComponent {
-    &_centered {
+    &__centered {
       margin-top: 0;
       justify-content: center;
     }

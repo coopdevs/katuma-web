@@ -39,11 +39,11 @@ $jambotron_scale: 0.8rem;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
 
-  &_inner {
+  &__inner {
     padding: 2.8em $jambotron_inner_padding;
   }
 
-  &_item {
+  &__item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -69,7 +69,7 @@ $jambotron_scale: 0.8rem;
     }
   }
 
-  &_icon {
+  &__icon {
     margin-top: 0.4em;
     margin-right: 1em;
     border-radius: 0.1em;
@@ -85,12 +85,12 @@ $jambotron_scale: 0.8rem;
   padding: 2em;
   background-color: white;
 
-  &_container {
+  &__container {
     display: flex;
     justify-content: center;
   }
 
-  &_inner {
+  &__inner {
     font-size: 1.3rem;
     max-width: 30em;
   }
@@ -126,7 +126,7 @@ $jambotron_scale: 0.8rem;
     fill: $gray_10;
   }
 
-  &_love {
+  &__love {
     font-size: 0.8em;
     color: rgba(0, 0, 0, 0.5);
     display: flex;
@@ -161,7 +161,7 @@ $jambotron_scale: 0.8rem;
 
 @media (min-width: $screen-sm-min) {
   .services {
-    &_item {
+    &__item {
       border-bottom: 0;
       margin-bottom: 0;
     }

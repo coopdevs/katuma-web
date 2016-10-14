@@ -23,17 +23,17 @@ export default class Home extends Component {
 
           <div className={styles.services}>
             <div className="wrap container-fluid">
-              <div className={`row ${styles.services_inner}`}>
-                <div className={`col-xs-12 col-sm-4 ${styles.services_item}`}>
-                  <div className={styles.services_icon}><Icon glyph={GLYPHS.cogs} /></div>
+              <div className={`row ${styles.services__inner}`}>
+                <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
+                  <div className={styles.services__icon}><Icon glyph={GLYPHS.cogs} /></div>
                   <p><strong>Gestiona fácilmente</strong> grupos de consumo.</p>
                 </div>
-                <div className={`col-xs-12 col-sm-4 ${styles.services_item}`}>
-                  <div className={styles.services_icon}><Icon glyph={GLYPHS.users} /></div>
+                <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
+                  <div className={styles.services__icon}><Icon glyph={GLYPHS.users} /></div>
                   <p><strong>Crea vínculos de calidad</strong> con los productores.</p>
                 </div>
-                <div className={`col-xs-12 col-sm-4 ${styles.services_item}`}>
-                  <div className={styles.services_icon}><Icon glyph={GLYPHS.lineChart} /></div>
+                <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
+                  <div className={styles.services__icon}><Icon glyph={GLYPHS.lineChart} /></div>
                   <p><strong>Un mercado alternativo</strong> para productores.</p>
                 </div>
               </div>
@@ -42,8 +42,8 @@ export default class Home extends Component {
         </div>
 
         <div className={styles.phrase}>
-          <div className={`wrap container-fluid ${styles.phrase_container}`}>
-            <div className={`${styles.phrase_inner}`}>
+          <div className={`wrap container-fluid ${styles.phrase__container}`}>
+            <div className={`${styles.phrase__inner}`}>
               <p>
                 <strong>KATUMA</strong> es una <strong>herramienta</strong> para administradores, miembros y productores de
                 <strong> grupos de consumo colaborativo</strong>.
@@ -74,7 +74,7 @@ export default class Home extends Component {
                 </a>
               </li>
             </ul>
-            <p className={styles.footer_love}>
+            <p className={styles.footer__love}>
               Make with <Icon glyph={GLYPHS.heart} /> by <a href="http://coopdevs.org/" target="_blank">Coopdevs</a>
             </p>
           </div>
