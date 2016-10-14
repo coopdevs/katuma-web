@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
@@ -11,30 +12,11 @@ import sprite from '../../helpers/Sprite';
 import config from '../../config';
 import styles from './styles/index.scss';
 
-@asyncConnect([{
-  promise: (options) => {
-    const {
-      store: { dispatch, getState },
-    } = options;
-    const promises = [];
-
-    if (!isAuthLoaded(getState())) {
-      promises.push(dispatch(loadAuth()));
-    }
-
-    return Promise.all(promises);
-  }
-}])
-@connect(
-  state => ({user: state.auth.user}),
-  {push: routeActions.push}
-)
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    route: PropTypes.object.isRequired,
+    push: PropTypes.func.isRequired,
     user: PropTypes.object,
-    push: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -83,3 +65,21 @@ export default class App extends Component {
     );
   }
 }
+
+const asyncConnectProps = [{
+  promise: ({ store: { dispatch, getState } }) => {
+    const promises = [];
+
+    if (!isAuthLoaded(getState())) {
+      promises.push(dispatch(loadAuth()));
+    }
+
+    return Promise.all(promises);
+  }
+}];
+const mapStateToProps = (state) => ({ user: state.auth.user });
+
+export default compose(
+  asyncConnect(asyncConnectProps),
+  connect(mapStateToProps, { push: routeActions.push })
+)(App);

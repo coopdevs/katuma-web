@@ -44,7 +44,10 @@ const appReducers = combineReducers({
 const interceptRootState = (state, action) => {
   switch (action.type) {
     case LOGOUT_SUCCESS:
-      return { auth: { loaded: true } };
+      return {
+        routing: state.routing,
+        auth: { loaded: true },
+      };
 
     case COMPLETE_INVITATION_SUCCESS:
     case COMPLETE_SIGNUP_SUCCESS:
