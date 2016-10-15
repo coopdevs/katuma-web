@@ -1,7 +1,7 @@
 import _ from 'underscore';
-const LOAD = 'redux-example/memberships/LOAD';
-const LOAD_SUCCESS = 'redux-example/memberships/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/memberships/LOAD_FAIL';
+const LOAD = 'group/memberships/LOAD';
+const LOAD_SUCCESS = 'group/memberships/LOAD_SUCCESS';
+const LOAD_FAIL = 'group/memberships/LOAD_FAIL';
 
 const initialState = {
   memberships: {
@@ -41,9 +41,14 @@ export default function membershipsReducer(state = initialState, action = {}) {
   }
 }
 
-export function load() {
+/**
+ * Load all memberships of a group
+ *
+ * @param {Number} groupId
+ */
+export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/memberships')
+    promise: (client) => client.get(`/memberships?basic_resource_group_id=${groupId}`)
   };
 }

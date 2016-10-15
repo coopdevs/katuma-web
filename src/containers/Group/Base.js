@@ -64,7 +64,7 @@ const asyncConnectProps = [{
     return Promise.all([
       dispatch(loadGroup(id)),
       dispatch(loadUsers(id)),
-      dispatch(loadMemberships()),
+      dispatch(loadMemberships(id)),
     ]);
   }
 }];
