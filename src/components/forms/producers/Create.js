@@ -60,7 +60,7 @@ class CreateProducerForm extends Component {
             component={Input}
             placeholder="Email del productor"
             label="Email"
-            type="email"
+            type="text"
             errorsAlways
           />
           <Field

@@ -25,7 +25,9 @@ class Item extends Component {
   }
 }
 
-const mapStateToProps = () => ({ providersReducer: { suppliers } }, { producer }) =>
-  ({ suppliers: suppliers.byProducerId[producer.id] });
+/* const mapStateToProps = () => ({ providersReducer: { suppliers } }, { producer }) =>
+ *   ({ suppliers: [22] || suppliers.byProducerId[producer.id] });
+ * */
+const mapStateToProps = () => ({ suppliers: { '22': {} } });
 
 export default connect(mapStateToProps)(Item);
