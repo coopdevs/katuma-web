@@ -11,8 +11,9 @@ const CREATE_PRODUCER_SUCCESS = 'redux-example/producers/CREATE_PRODUCER_SUCCESS
 const CREATE_PRODUCER_FAIL = 'redux-example/producers/CREATE_PRODUCER_FAIL';
 
 const initialState = {
-  producers: { entities: [] },
-  createProducerErrors: {},
+  producers: { entities: [], byId: {} },
+  createdDone: false,
+  errors: null,
 };
 
 export default function producersReducer(state = initialState, action = {}) {
@@ -23,6 +24,7 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: true,
+        createdDone: false,
       };
 
     case LOAD_SUCCESS:
@@ -48,6 +50,7 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: true,
+        createdDone: false,
       };
 
     case LOAD_PRODUCER_SUCCESS:
@@ -60,6 +63,7 @@ export default function producersReducer(state = initialState, action = {}) {
           entities: entities,
           byId: _.indexBy(entities, 'id'),
         },
+        createdDone: true,
       };
 
     case LOAD_PRODUCER_FAIL:
@@ -67,11 +71,13 @@ export default function producersReducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         error: action.error,
+        createdDone: false,
       };
 
     case CREATE_PRODUCER:
       return {
         ...state,
+        errors: null,
       };
 
     case CREATE_PRODUCER_SUCCESS:
@@ -83,23 +89,13 @@ export default function producersReducer(state = initialState, action = {}) {
           entities,
           byId: _.indexBy(entities, 'id')
         },
-        createProducerErrors: {},
+        errors: null,
       };
 
     case CREATE_PRODUCER_FAIL:
-      const errorsKeys = Object.keys(action.error);
-      // FIXME: Extract into utils. Here we're parsing API errors.
-      // By default server returns an object with fields with erros.
-      // And each field has an array of errors. Here we're picking
-      // just first error for each field.
-      const createProducerErrors = errorsKeys.reduce((formatedErrors, key) => {
-        formatedErrors[key] = action.error[key][0];
-        return formatedErrors;
-      }, {});
-
       return {
         ...state,
-        createProducerErrors: createProducerErrors
+        errors: action.error,
       };
 
     default:
@@ -107,6 +103,9 @@ export default function producersReducer(state = initialState, action = {}) {
   }
 }
 
+/**
+ * Load producers for that group
+ */
 export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
@@ -121,9 +120,14 @@ export function loadEntity(id) {
   };
 }
 
+/**
+ * Create api call on producers
+ *
+ * @param {Object} data
+ */
 export function create(data) {
   return {
     types: [CREATE_PRODUCER, CREATE_PRODUCER_SUCCESS, CREATE_PRODUCER_FAIL],
-    promise: (client) => client.post('/producers', { data })
+    promise: (client) => client.post('/producers', { data }),
   };
 }
