@@ -27,7 +27,6 @@ class CreateProducerForm extends Component {
     if (oldCreatedDone === createdDone) return;
 
     resetForm(CREATE_PRODUCER_FORM);
-    this.setState({ createdDone });
   }
 
   /**
@@ -43,11 +42,10 @@ class CreateProducerForm extends Component {
   }
 
   render() {
-    const { group } = this.props;
     return (
       <div>
         <div>
-          <Field name="group_id" value={group.id} component={Input} type="hidden" />
+          <Field name="group_id" component={Input} type="hidden" />
           <Field
             name="name"
             component={Input}
@@ -64,7 +62,6 @@ class CreateProducerForm extends Component {
             label="Email"
             type="email"
             errorsAlways
-            setInitialFocus
           />
           <Field
             name="address"
@@ -88,7 +85,7 @@ class CreateProducerForm extends Component {
  * @param {Function} dispatch
  */
 const onSubmit = (fields, dispatch) => {
-  return dispatch(createProducer(data));
+  return dispatch(createProducer(fields));
 };
 
 const reduxFormProps = {
@@ -97,11 +94,8 @@ const reduxFormProps = {
   onSubmit,
 };
 
-const mapStateToProps = (state) => {
-  const { producersReducer: { createdDone, errors } } = state;
-
-  return { createdDone, errors };
-};
+const mapStateToProps = ({ producersReducer: { createdDone, errors } }) =>
+  ({ createdDone, errors });
 
 export default compose(
   reduxForm(reduxFormProps),

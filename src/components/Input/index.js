@@ -7,12 +7,14 @@ import styles from './styles/index.scss';
  * Get css classes for field
  *
  * @param {String} error
+ * @param {String} type
  * @param {Sting}
  */
-function getInputClasses(error) {
+function getInputClasses(error, type) {
   return classNames({
     'form-group': true,
     'has-error': !!error,
+    'hidden': type === 'hidden',
   });
 }
 
@@ -72,7 +74,7 @@ class Input extends Component {
     const hasErrors = errorsAlways ? !!error : touched && !!error;
 
     return (
-      <div className={getInputClasses(error)}>
+      <div className={getInputClasses(error, type)}>
         <label htmlFor={name}>{label}</label>
         {element === 'input' && <input {...elementProps} />}
         {element === 'textarea' && <textarea rows={rows} {...elementProps} />}

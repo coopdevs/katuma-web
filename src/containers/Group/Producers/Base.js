@@ -7,9 +7,10 @@ import { asyncConnect } from 'redux-async-connect';
 import { load as loadSuppliers } from 'redux/modules/suppliers/suppliers';
 import { load as loadProducers } from 'redux/modules/producers/producers';
 
-/* import CreateProducerForm from 'components/forms/Producers/Create';*/
+import CreateProducerModal from './CreateProducerModal';
 import { isRole } from 'presenters/member';
 import List from './List';
+import Button from 'components/Button';
 
 class GroupProducersBase extends Component {
   static propTypes = {
@@ -18,14 +19,52 @@ class GroupProducersBase extends Component {
     producers: PropTypes.array.isRequired,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.onOpenModal = this._onOpenModal.bind(this);
+    this.onCloseModal = this._onCloseModal.bind(this);
+
+    this.state = { showModal: false };
+  }
+
+  /**
+   * Open modal with login form
+   */
+  _onOpenModal() {
+    this.setState({ showModal: true });
+  }
+
+  /**
+   * Open modal with signup form
+   */
+  _onCloseModal() {
+    this.setState({ showModal: false });
+  }
+
   /**
    * If user is group admin she/he can create
    * producers
    */
-  renderCreateProducerForm() {
-    const { user } = this.props;
+  renderCreateProducer() {
+    const { group, user } = this.props;
+    const isAdmin = isRole(user, 'admin');
 
-    console.log('isAdmin', isRole(user, 'admin'));
+    if (!isAdmin) return null;
+
+    const { showModal } = this.state;
+
+    return (
+      <div>
+        <Button primary onClick={this.onOpenModal}>Crear productor</Button>
+
+        <CreateProducerModal
+          showModal={showModal}
+          group={group}
+          onCloseModal={this.onCloseModal}
+        />
+      </div>
+    );
   }
 
   render() {
@@ -33,11 +72,11 @@ class GroupProducersBase extends Component {
 
     return (
       <div>
-        <Helmet title={`Proveedores de ${group.name}`}/>
+        <Helmet title={`Productores de ${group.name}`}/>
 
         <h3>Productores</h3>
+        {this.renderCreateProducer()}
 
-        {this.renderCreateProducerForm()}
         <div>
           <List group={group} producers={producers} />
         </div>
@@ -46,7 +85,8 @@ class GroupProducersBase extends Component {
   }
 }
 
-const mapStateToProps = () => ({ producersReducer: { entities: producers }}) => ({ producers });
+const mapStateToProps = () => ({ producersReducer: { producers: { entities: producers } } }) =>
+  ({ producers });
 
 const asyncConnectProps = [{
   promise: ({ store: { dispatch }, params: { id } }) => {
