@@ -5,38 +5,7 @@ import { asyncConnect } from 'redux-async-connect';
 
 import { loadEntity as loadProducer } from 'redux/modules/producers/producers';
 
-const mapStateToProps = (state, ownProps) => {
-  const producerId = ownProps.params.producer_id;
-
-  return {
-    producer: state.producersReducer.producers.byId[producerId],
-  };
-};
-
-@asyncConnect([{
-  promise: (options) => {
-
-    const {
-      store: { dispatch, getState },
-      params,
-    } = options;
-
-    const {
-      producersReducer: { producers: { byId } }
-    } = getState();
-    const promises = [];
-    const id = params.producer_id;
-    const producer = byId[id];
-
-    if (!producer) {
-      promises.push(dispatch(loadProducer(id)));
-    }
-
-    return Promise.all(promises);
-  }
-}])
-@connect(mapStateToProps)
-export default class GroupProducersDetails extends Component {
+class GroupProducersDetails extends Component {
   static propTypes = {
     producer: PropTypes.object.isRequired,
   }
@@ -55,3 +24,25 @@ export default class GroupProducersDetails extends Component {
     );
   }
 }
+
+const mapStateToProps = (_state, { params: { producer_id } }) =>
+  ({ producersReducer: reducer }) => ({ producer: reducer.producers.byId[producer_id] });
+
+const asyncConnectProps = [{
+  promise: ({ store: { dispatch, getState }, params: { producer_id} }) => {
+    const { producersReducer: { producers: { byId } } } = getState();
+    const producer = byId[producer_id];
+    const promises = [];
+
+    if (!producer) {
+      promises.push(dispatch(loadProducer(producer_id)));
+    }
+
+    return Promise.all(promises);
+  }
+}];
+
+export default compose(
+  asyncConnect(asyncConnectProps),
+  connect(mapStateToProps)
+)(GroupProducersDetails);

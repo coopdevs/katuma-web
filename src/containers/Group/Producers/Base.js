@@ -6,17 +6,26 @@ import { asyncConnect } from 'redux-async-connect';
 
 import { load as loadSuppliers } from 'redux/modules/suppliers/suppliers';
 import { load as loadProducers } from 'redux/modules/producers/producers';
-import { providers } from 'presenters/providers';
 
+/* import CreateProducerForm from 'components/forms/Producers/Create';*/
+import { isRole } from 'presenters/member';
 import List from './List';
 
 class GroupProducersBase extends Component {
   static propTypes = {
-    group: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-
-    // Props from `connect`
+    group: PropTypes.object.isRequired,
     producers: PropTypes.array.isRequired,
+  }
+
+  /**
+   * If user is group admin she/he can create
+   * producers
+   */
+  renderCreateProducerForm() {
+    const { user } = this.props;
+
+    console.log('isAdmin', isRole(user, 'admin'));
   }
 
   render() {
@@ -28,6 +37,7 @@ class GroupProducersBase extends Component {
 
         <h3>Productores</h3>
 
+        {this.renderCreateProducerForm()}
         <div>
           <List group={group} producers={producers} />
         </div>
@@ -36,23 +46,13 @@ class GroupProducersBase extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  return (state) => {
-    const { producersReducer, suppliersReducer } = state;
-    const producers = producersReducer.producers.entities;
-    const suppliers = suppliersReducer.suppliers.byProducerId;
-
-    return {
-      producers: providers(producers, suppliers),
-    };
-  };
-};
+const mapStateToProps = () => ({ producersReducer: { entities: producers }}) => ({ producers });
 
 const asyncConnectProps = [{
   promise: ({ store: { dispatch }, params: { id } }) => {
     const promises = [];
-    promises.push(dispatch(loadSuppliers(id)));
     promises.push(dispatch(loadProducers(id)));
+    promises.push(dispatch(loadSuppliers(id)));
 
     return Promise.all(promises);
   },

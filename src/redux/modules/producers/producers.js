@@ -24,7 +24,6 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: true,
-        createdDone: false,
       };
 
     case LOAD_SUCCESS:
@@ -63,7 +62,6 @@ export default function producersReducer(state = initialState, action = {}) {
           entities: entities,
           byId: _.indexBy(entities, 'id'),
         },
-        createdDone: true,
       };
 
     case LOAD_PRODUCER_FAIL:
@@ -71,13 +69,13 @@ export default function producersReducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         error: action.error,
-        createdDone: false,
       };
 
     case CREATE_PRODUCER:
       return {
         ...state,
         errors: null,
+        createdDone: false,
       };
 
     case CREATE_PRODUCER_SUCCESS:
@@ -89,6 +87,7 @@ export default function producersReducer(state = initialState, action = {}) {
           entities,
           byId: _.indexBy(entities, 'id')
         },
+        createdDone: true,
         errors: null,
       };
 
@@ -96,6 +95,7 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         errors: action.error,
+        createdDone: false,
       };
 
     default:

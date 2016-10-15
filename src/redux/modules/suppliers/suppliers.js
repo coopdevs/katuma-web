@@ -9,6 +9,7 @@ const LOAD_SUPPLIER_FAIL = 'redux-example/suppliers/LOAD_SUPPLIER_FAIL';
 
 const initialState = {
   suppliers: { entities: [], byId: {}, byProducerId: {} },
+  loading: false,
 };
 
 export default function suppliersReducer(state = initialState, action = {}) {
@@ -56,6 +57,7 @@ export default function suppliersReducer(state = initialState, action = {}) {
         suppliers: {
           entities: entities,
           byId: _.indexBy(entities, 'id'),
+          byProducerId: _.indexBy(entities, 'producer_id'),
         },
       };
 
@@ -71,6 +73,11 @@ export default function suppliersReducer(state = initialState, action = {}) {
   }
 }
 
+/**
+ * Load suppliers scoped by group
+ *
+ * @param {Number} groupId
+ */
 export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
