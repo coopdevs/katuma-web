@@ -38,7 +38,7 @@ class GroupProducersBase extends Component {
   }
 
   /**
-   * Open modal with signup form
+   * Open modal
    */
   _onCloseModal() {
     this.setState({ showModal: false });

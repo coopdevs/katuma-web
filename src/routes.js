@@ -42,8 +42,7 @@ const goToGroupDetail = (store, listPath, replace, callback) => {
   if (groupIds.length === 0) {
     replace('/onboarding');
   } else if (groupIds.length === 1) {
-    // replace(`/groups/${groupIds[0]}`);
-    replace(listPath);
+    replace(`/groups/${groupIds[0]}`);
   } else {
     replace(listPath);
   }

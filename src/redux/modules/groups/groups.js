@@ -10,6 +10,8 @@ const CREATE_GROUP = 'redux-example/groups/CREATE_GROUP';
 const CREATE_GROUP_SUCCESS = 'redux-example/groups/CREATE_GROUP_SUCCESS';
 const CREATE_GROUP_FAIL = 'redux-example/groups/CREATE_GROUP_FAIL';
 
+import mergeResponse from 'redux/lib/merge';
+
 const initialState = {
   groups: { entities: [], byId: {} },
   createdGroupId: null,
@@ -31,7 +33,10 @@ export default function groupsReducer(state = initialState, action = {}) {
 
       return {
         ...state,
-        groups: { entities, byId: _.indexBy(entities, 'id')},
+        groups: {
+          entities,
+          byId: _.indexBy(entities, 'id'),
+        },
         createdGroupId: action.result.id,
         errors: null,
       };
@@ -50,15 +55,15 @@ export default function groupsReducer(state = initialState, action = {}) {
       };
 
     case LOAD_GROUPS_SUCCESS:
-      entities = action.result;
+      entities = mergeResponse(state.groups.entities, action.result);
 
       return {
         ...state,
-        loading: false,
         groups: {
-          entities: entities,
-          byId: _.indexBy(entities, 'id')
+          entities,
+          byId: _.indexBy(entities, 'id'),
         },
+        loading: false,
       };
 
     case LOAD_GROUPS_FAIL:
@@ -75,12 +80,15 @@ export default function groupsReducer(state = initialState, action = {}) {
       };
 
     case LOAD_GROUP_SUCCESS:
-      entities = [...state.groups.entities, action.result];
+      entities = mergeResponse(state.groups.entities, action.result);
 
       return {
         ...state,
+        groups: {
+          entities,
+          byId: _.indexBy(entities, 'id'),
+        },
         loading: false,
-        groups: {entities: entities, byId: _.indexBy(entities, 'id')},
       };
 
     case LOAD_GROUP_FAIL:
