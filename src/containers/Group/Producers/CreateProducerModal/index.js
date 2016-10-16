@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 
-import CreateProducerForm, { CREATE_PRODUCER_FORM } from 'components/forms/Producers/Create';
+import CreateProducerForm, { CREATE_PRODUCER_FORM } from 'components/forms/producers/Create';
 import Button from 'components/Button';
 
 class CreateProducerModal extends Component {
