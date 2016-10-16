@@ -12,16 +12,18 @@ class Item extends Component {
   }
 
   render() {
-    const { producer, suppliers } = this.props;
-    const editText = producer.can_edit === true ? 'editar - ' : '';
+    const { producer, suppliers, group } = this.props;
+    const editText = producer.can_edit === true ? ' - editar - ' : ' - ';
     const workingWithThisProducer = isSupplier(producer, suppliers) ? 'si' : 'no';
 
     return (
       <div>
-        <Link to={`/groups/1/producers/${producer.id}`}>hola</Link>
-        {`${producer.name} - `}
+        <Link to={`/groups/${group.id}/producers/${producer.id}`}>
+          {producer.name}
+        </Link>
 
-        <span>{editText} </span>
+        {editText}
+
         <span>{`Trabajando con el: ${workingWithThisProducer}`}</span>
       </div>
     );

@@ -11,6 +11,8 @@ const CREATE_PRODUCER_SUCCESS = 'redux-example/producers/CREATE_PRODUCER_SUCCESS
 const CREATE_PRODUCER_FAIL = 'redux-example/producers/CREATE_PRODUCER_FAIL';
 const RESET_CREATED_PRODUCER = 'redux-example/producers/RESET_CREATED_PRODUCER';
 
+import mergeResponse from 'redux/lib/merge';
+
 const initialState = {
   producers: { entities: [], byId: {} },
   createdProducer: null,
@@ -54,7 +56,7 @@ export default function producersReducer(state = initialState, action = {}) {
       };
 
     case LOAD_PRODUCER_SUCCESS:
-      entities = [...state.producers.entities, action.result];
+      entities = mergeResponse(state.producers.entities, action.result);
 
       return {
         ...state,
