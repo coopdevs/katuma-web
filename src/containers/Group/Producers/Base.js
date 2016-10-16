@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 
-import { load as loadSuppliers } from 'redux/modules/suppliers/suppliers';
+import { load as loadSuppliers, create } from 'redux/modules/suppliers/suppliers';
 import { load as loadProducers } from 'redux/modules/producers/producers';
 
 import CreateProducerModal from './CreateProducerModal';
@@ -17,6 +17,7 @@ class GroupProducersBase extends Component {
     user: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
     producers: PropTypes.array.isRequired,
+    createSupplier: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -24,6 +25,7 @@ class GroupProducersBase extends Component {
 
     this.onOpenModal = this._onOpenModal.bind(this);
     this.onCloseModal = this._onCloseModal.bind(this);
+    this.onProducerCreated = this._onProducerCreated.bind(this);
 
     this.state = { showModal: false };
   }
@@ -40,6 +42,20 @@ class GroupProducersBase extends Component {
    */
   _onCloseModal() {
     this.setState({ showModal: false });
+  }
+
+  /**
+   * When a new producer is created whe
+   * close create producer modal/form and
+   * create a new supplier relation on DB.
+   *
+   * @param {Object} producer
+   */
+  _onProducerCreated(producer) {
+    const { createSupplier, group } = this.props;
+
+    this.onCloseModal();
+    createSupplier({ group_id: group.id, producer_id: producer.id });
   }
 
   /**
@@ -62,6 +78,7 @@ class GroupProducersBase extends Component {
           showModal={showModal}
           group={group}
           onCloseModal={this.onCloseModal}
+          onCreated={this.onProducerCreated}
         />
       </div>
     );
@@ -100,5 +117,5 @@ const asyncConnectProps = [{
 
 export default compose(
   asyncConnect(asyncConnectProps),
-  connect(mapStateToProps)
+  connect(mapStateToProps, { createSupplier: create })
 )(GroupProducersBase);

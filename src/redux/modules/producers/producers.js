@@ -9,10 +9,11 @@ const LOAD_PRODUCER_FAIL = 'redux-example/producers/LOAD_PRODUCER_FAIL';
 const CREATE_PRODUCER = 'redux-example/producers/CREATE_PRODUCER';
 const CREATE_PRODUCER_SUCCESS = 'redux-example/producers/CREATE_PRODUCER_SUCCESS';
 const CREATE_PRODUCER_FAIL = 'redux-example/producers/CREATE_PRODUCER_FAIL';
+const RESET_CREATED_PRODUCER = 'redux-example/producers/RESET_CREATED_PRODUCER';
 
 const initialState = {
   producers: { entities: [], byId: {} },
-  createdDone: false,
+  createdProducer: null,
   errors: null,
 };
 
@@ -49,7 +50,7 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: true,
-        createdDone: false,
+        createdProducer: null,
       };
 
     case LOAD_PRODUCER_SUCCESS:
@@ -75,7 +76,7 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         errors: null,
-        createdDone: false,
+        createdProducer: null,
       };
 
     case CREATE_PRODUCER_SUCCESS:
@@ -87,7 +88,7 @@ export default function producersReducer(state = initialState, action = {}) {
           entities,
           byId: _.indexBy(entities, 'id')
         },
-        createdDone: true,
+        createdProducer: action.result,
         errors: null,
       };
 
@@ -95,7 +96,13 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         errors: action.error,
-        createdDone: false,
+        createdProducer: null,
+      };
+
+    case RESET_CREATED_PRODUCER:
+      return {
+        ...state,
+        createdProducer: null,
       };
 
     default:
@@ -130,4 +137,12 @@ export function create(data) {
     types: [CREATE_PRODUCER, CREATE_PRODUCER_SUCCESS, CREATE_PRODUCER_FAIL],
     promise: (client) => client.post('/producers', { data }),
   };
+}
+
+/**
+ * After a new producer is created we reset
+ * in the store `createdProducer` key
+ */
+export function resetCreated() {
+  return { type: RESET_CREATED_PRODUCER };
 }

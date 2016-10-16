@@ -6,7 +6,8 @@ import { isSupplier } from 'presenters/producer';
 class Item extends Component {
   static propTypes = {
     producer: PropTypes.object.isRequired,
-    suppliers: PropTypes.object.isRequired,
+    group: PropTypes.object.isRequired,
+    suppliers: PropTypes.array.isRequired,
   }
 
   render() {
@@ -25,9 +26,11 @@ class Item extends Component {
   }
 }
 
-/* const mapStateToProps = () => ({ providersReducer: { suppliers } }, { producer }) =>
- *   ({ suppliers: [22] || suppliers.byProducerId[producer.id] });
- * */
-const mapStateToProps = () => ({ suppliers: { '22': {} } });
+const mapStateToProps = () => ({ suppliersReducer: { suppliers } }, { group }) => {
+  return {
+    suppliers: suppliers.byGroupId[group.id]
+  };
+};
+
 
 export default connect(mapStateToProps)(Item);

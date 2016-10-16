@@ -11,9 +11,9 @@ const CREATE_GROUP_SUCCESS = 'redux-example/groups/CREATE_GROUP_SUCCESS';
 const CREATE_GROUP_FAIL = 'redux-example/groups/CREATE_GROUP_FAIL';
 
 const initialState = {
-  errors: null,
-  createdGroupId: null,
   groups: { entities: [], byId: {} },
+  createdGroupId: null,
+  errors: null,
 };
 
 export default function groupsReducer(state = initialState, action = {}) {
@@ -55,7 +55,10 @@ export default function groupsReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        groups: {entities: entities, byId: _.indexBy(entities, 'id')},
+        groups: {
+          entities: entities,
+          byId: _.indexBy(entities, 'id')
+        },
       };
 
     case LOAD_GROUPS_FAIL:

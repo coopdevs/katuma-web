@@ -1,32 +1,33 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { reduxForm, Field, stopSubmit, reset } from 'redux-form';
+import { reduxForm, Field, stopSubmit } from 'redux-form';
 
 import Input from 'components/Input';
-import { create as createProducer } from 'redux/modules/producers/producers';
+import { create as createProducer, resetCreated as resetCreatedProducer } from 'redux/modules/producers/producers';
 
 export const CREATE_PRODUCER_FORM = 'createProducer';
 
 class CreateProducerForm extends Component {
   static propTypes = {
-    group: PropTypes.object.isRequired,
+    onCreated: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
+    resetCreated: PropTypes.func.isRequired,
     stopSubmit: PropTypes.func.isRequired,
-    resetForm: PropTypes.func.isRequired,
     errors: PropTypes.object,
-    createdDone: PropTypes.bool,
+    createdProducer: PropTypes.object,
   }
 
   componentWillReceiveProps(newProps) {
-    const { resetForm, createdDone: oldCreatedDone } = this.props;
-    const { errors, createdDone } = newProps;
+    const { resetCreated, onCreated, createdProducer: oldCreatedProducer } = this.props;
+    const { errors, createdProducer } = newProps;
 
     this.checkErrors(errors);
 
-    if (oldCreatedDone === createdDone) return;
+    if ((oldCreatedProducer === createdProducer) || !createdProducer) return;
 
-    resetForm(CREATE_PRODUCER_FORM);
+    resetCreated();
+    onCreated(createdProducer);
   }
 
   /**
@@ -94,10 +95,10 @@ const reduxFormProps = {
   onSubmit,
 };
 
-const mapStateToProps = ({ producersReducer: { createdDone, errors } }) =>
-  ({ createdDone, errors });
+const mapStateToProps = ({ producersReducer: { createdProducer, errors } }) =>
+  ({ createdProducer, errors });
 
 export default compose(
   reduxForm(reduxFormProps),
-  connect(mapStateToProps, { stopSubmit, resetForm: reset })
+  connect(mapStateToProps, { stopSubmit, resetCreated: resetCreatedProducer })
 )(CreateProducerForm);

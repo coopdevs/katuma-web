@@ -1,12 +1,14 @@
+import _ from 'underscore';
+
 /**
- * Check if producer is provider of a group
+ * Check if producer is supplier of a group
  * suppliers list must be passed scoped by group
  * you must do it on mapStateToProps
  *
  * @param {Object} producer
- * @param {Object} suppliersByProduceId
+ * @param {Object} suppliers
  * @returns {Boolean}
  */
-export function isSupplier({ id }, suppliersByProducerId) {
-  return !!suppliersByProducerId[id];
+export function isSupplier({ id }, suppliers) {
+  return _.any(suppliers, (supplier) => supplier.producer_id === id);
 }

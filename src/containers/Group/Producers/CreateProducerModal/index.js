@@ -5,8 +5,9 @@ import { Modal } from 'react-bootstrap';
 import CreateProducerForm, { CREATE_PRODUCER_FORM } from 'components/forms/Producers/Create';
 import Button from 'components/Button';
 
-class UserAccessModal extends Component {
+class CreateProducerModal extends Component {
   static propTypes = {
+    onCreated: PropTypes.func.isRequired,
     group: PropTypes.object.isRequired,
     showModal: PropTypes.bool.isRequired,
     onCloseModal: PropTypes.func.isRequired,
@@ -19,6 +20,9 @@ class UserAccessModal extends Component {
     this.onClickCreate = this._onClickCreate.bind(this);
   }
 
+  /**
+   * Trigger form submit
+   */
   _onClickCreate() {
     this._producer_form.submit();
   }
@@ -33,7 +37,13 @@ class UserAccessModal extends Component {
   }
 
   render() {
-    const { group, submitting, showModal, onCloseModal } = this.props;
+    const {
+      group,
+      submitting,
+      showModal,
+      onCloseModal,
+      onCreated,
+    } = this.props;
 
     return (
       <Modal show={showModal} onHide={onCloseModal}>
@@ -46,7 +56,7 @@ class UserAccessModal extends Component {
             <CreateProducerForm
               ref={(domNode) => this._producer_form = domNode}
               initialValues={{ group_id: group.id }}
-              group={group}
+              onCreated={onCreated}
             />
           </Modal.Body>
 
@@ -74,4 +84,4 @@ const mapStateToProps = ({ form: allForms }) => {
   return { submitting: form.submitting };
 };
 
-export default connect(mapStateToProps)(UserAccessModal);
+export default connect(mapStateToProps)(CreateProducerModal);
