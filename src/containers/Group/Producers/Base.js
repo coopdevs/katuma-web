@@ -31,7 +31,7 @@ class GroupProducersBase extends Component {
   }
 
   /**
-   * Open modal with login form
+   * Open modal
    */
   _onOpenModal() {
     this.setState({ showModal: true });

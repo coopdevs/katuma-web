@@ -26,9 +26,15 @@ class Item extends Component {
   }
 }
 
-const mapStateToProps = () => ({ suppliersReducer: { suppliers } }, { group }) => {
-  return {
-    suppliers: suppliers.byGroupId[group.id]
+const mapStateToProps = (_state, ownProps) => {
+  const { group: { id } } = ownProps;
+
+  return (state) => {
+    const { suppliersReducer: { suppliers } } = state;
+
+    return {
+      suppliers: suppliers.byGroupId[id],
+    };
   };
 };
 
