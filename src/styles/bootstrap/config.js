@@ -44,6 +44,7 @@ module.exports = {
     tooltip: true,
     popovers: true,
     type: true,
+    utilities: true,
 
     // NOT USED
     navs: false,
@@ -55,7 +56,6 @@ module.exports = {
     glyphicons: false,
     carousel: false,
     'responsive-utilities': false,
-    utilities: false,
   },
   // We don't use boostrap's javascript
   scripts: {

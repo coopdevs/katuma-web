@@ -31,7 +31,7 @@ const completeUrl = (path) => {
 
 class _ApiHttp {
   constructor(userId) {
-    ['get', 'post', 'put', 'patch', 'del'].forEach((method) => {
+    ['get', 'post', 'put', 'patch', 'delete'].forEach((method) => {
       this[method] = (path, { params, data } = {}) => new Promise((resolve, reject) => {
         const req = request[method];
         const options = {

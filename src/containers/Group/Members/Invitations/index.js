@@ -31,13 +31,12 @@ class Invitations extends Component {
   }
 
   /**
-   * Send bulk invitations
+   * Re-send invitation
    *
-   * @param {Object} invitation
-   * @param {Number} groupId
+   * @param {Object} data
    */
-  _onResendInvitation({ id, email }, groupId) {
-    return this.props.send({ id, email, groupId });
+  _onResendInvitation(data) {
+    return this.props.send(data);
   }
 
   /**

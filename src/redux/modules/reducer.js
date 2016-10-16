@@ -10,7 +10,7 @@ import bulkInvitationsReducer from './invitations/bulk';
 import completeInvitationReducer, { COMPLETE_INVITATION_SUCCESS }from './invitations/complete';
 import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
-import suppliersReducer from './suppliers/list';
+import suppliersReducer from './suppliers/suppliers';
 import producersReducer from './producers/producers';
 import {reducer as form} from 'redux-form';
 import { routeReducer } from 'react-router-redux';
@@ -44,7 +44,10 @@ const appReducers = combineReducers({
 const interceptRootState = (state, action) => {
   switch (action.type) {
     case LOGOUT_SUCCESS:
-      return { auth: { loaded: true } };
+      return {
+        routing: state.routing,
+        auth: { loaded: true },
+      };
 
     case COMPLETE_INVITATION_SUCCESS:
     case COMPLETE_SIGNUP_SUCCESS:

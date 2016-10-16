@@ -3,9 +3,10 @@ export Home from './Home/Home';
 export Login from './Login/Login';
 export { Create as Signup, Complete as SignupComplete } from './Signup';
 export InvitationComplete from './Invitation/Complete';
-export { GroupsBase, GroupsList } from './Groups';
+export GroupsList from './Groups';
+export GroupsBase from './Groups/Base';
 export { GroupBase, GroupMembers } from './Group';
-export { GroupSuppliersBase, GroupSuppliersDetails } from './Group/Suppliers';
+export { GroupProducersBase, GroupProducersList, GroupProducersDetails } from './Group/Producers';
 export { OnboardingCreateGroup, OnboardingInvitations } from './Onboarding';
 export NotFound from './NotFound/NotFound';
 

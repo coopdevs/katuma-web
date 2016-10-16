@@ -6,7 +6,7 @@ import { asyncConnect } from 'redux-async-connect';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 
-import SignupCompleteForm from 'components/forms/Signup/Complete';
+import ProfileCompleteForm from 'components/forms/Profile/Complete';
 
 import styles from '../../styles/layouts/index.scss';
 import { checkSignup, complete } from 'redux/modules/signup/complete';
@@ -60,7 +60,10 @@ class SignupComplete extends Component {
     return (
       <div className={styles.layoutCentered}>
         <div className={styles.layoutCentered__body}>
-          <SignupCompleteForm onSubmit={this.handleSubmit} />
+          <ProfileCompleteForm
+            onSubmit={this.handleSubmit}
+            reducerKey="signupCompleteReducer"
+          />
         </div>
       </div>
     );

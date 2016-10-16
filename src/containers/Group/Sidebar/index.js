@@ -23,7 +23,7 @@ class Sidebar extends Component {
         </li>
         <li>
           <Link
-            to={`/groups/${group.id}/suppliers`}
+            to={`/groups/${group.id}/producers`}
             activeClassName={styles.activeLink}
           >
             Productores

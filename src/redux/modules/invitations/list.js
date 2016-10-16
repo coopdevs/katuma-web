@@ -7,44 +7,22 @@ const SEND = 'redux-example/invitations/SEND';
 const SEND_SUCCESS = 'redux-example/invitations/SEND_SUCCESS';
 const SEND_FAIL = 'redux-example/invitations/SEND_FAIL';
 
-
-const invitationBaseState = {
-  sending: false,
-  sent: false,
-  failed: false,
-};
-
 const initialState = {
-  invitations: {entities: [], byGroupId: []},
-  invitationStatusByID: {},
+  invitations: { entities: [], byGroupId: [] },
+  sendingInvitationId: null,
+  sentInvitations: [],
 };
-
-function getInvitationState(state, invitationId, newState) {
-  const invitationState = {};
-
-  invitationState[invitationId] = {
-    ...invitationBaseState,
-    ...newState,
-  };
-
-  return Object.assign({}, state.invitationStatusByID, invitationState);
-}
-
 export default function invitationsReducer(state = initialState, action = {}) {
   switch (action.type) {
     case LOAD:
       return {
         ...state,
         loading: true,
+        sentInvitations: [],
       };
 
     case LOAD_SUCCESS:
       const entities = action.result;
-
-      const invitationStatusByID = _.reduce(_.pluck(entities, 'id'), (memo, id) => {
-        memo[id] = invitationBaseState;
-        return memo;
-      }, {});
 
       return {
         ...state,
@@ -53,7 +31,6 @@ export default function invitationsReducer(state = initialState, action = {}) {
           entities: entities,
           byGroupId: _.groupBy(entities, 'group_id'),
         },
-        invitationStatusByID,
       };
     case LOAD_FAIL:
       return {
@@ -65,26 +42,23 @@ export default function invitationsReducer(state = initialState, action = {}) {
     case SEND:
       return {
         ...state,
-        invitationStatusByID: getInvitationState(
-          state,
-          action.requestData.invitationId,
-          {sending: true},
-        ),
+        sendingInvitationId: action.requestData.invitationId,
       };
 
     case SEND_SUCCESS:
       return {
         ...state,
-        invitationStatusByID: getInvitationState(
-          state,
+        sendingInvitationId: null,
+        sentInvitations: [
+          ...state.sentInvitations,
           action.result.id,
-          {sent: true},
-        ),
+        ],
       };
 
     case SEND_FAIL:
       return {
         ...state,
+        sendingInvitationId: null,
       };
 
     default:
@@ -111,11 +85,9 @@ export function send(data) {
     promise: (client) => client.post(`/invitations`, {
       data: {
         email: data.email,
-        group_id: data.groupId,
-      }
+        group_id: data.group_id,
+      },
     }),
-    requestData: {
-      invitationId: data.id,
-    }
+    requestData: { invitationId: data.id }
   };
 }

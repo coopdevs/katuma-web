@@ -1,28 +1,56 @@
 import _ from 'underscore';
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
-import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 
+import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
-import { load as loadGroups } from 'redux/modules/groups/groups';
 
 import {
-    App,
-    Home,
-    Login,
-    Signup,
-    SignupComplete,
-    GroupsBase,
-    GroupsList,
-    GroupBase,
-    GroupMembers,
-    GroupSuppliersBase,
-    GroupSuppliersDetails,
-    OnboardingCreateGroup,
-    OnboardingInvitations,
-    InvitationComplete,
-    NotFound,
-  } from 'containers';
+  App,
+  Home,
+  Login,
+  Signup,
+  SignupComplete,
+  GroupsBase,
+  GroupsList,
+  GroupBase,
+  GroupMembers,
+  GroupProducersBase,
+  GroupProducersList,
+  GroupProducersDetails,
+  OnboardingCreateGroup,
+  OnboardingInvitations,
+  InvitationComplete,
+  NotFound,
+} from 'containers';
+
+/**
+ * Go to group detail if user only has 1 membership
+ * if user has 0 memberships means he doesn't belongs to any
+ * group, so we redirect him to onboarding. Other way redirect
+ * him to list of groups.
+ *
+ * @param {Object} store
+ * @param {Function} listPath
+ * @param {Function} replace
+ * @param {Function} callback
+ */
+const goToGroupDetail = (store, listPath, replace, callback) => {
+  const {
+    membershipsReducer: { memberships: { byBasicResourceGroupId } },
+  } = store.getState();
+  const groupIds = _.keys(byBasicResourceGroupId);
+
+  if (groupIds.length === 0) {
+    replace('/onboarding');
+  } else if (groupIds.length === 1) {
+    replace(`/groups/${groupIds[0]}`);
+  } else {
+    replace(listPath);
+  }
+
+  callback();
+};
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
@@ -62,28 +90,19 @@ export default (store) => {
   };
 
   const redirectToGroupsDetail = (nextState, replace, cb) => {
-    function getGroupIds() {
-      const {membershipsReducer: {memberships: {entities}}} = store.getState();
-      return _.uniq(_.pluck(entities, 'basic_resource_group_id'));
-    }
+    const listPath = '/groups/list';
+    const groupDetail = /groups\/\d+/;
+    const { pathname } = nextState.location;
 
-    function goToGroupDetail() {
-      const groupIds = getGroupIds();
-
-      if (groupIds.length === 0) {
-        replace('/onboarding');
-      } else if (groupIds.length === 1) {
-        replace(`/groups/${groupIds[0]}`);
-      }
-
+    if (pathname === listPath || groupDetail.test(pathname)) {
       cb();
+    } else {
+      Promise
+        .all([store.dispatch(loadMemberships())])
+        .then(() => {
+          goToGroupDetail(store, listPath, replace, cb);
+        });
     }
-
-    Promise.all([
-      store.dispatch(loadMemberships()),
-      store.dispatch(loadGroups()),
-    ])
-      .then(goToGroupDetail);
   };
 
   return (
@@ -102,13 +121,17 @@ export default (store) => {
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
-        <Route path="groups" component={GroupsBase}>
-          <IndexRoute component={GroupsList} onEnter={redirectToGroupsDetail}/>
+      <Route path="groups" component={GroupsBase} onEnter={redirectToGroupsDetail}>
+          <IndexRoute component={GroupsList} />
+          <Route path="list" component={GroupsList} />
+
           <Route path=":id" component={GroupBase}>
             <IndexRoute component={GroupMembers}/>
             <Route path="members" component={GroupMembers}/>
-            <Route path="suppliers" component={GroupSuppliersBase}/>
-            <Route path="suppliers/:producer_id" component={GroupSuppliersDetails}/>
+            <Route path="producers" component={GroupProducersBase}>
+              <IndexRoute component={GroupProducersList} />
+              <Route path=":producer_id" component={GroupProducersDetails}/>
+            </Route>
           </Route>
         </Route>
 

@@ -1,98 +1,96 @@
 import React, { Component, PropTypes } from 'react';
-import { reduxForm } from 'redux-form';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field, stopSubmit } from 'redux-form';
 
-const CREATE_PRODUCER_FORM_FIELDS = {
-  name: {
-    type: 'text',
-    label: 'Nombre',
-    placeholder: 'Elige un nombre para el proveedor'
-  },
-  email: {
-    type: 'text',
-    label: 'Email',
-    placeholder: 'Introduce el email del proveedor'
-  },
-  address: {
-    type: 'textarea',
-    label: 'Direccion',
-    placeholder: 'Introduce la direccion del proveedor'
-  },
-};
+import Input from 'components/Input';
+import { create as createProducer, resetCreated as resetCreatedProducer } from 'redux/modules/producers/producers';
 
-@reduxForm({
-  form: 'createProducer',
-  fields: Object.keys(CREATE_PRODUCER_FORM_FIELDS),
-})
-export default class CreateProducerForm extends Component {
+export const CREATE_PRODUCER_FORM = 'createProducer';
+
+class CreateProducerForm extends Component {
   static propTypes = {
-    fields: PropTypes.object.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    submitting: PropTypes.bool,
+    onCreated: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    resetCreated: PropTypes.func.isRequired,
+    stopSubmit: PropTypes.func.isRequired,
+    errors: PropTypes.object,
+    createdProducer: PropTypes.object,
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { resetCreated, onCreated, createdProducer: oldCreatedProducer } = this.props;
+    const { errors, createdProducer } = newProps;
+
+    this.checkErrors(errors);
+
+    if ((oldCreatedProducer === createdProducer) || !createdProducer) return;
+
+    resetCreated();
+    onCreated(createdProducer);
   }
 
   /**
-   * Get css classes for field
+   * When api request has errors show it
+   * on the form.
    *
-   * @param {Object} field
+   * @param {Object} errors.
    */
-  getInputClasses(field) {
-    const classes = ['form-group'];
+  checkErrors(errors) {
+    if (!errors) return;
 
-    if (field.error) {
-      classes.push('has-error');
-    }
-
-    return classes.join(' ');
+    this.props.stopSubmit(CREATE_PRODUCER_FORM, errors);
   }
 
   render() {
-    const {submitting, fields, handleSubmit} = this.props;
-
-    const renderInput = (field, index) => {
-      const fieldProps = CREATE_PRODUCER_FORM_FIELDS[field.name];
-
-      if (!fieldProps) {
-        return null;
-      }
-
-      const {label, type, placeholder} = fieldProps;
-
-      const inputProps = {
-        id: field.name,
-        type,
-        className: 'form-control',
-        placeholder,
-        ...field,
-      };
-
-      return (
-        <div key={index} className={this.getInputClasses(field)}>
-          <label htmlFor={field.name}>{label}</label>
-          <div>
-            {type === 'text' && <input {...inputProps}/>}
-            {type === 'textarea' && <textarea rows={5} {...inputProps}/>}
-
-            {field.error && <div className="text-danger">{field.error}</div>}
-          </div>
-        </div>
-      );
-    };
-
-    const inputs = Object.keys(fields).map((key, index) => renderInput(fields[key], index));
-
     return (
       <div>
-        <form onSubmit={handleSubmit}>
-
-          {inputs}
-
-          <div className="form-group">
-            <button className="btn btn-success" onClick={handleSubmit}>
-              {submitting ? 'Enviando...' : 'Crear proveedor'}
-            </button>
-          </div>
-        </form>
+        <div>
+          <Field name="group_id" component={Input} type="hidden" />
+          <Field
+            name="name"
+            component={Input}
+            placeholder="Nombre del productor"
+            label="Nombre"
+            type="text"
+            errorsAlways
+            setInitialFocus
+          />
+          <Field
+            name="address"
+            component={Input}
+            placeholder="Direccion del productor. Calle, localidad, provincia,..."
+            label="Direccion"
+            type="textarea"
+            errorsAlways
+            rows={5}
+          />
+        </div>
       </div>
     );
   }
 }
+
+/**
+ * Create producer form
+ *
+ * @param {Object} fields
+ * @param {Function} dispatch
+ */
+const onSubmit = (fields, dispatch) => {
+  return dispatch(createProducer(fields));
+};
+
+const reduxFormProps = {
+  form: CREATE_PRODUCER_FORM,
+  persistentSubmitErrors: true,
+  onSubmit,
+};
+
+const mapStateToProps = ({ producersReducer: { createdProducer, errors } }) =>
+  ({ createdProducer, errors });
+
+export default compose(
+  reduxForm(reduxFormProps),
+  connect(mapStateToProps, { stopSubmit, resetCreated: resetCreatedProducer })
+)(CreateProducerForm);

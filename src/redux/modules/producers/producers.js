@@ -9,10 +9,14 @@ const LOAD_PRODUCER_FAIL = 'redux-example/producers/LOAD_PRODUCER_FAIL';
 const CREATE_PRODUCER = 'redux-example/producers/CREATE_PRODUCER';
 const CREATE_PRODUCER_SUCCESS = 'redux-example/producers/CREATE_PRODUCER_SUCCESS';
 const CREATE_PRODUCER_FAIL = 'redux-example/producers/CREATE_PRODUCER_FAIL';
+const RESET_CREATED_PRODUCER = 'redux-example/producers/RESET_CREATED_PRODUCER';
+
+import mergeResponse from 'redux/lib/merge';
 
 const initialState = {
-  producers: { entities: [] },
-  createProducerErrors: {},
+  producers: { entities: [], byId: {} },
+  createdProducer: null,
+  errors: null,
 };
 
 export default function producersReducer(state = initialState, action = {}) {
@@ -48,10 +52,11 @@ export default function producersReducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: true,
+        createdProducer: null,
       };
 
     case LOAD_PRODUCER_SUCCESS:
-      entities = [...state.producers.entities, action.result];
+      entities = mergeResponse(state.producers.entities, action.result);
 
       return {
         ...state,
@@ -72,6 +77,8 @@ export default function producersReducer(state = initialState, action = {}) {
     case CREATE_PRODUCER:
       return {
         ...state,
+        errors: null,
+        createdProducer: null,
       };
 
     case CREATE_PRODUCER_SUCCESS:
@@ -83,23 +90,21 @@ export default function producersReducer(state = initialState, action = {}) {
           entities,
           byId: _.indexBy(entities, 'id')
         },
-        createProducerErrors: {},
+        createdProducer: action.result,
+        errors: null,
       };
 
     case CREATE_PRODUCER_FAIL:
-      const errorsKeys = Object.keys(action.error);
-      // FIXME: Extract into utils. Here we're parsing API errors.
-      // By default server returns an object with fields with erros.
-      // And each field has an array of errors. Here we're picking
-      // just first error for each field.
-      const createProducerErrors = errorsKeys.reduce((formatedErrors, key) => {
-        formatedErrors[key] = action.error[key][0];
-        return formatedErrors;
-      }, {});
-
       return {
         ...state,
-        createProducerErrors: createProducerErrors
+        errors: action.error,
+        createdProducer: null,
+      };
+
+    case RESET_CREATED_PRODUCER:
+      return {
+        ...state,
+        createdProducer: null,
       };
 
     default:
@@ -107,6 +112,9 @@ export default function producersReducer(state = initialState, action = {}) {
   }
 }
 
+/**
+ * Load producers for that group
+ */
 export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
@@ -121,9 +129,22 @@ export function loadEntity(id) {
   };
 }
 
+/**
+ * Create api call on producers
+ *
+ * @param {Object} data
+ */
 export function create(data) {
   return {
     types: [CREATE_PRODUCER, CREATE_PRODUCER_SUCCESS, CREATE_PRODUCER_FAIL],
-    promise: (client) => client.post('/producers', { data })
+    promise: (client) => client.post('/producers', { data }),
   };
+}
+
+/**
+ * After a new producer is created we reset
+ * in the store `createdProducer` key
+ */
+export function resetCreated() {
+  return { type: RESET_CREATED_PRODUCER };
 }

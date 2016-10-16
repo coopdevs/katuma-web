@@ -38,7 +38,7 @@ class Header extends Component {
 
     return (
       <div>
-        <Link to="/groups">Grupos</Link>
+        <Link to="/groups/list">Grupos</Link>
         <strong>{user.full_name}</strong>
         <button onClick={this.logout}>Salir</button>
       </div>
