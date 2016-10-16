@@ -1,4 +1,6 @@
 import _ from 'underscore';
+
+import parseParamsToQueryString from 'helpers/api/queryStringParser';
 const LOAD = 'group/memberships/LOAD';
 const LOAD_SUCCESS = 'group/memberships/LOAD_SUCCESS';
 const LOAD_FAIL = 'group/memberships/LOAD_FAIL';
@@ -42,13 +44,15 @@ export default function membershipsReducer(state = initialState, action = {}) {
 }
 
 /**
- * Load all memberships of a group
+ * Load all memberships
  *
  * @param {Number} groupId
  */
 export function load(groupId) {
+  const params = parseParamsToQueryString({ group_id: groupId });
+
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get(`/memberships?basic_resource_group_id=${groupId}`)
+    promise: (client) => client.get(`/memberships${params}`)
   };
 }

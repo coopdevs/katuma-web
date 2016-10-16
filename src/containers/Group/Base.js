@@ -9,6 +9,7 @@ import { loadGroup } from 'redux/modules/groups/groups';
 import { load as loadUsers } from 'redux/modules/users/users';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
 
+import Header from '../Header';
 import Sidebar from './Sidebar';
 
 export default class GroupBase extends Component {
@@ -30,6 +31,8 @@ export default class GroupBase extends Component {
 
     return (
       <div>
+        <Header />
+
         <h1>{group.name}</h1>
         <Sidebar group={group} />
         {React.cloneElement(
