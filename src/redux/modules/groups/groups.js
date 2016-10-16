@@ -55,7 +55,7 @@ export default function groupsReducer(state = initialState, action = {}) {
       };
 
     case LOAD_GROUPS_SUCCESS:
-      entities = mergeResponse(state.groups.entities, action.result);
+      entities = action.result;
 
       return {
         ...state,
