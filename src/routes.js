@@ -125,8 +125,9 @@ export default (store) => {
           <Route path=":id" component={GroupBase}>
             <IndexRoute component={GroupMembers}/>
             <Route path="members" component={GroupMembers}/>
-            <Route path="producers" component={GroupProducersBase}/>
-            <Route path="producers/:producer_id" component={GroupProducersDetails}/>
+            <Route path="producers" component={GroupProducersBase}>
+              <Route path=":producer_id" component={GroupProducersDetails}/>
+            </Route>
           </Route>
         </Route>
 

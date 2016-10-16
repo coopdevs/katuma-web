@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { isSupplier } from 'presenters/producer';
 
@@ -17,6 +18,7 @@ class Item extends Component {
 
     return (
       <div>
+        <Link to={`/groups/1/producers/${producer.id}`}>hola</Link>
         {`${producer.name} - `}
 
         <span>{editText} </span>
