@@ -6,9 +6,12 @@ const LOAD_FAIL = 'redux-example/suppliers/LOAD_FAIL';
 const LOAD_SUPPLIER = 'redux-example/suppliers/LOAD_SUPPLIER';
 const LOAD_SUPPLIER_SUCCESS = 'redux-example/suppliers/LOAD_SUPPLIER_SUCCESS';
 const LOAD_SUPPLIER_FAIL = 'redux-example/suppliers/LOAD_SUPPLIER_FAIL';
-const CREATE_SUPPLIER = 'redux-example/producers/CREATE_SUPPLIER';
-const CREATE_SUPPLIER_SUCCESS = 'redux-example/producers/CREATE_SUPPLIER_SUCCESS';
-const CREATE_SUPPLIER_FAIL = 'redux-example/producers/CREATE_SUPPLIER_FAIL';
+const CREATE_SUPPLIER = 'redux-example/suppliers/CREATE_SUPPLIER';
+const CREATE_SUPPLIER_SUCCESS = 'redux-example/suppliers/CREATE_SUPPLIER_SUCCESS';
+const CREATE_SUPPLIER_FAIL = 'redux-example/suppliers/CREATE_SUPPLIER_FAIL';
+const DELETE_SUPPLIER = 'redux-example/suppliers/DELETE_SUPPLIER';
+const DELETE_SUPPLIER_SUCCESS = 'redux-example/suppliers/DELETE_SUPPLIER_SUCCESS';
+const DELETE_SUPPLIER_FAIL = 'redux-example/suppliers/DELETE_SUPPLIER_FAIL';
 
 const initialState = {
   suppliers: { entities: [], byId: {}, byGroupId: {} },
@@ -83,7 +86,7 @@ export default function suppliersReducer(state = initialState, action = {}) {
 
       return {
         ...state,
-        producers: {
+        suppliers: {
           entities,
           byId: _.indexBy(entities, 'id'),
           byGroupId: _.groupBy(entities, 'group_id'),
@@ -97,6 +100,22 @@ export default function suppliersReducer(state = initialState, action = {}) {
         errors: action.error,
       };
 
+    case DELETE_SUPPLIER_SUCCESS:
+      entities = _.reject(state.suppliers.entities, (supplier) => {
+        return supplier.id === action.requestData.id;
+      });
+
+      return {
+        ...state,
+        suppliers: {
+          entities,
+          byId: _.indexBy(entities, 'id'),
+          byGroupId: _.groupBy(entities, 'group_id'),
+        },
+      };
+
+    case DELETE_SUPPLIER:
+    case DELETE_SUPPLIER_FAIL:
     default:
       return state;
   }
@@ -130,5 +149,18 @@ export function create(data) {
   return {
     types: [CREATE_SUPPLIER, CREATE_SUPPLIER_SUCCESS, CREATE_SUPPLIER_FAIL],
     promise: (client) => client.post('/suppliers', { data }),
+  };
+}
+
+/**
+ * Delete supplier
+ *
+ * @param {Number} id
+ */
+export function destroy(id) {
+  return {
+    types: [DELETE_SUPPLIER, DELETE_SUPPLIER_SUCCESS, DELETE_SUPPLIER_FAIL],
+    promise: (client) => client.delete(`/suppliers/${id}`, { data: { id }}),
+    requestData: { id }
   };
 }

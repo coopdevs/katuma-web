@@ -1,9 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import { compose } from 'redux';
+import { asyncConnect } from 'redux-async-connect';
 
-import { create } from 'redux/modules/suppliers/suppliers';
+import { load as loadSuppliers, create } from 'redux/modules/suppliers/suppliers';
+import { load as loadProducers } from 'redux/modules/producers/producers';
 
+import { producersByStatus } from './selectors';
 import Item from './Item';
 import CreateProducerModal from './CreateProducerModal';
 import { isRole } from 'presenters/member';
@@ -12,7 +16,8 @@ import Button from 'components/Button';
 class List extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
-    producers: PropTypes.array.isRequired,
+    activeProducers: PropTypes.array.isRequired,
+    inactiveProducers: PropTypes.array.isRequired,
     group: PropTypes.object.isRequired,
     createSupplier: PropTypes.func.isRequired,
   }
@@ -82,19 +87,40 @@ class List extends Component {
   }
 
   /**
-   * Render producers list
+   * Render in-active producers list
    */
-  renderProducersList() {
-    const { producers, group } = this.props;
+  renderInactiveProducers() {
+    const { inactiveProducers, user, group } = this.props;
 
-    if (!producers.length) return (<span>Ningun productor en este grupo</span>);
+    if (!inactiveProducers.length) return (<span>Ningun productor inactivo</span>);
 
     return (
       <ul>
-        {producers.map((producer) => {
+        {inactiveProducers.map((producer) => {
           return (
             <li key={producer.id}>
-              <Item producer={producer} group={group} />
+              <Item user={user} producer={producer} group={group} />
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  /**
+   * Render active producers list
+   */
+  renderActiveProducers() {
+    const { user, activeProducers, group } = this.props;
+
+    if (!activeProducers.length) return (<span>Ningun productor activo</span>);
+
+    return (
+      <ul>
+        {activeProducers.map((producer) => {
+          return (
+            <li key={producer.id}>
+              <Item user={user} producer={producer} group={group} />
             </li>
           );
         })}
@@ -111,10 +137,36 @@ class List extends Component {
 
         <h3>Productores</h3>
         {this.renderCreateProducer()}
-        {this.renderProducersList()}
+        <h4>Activos</h4>
+        {this.renderActiveProducers()}
+        <h4>Inactivos</h4>
+        {this.renderInactiveProducers()}
       </div>
     );
   }
 }
 
-export default connect(() => ({}), { createSupplier: create })(List);
+const mapStateToProps = (_state, ownProps) => {
+  return (state) => {
+    const selector = producersByStatus();
+    const { activeProducers, inactiveProducers } = selector(state, ownProps);
+
+    return { activeProducers, inactiveProducers };
+  };
+};
+
+const asyncConnectProps = [{
+  promise: ({ store: { dispatch }, params: { id } }) => {
+    const promises = [];
+
+    promises.push(dispatch(loadProducers(id)));
+    promises.push(dispatch(loadSuppliers(id)));
+
+    return Promise.all(promises);
+  },
+}];
+
+export default compose(
+  asyncConnect(asyncConnectProps),
+  connect(mapStateToProps, { createSupplier: create })
+)(List);

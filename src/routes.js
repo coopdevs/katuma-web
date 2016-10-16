@@ -11,6 +11,7 @@ import {
   Login,
   Signup,
   SignupComplete,
+  GroupsBase,
   GroupsList,
   GroupBase,
   GroupMembers,
@@ -120,7 +121,8 @@ export default (store) => {
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
-        <Route path="groups" onEnter={redirectToGroupsDetail}>
+      <Route path="groups" component={GroupsBase} onEnter={redirectToGroupsDetail}>
+          <IndexRoute component={GroupsList} />
           <Route path="list" component={GroupsList} />
 
           <Route path=":id" component={GroupBase}>
