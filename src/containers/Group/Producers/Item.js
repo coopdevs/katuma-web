@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { isSupplier } from 'presenters/producer';
 
@@ -11,15 +12,18 @@ class Item extends Component {
   }
 
   render() {
-    const { producer, suppliers } = this.props;
-    const editText = producer.can_edit === true ? 'editar - ' : '';
+    const { producer, suppliers, group } = this.props;
+    const editText = producer.can_edit === true ? ' - editar - ' : ' - ';
     const workingWithThisProducer = isSupplier(producer, suppliers) ? 'si' : 'no';
 
     return (
       <div>
-        {`${producer.name} - `}
+        <Link to={`/groups/${group.id}/producers/${producer.id}`}>
+          {producer.name}
+        </Link>
 
-        <span>{editText} </span>
+        {editText}
+
         <span>{`Trabajando con el: ${workingWithThisProducer}`}</span>
       </div>
     );

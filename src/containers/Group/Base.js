@@ -12,7 +12,7 @@ import { load as loadMemberships } from 'redux/modules/groups/memberships';
 import Header from '../Header';
 import Sidebar from './Sidebar';
 
-export default class GroupBase extends Component {
+export default class Base extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
@@ -75,4 +75,4 @@ const asyncConnectProps = [{
 export default compose(
   asyncConnect(asyncConnectProps),
   connect(mapStateToProps)
-)(GroupBase);
+)(Base);

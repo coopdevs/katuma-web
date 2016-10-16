@@ -6,21 +6,22 @@ import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
 
 import {
-    App,
-    Home,
-    Login,
-    Signup,
-    SignupComplete,
-    GroupsList,
-    GroupBase,
-    GroupMembers,
-    GroupProducersBase,
-    GroupProducersDetails,
-    OnboardingCreateGroup,
-    OnboardingInvitations,
-    InvitationComplete,
-    NotFound,
-  } from 'containers';
+  App,
+  Home,
+  Login,
+  Signup,
+  SignupComplete,
+  GroupsList,
+  GroupBase,
+  GroupMembers,
+  GroupProducersBase,
+  GroupProducersList,
+  GroupProducersDetails,
+  OnboardingCreateGroup,
+  OnboardingInvitations,
+  InvitationComplete,
+  NotFound,
+} from 'containers';
 
 /**
  * Go to group detail if user only has 1 membership
@@ -125,8 +126,10 @@ export default (store) => {
           <Route path=":id" component={GroupBase}>
             <IndexRoute component={GroupMembers}/>
             <Route path="members" component={GroupMembers}/>
-            <Route path="producers" component={GroupProducersBase}/>
-            <Route path="producers/:producer_id" component={GroupProducersDetails}/>
+            <Route path="producers" component={GroupProducersBase}>
+              <IndexRoute component={GroupProducersList} />
+              <Route path=":producer_id" component={GroupProducersDetails}/>
+            </Route>
           </Route>
         </Route>
 
