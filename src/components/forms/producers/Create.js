@@ -57,14 +57,6 @@ class CreateProducerForm extends Component {
             setInitialFocus
           />
           <Field
-            name="email"
-            component={Input}
-            placeholder="Email del productor"
-            label="Email"
-            type="text"
-            errorsAlways
-          />
-          <Field
             name="address"
             component={Input}
             placeholder="Direccion del productor. Calle, localidad, provincia,..."
