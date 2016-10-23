@@ -48,7 +48,12 @@ label {
   .close {
     font-size: 40px;
     font-weight: lighter;
+    margin-top: -10px;
   }
+}
+
+.modal-title {
+  font-size: 1.6em;
 }
 
 .modal-body {
@@ -70,4 +75,16 @@ label {
 a.btn,
 a.btn:hover {
   text-decoration: none;
+}
+
+.nav-tabs {
+  > li {
+    > a {
+      text-decoration: none;
+    }
+  }
+  &--centered {
+    display: flex;
+    justify-content: center;
+  }
 }

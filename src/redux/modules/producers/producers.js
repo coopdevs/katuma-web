@@ -9,13 +9,18 @@ const LOAD_PRODUCER_FAIL = 'redux-example/producers/LOAD_PRODUCER_FAIL';
 const CREATE_PRODUCER = 'redux-example/producers/CREATE_PRODUCER';
 const CREATE_PRODUCER_SUCCESS = 'redux-example/producers/CREATE_PRODUCER_SUCCESS';
 const CREATE_PRODUCER_FAIL = 'redux-example/producers/CREATE_PRODUCER_FAIL';
-const RESET_CREATED_PRODUCER = 'redux-example/producers/RESET_CREATED_PRODUCER';
+const EDIT_PRODUCER = 'redux-example/producers/EDIT_PRODUCER';
+const EDIT_PRODUCER_SUCCESS = 'redux-example/producers/EDIT_PRODUCER_SUCCESS';
+const EDIT_PRODUCER_FAIL = 'redux-example/producers/EDIT_PRODUCER_FAIL';
+const RESET_PRODUCER_FORM = 'redux-example/producers/RESET_PRODUCER_FORM';
 
 import mergeResponse from 'redux/lib/merge';
 
 const initialState = {
   producers: { entities: [], byId: {} },
   createdProducer: null,
+  editedProducer: false,
+  error: null,
   errors: null,
 };
 
@@ -53,6 +58,7 @@ export default function producersReducer(state = initialState, action = {}) {
         ...state,
         loading: true,
         createdProducer: null,
+        errors: null,
       };
 
     case LOAD_PRODUCER_SUCCESS:
@@ -101,10 +107,38 @@ export default function producersReducer(state = initialState, action = {}) {
         createdProducer: null,
       };
 
-    case RESET_CREATED_PRODUCER:
+    case EDIT_PRODUCER:
+      return {
+        ...state,
+        errors: null,
+        editedProducer: false,
+      };
+
+    case EDIT_PRODUCER_SUCCESS:
+      entities = mergeResponse(state.producers.entities, action.result);
+
+      return {
+        ...state,
+        producers: {
+          entities,
+          byId: _.indexBy(entities, 'id')
+        },
+        editedProducer: true,
+        errors: null,
+      };
+
+    case EDIT_PRODUCER_FAIL:
+      return {
+        ...state,
+        errors: action.error,
+        editedProducer: false,
+      };
+
+    case RESET_PRODUCER_FORM:
       return {
         ...state,
         createdProducer: null,
+        editedProducer: false,
       };
 
     default:
@@ -142,9 +176,20 @@ export function create(data) {
 }
 
 /**
- * After a new producer is created we reset
- * in the store `createdProducer` key
+ * Edit api call on producers
+ *
+ * @param {Object} data
  */
-export function resetCreated() {
-  return { type: RESET_CREATED_PRODUCER };
+export function edit(id, data) {
+  return {
+    types: [EDIT_PRODUCER, EDIT_PRODUCER_SUCCESS, EDIT_PRODUCER_FAIL],
+    promise: (client) => client.put(`/producers/${id}`, { data }),
+  };
+}
+
+/**
+ * Reset errors when create/edit a producer
+ */
+export function resetForm() {
+  return { type: RESET_PRODUCER_FORM };
 }

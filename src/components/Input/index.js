@@ -8,13 +8,15 @@ import styles from './styles/index.scss';
  *
  * @param {String} error
  * @param {String} type
+ * @param {Boolean} isLast
  * @param {Sting}
  */
-function getInputClasses(error, type) {
+function getInputClasses(error, type, isLast) {
   return classNames({
     'form-group': true,
     'has-error': !!error,
     'hidden': type === 'hidden',
+    [styles.input_last]: isLast,
   });
 }
 
@@ -45,6 +47,7 @@ class Input extends Component {
     errorsAlways: PropTypes.bool,
     setInitialFocus: PropTypes.bool,
     meta: PropTypes.object,
+    isLast: PropTypes.bool,
   }
 
   componentDidMount() {
@@ -56,7 +59,7 @@ class Input extends Component {
   render() {
     const {
       input, name, type, label, placeholder,
-      errorsAlways, rows,
+      errorsAlways, rows, isLast,
       meta: { touched, error }
     } = this.props;
 
@@ -74,7 +77,7 @@ class Input extends Component {
     const hasErrors = errorsAlways ? !!error : touched && !!error;
 
     return (
-      <div className={getInputClasses(error, type)}>
+      <div className={getInputClasses(error, type, isLast)}>
         <label htmlFor={name}>{label}</label>
         {element === 'input' && <input {...elementProps} />}
         {element === 'textarea' && <textarea rows={rows} {...elementProps} />}
