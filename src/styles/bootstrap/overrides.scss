@@ -1,4 +1,4 @@
-@import "../_katuma-colors.scss";
+@import "../variables.scss";
 
 /**
  * Override Bootstrap styles that you can't modify via variables here.
@@ -76,13 +76,13 @@ a.btn,
 a.btn:hover {
   text-decoration: none;
 }
-
 .nav-tabs {
   > li {
     > a {
       text-decoration: none;
     }
   }
+
   &--centered {
     display: flex;
     justify-content: center;

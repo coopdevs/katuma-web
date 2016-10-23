@@ -1,4 +1,5 @@
-@import "./_katuma-colors.scss";
+@import "./_katuma-variables.scss";
+@import "./_katuma-mixins.scss";
 
 //
 // Boostrap Variables
@@ -52,7 +53,7 @@ $link-hover-decoration: underline !default;
 //## Font, line-height, and color for body text, headings, and more.
 
 $font-family-sans-serif:  "Open Sans", Arial, sans-serif !default;
-$font-family-serif:       "Libre Baskerville", Times, serif !default;
+$font-family-serif:       "Roboto Slab", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
 $font-family-base:        $font-family-sans-serif !default;

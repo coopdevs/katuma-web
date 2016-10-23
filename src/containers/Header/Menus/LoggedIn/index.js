@@ -33,17 +33,19 @@ class LoggedInMenu extends Component {
     if (!user) return null;
 
     return (
-      <ul>
-        <li>
-          <Link to="/groups">Grupos</Link>
-        </li>
-        <li>
-          <strong>{user.full_name}</strong>
-        </li>
-        <li>
-          <Button onClick={this.logout}>Salir</Button>
-        </li>
-      </ul>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/groups">Grupos</Link>
+          </li>
+          <li>
+            <strong>{user.full_name}</strong>
+          </li>
+          <li>
+            <Button onClick={this.logout}>Salir</Button>
+          </li>
+        </ul>
+      </nav>
     );
   }
 }

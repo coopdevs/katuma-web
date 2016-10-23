@@ -1,0 +1,41 @@
+// Mixins
+// --------------------------------------------------
+/**
+ *  Define custom mixins
+ *  (not provided by Bootstrap).
+ *
+ */
+
+
+// Sizing shortcuts
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+// Reset default list styles
+@mixin list-reset() {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  > dt,
+  > dd {
+    margin-left: 0;
+  }
+}
+
+// Turns list items into inline-block
+@mixin list-inline($pad-left: $space-byte, $pad-right: $space-byte) {
+  @include list-reset;
+  > li {
+    display: inline-block;
+    padding-left: $pad-left;
+    padding-right: $pad-right;
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+}

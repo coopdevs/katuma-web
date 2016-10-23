@@ -61,22 +61,24 @@ class LoggedOutMenu extends Component {
     if (user) return null;
 
     return (
-      <ul>
-        <li>
-          <Button linkLookAndFeel onClick={this.openLogin}>Grupos</Button>
-        </li>
-        <li>
-          <Button onClick={this.openLogin}>Entrar</Button>
-        </li>
-        <li>
-          <Button primary onClick={this.openSignup}>Registrate</Button>
-        </li>
-        <UserAccessModal
-          showModal={showModal}
-          modalType={modalType}
-          onCloseModal={this.onCloseModal}
-        />
-      </ul>
+      <nav>
+        <ul>
+          <li>
+            <Button linkLookAndFeel onClick={this.openLogin}>Grupos</Button>
+          </li>
+          <li>
+            <Button onClick={this.openLogin}>Entrar</Button>
+          </li>
+          <li>
+            <Button primary onClick={this.openSignup}>Registrarse</Button>
+          </li>
+          <UserAccessModal
+            showModal={showModal}
+            modalType={modalType}
+            onCloseModal={this.onCloseModal}
+          />
+        </ul>
+      </nav>
     );
   }
 }

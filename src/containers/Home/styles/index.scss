@@ -19,12 +19,11 @@ $jambotron_scale: 0.8rem;
   padding: 0;
 }
 
-.header {
+.heading {
   // We set base font in header
   font-size: $jambotron_scale;
-  font-family: 'Roboto Slab', serif;
+  font-family: $font-family-serif;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 1);
-
   padding: 4.5em $jambotron_inner_padding 0 $jambotron_inner_padding;
 
   h1 {

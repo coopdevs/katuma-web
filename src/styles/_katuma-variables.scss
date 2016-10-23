@@ -1,0 +1,57 @@
+//
+// Katuma Variables
+// --------------------------------------------------
+/**
+ *  Define scss variables for custom elements
+ *  (not provided by Bootstrap).
+ *
+ */
+
+
+//== Colors
+//
+//## Gray and brand colors for use across Bootstrap.
+
+// Greyscale palette
+$gray_1: #111;
+$gray_2: #222;
+$gray_3: #333;
+$gray_4: #444;
+$gray_5: #555;
+$gray_6: #666;
+$gray_7: #777;
+$gray_8: #888;
+$gray_9: #999;
+$gray_10: #aaa;
+$gray_11: #bbb;
+$gray_12: #ccc;
+$gray_13: #ddd;
+$gray_14: #e2e2e2;
+$gray_15: #f2f2f2;
+
+// Katuma colors
+$katuma_primary: $gray_2;
+$katuma_active: #1bbb96;
+$katuma_soft_gray: $gray_15;
+
+
+//== Spacing
+//
+// ## Define common space sizes.
+
+$space-byte: 5px !default;
+$space-kilo-byte: ($space-byte * 2) !default;
+$space-mega-byte: ($space-byte * 3) !default;
+$space-giga-byte: ($space-byte * 4) !default;
+$space-tera-byte: ($space-byte * 5) !default;
+$space-peta-byte: ($space-byte * 6) !default;
+$space-exa-byte : ($space-byte * 7) !default;
+$space-zeta-byte: ($space-byte * 8) !default;
+
+
+//== Header
+//
+
+$header-height: 70px !default;
+$header-logo-size: 50px !default;
+$header-logo-font-size: ceil(($header-logo-size / 2)) !default;

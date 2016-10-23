@@ -8,11 +8,11 @@ import styles from './styles/index.scss';
 
 const Header = () => {
   return (
-    <div className={styles.navigation}>
+    <div className={styles.header}>
       <div className="wrap container-fluid">
         <div className="row">
           <div className="col-xs-6">
-            <IndexLink to="/" className={styles.navigation__logo}>K</IndexLink>
+            <IndexLink to="/" className={styles.header__logo}>K</IndexLink>
           </div>
           <div className="col-xs-6">
             <LoggedIn />
