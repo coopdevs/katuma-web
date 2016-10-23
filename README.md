@@ -54,6 +54,7 @@ Put `debugger` in the server code you want to debug and then run this on a Termi
 #### Frontend (Node JS)
 
     $ cd ~/Sites/coopdevs/katuma/web
+    $ nvm use 4.5
     $ npm run dev
     $ localhost:8000
 
