@@ -49,7 +49,7 @@ export default function membershipsReducer(state = initialState, action = {}) {
  * @param {Number} groupId
  */
 export function load(groupId) {
-  const params = parseParamsToQueryString({ group_id: groupId });
+  const params = parseParamsToQueryString({ basic_resource_group_id: groupId });
 
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
