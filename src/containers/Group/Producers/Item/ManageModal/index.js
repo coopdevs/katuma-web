@@ -13,6 +13,8 @@ const TABS = {
   products: 'products',
 };
 
+const DEFAULT_TAB = TABS.products;
+
 class ManageModal extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
@@ -27,9 +29,10 @@ class ManageModal extends Component {
 
     this.handleTabChange = this._handleTabChange.bind(this);
     this.onClickEdit = this._onClickEdit.bind(this);
+    this.onCloseModal = this._onCloseModal.bind(this);
 
     this.state = {
-      activeTab: TABS.details,
+      activeTab: DEFAULT_TAB,
     };
   }
 
@@ -38,6 +41,23 @@ class ManageModal extends Component {
    */
   _handleTabChange(activeTab) {
     this.setState({ activeTab });
+  }
+
+  /**
+   * Trigger form submit
+   */
+  _onClickEdit() {
+    this._producer_form.submit();
+  }
+
+  /**
+   * When close modal
+   */
+  _onCloseModal() {
+    const { onCloseModal } = this.props;
+
+    this.setState({ activeTab: DEFAULT_TAB });
+    onCloseModal();
   }
 
   /**
@@ -121,10 +141,10 @@ class ManageModal extends Component {
   }
 
   render() {
-    const { producer, showModal, onCloseModal } = this.props;
+    const { producer, showModal } = this.props;
 
     return (
-      <Modal show={showModal} onHide={onCloseModal}>
+      <Modal show={showModal} onHide={this.onCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>{producer.name}</Modal.Title>
         </Modal.Header>
