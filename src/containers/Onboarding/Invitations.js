@@ -34,7 +34,7 @@ class Invitations extends Component {
 
     if (oldInvitationsSent === invitationsSent) return;
 
-    push(getNextOnboardingUrl('finish', group.id));
+    push(getNextOnboardingUrl('create_producer', group.id));
   }
 
   /**
@@ -54,7 +54,7 @@ class Invitations extends Component {
             <BulkInvitationsForm group={group} ref="bulk_invitations_form" />
             <Button
               link
-              linkTo={getNextOnboardingUrl('finish', group.id)}
+              linkTo={getNextOnboardingUrl('create_producer', group.id)}
             >Saltar paso</Button>
             <Button
               type="submit"

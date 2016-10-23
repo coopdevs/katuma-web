@@ -6,7 +6,15 @@ export InvitationComplete from './Invitation/Complete';
 export GroupsList from './Groups';
 export GroupsBase from './Groups/Base';
 export { GroupBase, GroupMembers } from './Group';
-export { GroupProducersBase, GroupProducersList, GroupProducersDetails } from './Group/Producers';
-export { OnboardingCreateGroup, OnboardingInvitations } from './Onboarding';
+export {
+  GroupProducersBase,
+  GroupProducersList,
+  GroupProducersDetails,
+} from './Group/Producers';
+export {
+  OnboardingCreateGroup,
+  OnboardingCreateProducer,
+  OnboardingInvitations,
+} from './Onboarding';
 export NotFound from './NotFound/NotFound';
 
