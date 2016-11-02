@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { reduxForm, Field, SubmissionError } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 
-import { login } from 'redux/modules/auth';
 import Input from 'components/Input';
 import LoginFooter from './Footer';
 
@@ -14,7 +13,7 @@ class LoginForm extends Component {
   render() {
     return (
       <div>
-        <div>
+        <form onSubmit={this.props.handleSubmit}>
           <Field
             name="login"
             component={Input}
@@ -32,7 +31,7 @@ class LoginForm extends Component {
             label="Password"
             type="password"
           />
-        </div>
+        </form>
         <LoginFooter
           onClickSignup={this.props.onClickSignup}
         />
@@ -41,25 +40,4 @@ class LoginForm extends Component {
   }
 }
 
-/**
- * Submit login form
- *
- * @param {Object} fields
- * @param {Function} dispatch
- */
-const onSubmit = (fields, dispatch) => {
-  return dispatch(login(fields)).catch(() => {
-    // On /login endpoint we return a 401
-    // header response. No real error for
-    // login field. But in this case we force error
-    throw new SubmissionError({
-      login: 'Email o contraseña son incorrectos'
-    });
-  });
-};
-
-export default reduxForm({
-  form: 'login',
-  persistentSubmitErrors: true,
-  onSubmit,
-})(LoginForm);
+export default reduxForm({ form: 'login' })(LoginForm);

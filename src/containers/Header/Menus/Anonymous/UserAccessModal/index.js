@@ -1,14 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
+import { SubmissionError } from 'redux-form';
 
 import { MODAL_TYPES } from '../constants';
+import { login as loginAction } from 'redux/modules/auth';
 import LoginForm from 'components/forms/Login';
 import SignupCreateForm from 'components/forms/Signup/Create';
 import Button from 'components/Button';
 
 class UserAccessModal extends Component {
   static propTypes = {
+    login: PropTypes.func.isRequired,
     user: PropTypes.object,
     showModal: PropTypes.bool.isRequired,
     onCloseModal: PropTypes.func.isRequired,
@@ -27,6 +30,7 @@ class UserAccessModal extends Component {
     };
 
     this.onClickLogin = this._onClickLogin.bind(this);
+    this.onLoginSubmit = this._onLoginSubmit.bind(this);
     this.onClickSignup = this._onClickSignup.bind(this);
   }
 
@@ -41,6 +45,17 @@ class UserAccessModal extends Component {
 
   _onClickLogin() {
     this.refs.login_form.submit();
+  }
+
+  _onLoginSubmit(fields) {
+    return this.props.login(fields).catch(() => {
+      // On /login endpoint we return a 401
+      // header response. No real error for
+      // login field. But in this case we force error
+      throw new SubmissionError({
+        login: 'Email o contraseña son incorrectos'
+      });
+    });
   }
 
   _onClickSignup() {
@@ -92,6 +107,7 @@ class UserAccessModal extends Component {
         <LoginForm
           ref="login_form"
           onClickSignup={this.changeModalType.bind(this, MODAL_TYPES.signup)}
+          onSubmit={this.onLoginSubmit}
         />
       </div>
     );
@@ -128,13 +144,11 @@ class UserAccessModal extends Component {
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <form>
-          <Modal.Body>
-            {this.renderLoginForm()}
-            {this.renderSignupForm()}
-          </Modal.Body>
-          <Modal.Footer>{this.renderButton()}</Modal.Footer>
-        </form>
+        <Modal.Body>
+          {this.renderLoginForm()}
+          {this.renderSignupForm()}
+        </Modal.Body>
+        <Modal.Footer>{this.renderButton()}</Modal.Footer>
       </Modal>
     );
   }
@@ -165,4 +179,4 @@ const mapStateToProps = (state) => {
   return newState;
 };
 
-export default connect(mapStateToProps)(UserAccessModal);
+export default connect(mapStateToProps, { login: loginAction })(UserAccessModal);
