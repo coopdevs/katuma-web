@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { routeActions } from 'react-router-redux';
+import { browserHistory } from 'react-router';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 
@@ -17,7 +17,6 @@ class CreateGroup extends Component {
     createGroup: PropTypes.func.isRequired,
     createdGroupId: PropTypes.number,
     params: PropTypes.object.isRequired,
-    push: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -27,12 +26,12 @@ class CreateGroup extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { createdGroupId: oldCreatedGroupId, push } = this.props;
+    const { createdGroupId: oldCreatedGroupId } = this.props;
     const { createdGroupId } = newProps;
 
     if (oldCreatedGroupId === createdGroupId) return;
 
-    push(getNextOnboardingUrl('send_invitations', createdGroupId));
+    browserHistory.push(getNextOnboardingUrl('send_invitations', createdGroupId));
   }
 
   /**
@@ -59,5 +58,5 @@ const mapStateToProps = ({ groupsReducer: { createdGroupId }}) => ({ createdGrou
 
 export default compose(
   layoutCentered,
-  connect(mapStateToProps, { createGroup: create, push: routeActions.push })
+  connect(mapStateToProps, { createGroup: create })
 )(CreateGroup);

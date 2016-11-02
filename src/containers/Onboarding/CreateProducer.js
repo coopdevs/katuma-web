@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { routeActions } from 'react-router-redux';
+import { browserHistory } from 'react-router';
 import { asyncConnect } from 'redux-async-connect';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
@@ -19,7 +19,6 @@ class CreateProducer extends Component {
     group: PropTypes.object.isRequired,
     createSupplier: PropTypes.func.isRequired,
     createdGroupId: PropTypes.number,
-    push: PropTypes.func.isRequired,
     submitting: PropTypes.bool,
   };
 
@@ -46,10 +45,10 @@ class CreateProducer extends Component {
    * @param {Object} producer
    */
   _onProducerCreated(producer) {
-    const { push, createSupplier, group } = this.props;
+    const { createSupplier, group } = this.props;
 
     createSupplier({ group_id: group.id, producer_id: producer.id });
-    push(getNextOnboardingUrl('finish'));
+    browserHistory.push(getNextOnboardingUrl('finish'));
   }
 
   render() {
@@ -100,5 +99,5 @@ const mapStateToProps = (state, ownProps) => {
 export default compose(
   layoutCentered,
   asyncConnect(asyncConnectProps),
-  connect(mapStateToProps, { push: routeActions.push, createSupplier: create })
+  connect(mapStateToProps, { createSupplier: create })
 )(CreateProducer);

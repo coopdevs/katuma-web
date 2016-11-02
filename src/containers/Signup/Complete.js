@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { routeActions } from 'react-router-redux';
+import { browserHistory } from 'react-router';
 import { asyncConnect } from 'redux-async-connect';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
@@ -18,7 +18,6 @@ class SignupComplete extends Component {
     validSignup: PropTypes.bool.isRequired,
     signupDone: PropTypes.bool.isRequired,
     params: PropTypes.object.isRequired,
-    push: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -28,20 +27,20 @@ class SignupComplete extends Component {
   }
 
   componentWillMount() {
-    const { validSignup, push } = this.props;
+    const { validSignup } = this.props;
 
     if (validSignup) return;
 
-    push('/signup');
+    browserHistory.push('/signup');
   }
 
   componentWillReceiveProps(newProps) {
-    const { signupDone: oldSignupDone, push } = this.props;
+    const { signupDone: oldSignupDone } = this.props;
     const { signupDone } = newProps;
 
     if (oldSignupDone === signupDone) return;
 
-    push(getNextOnboardingUrl());
+    browserHistory.push(getNextOnboardingUrl());
   }
 
   /**
@@ -85,5 +84,5 @@ const mapStateToProps = ({ signupCompleteReducer: { validSignup, signupDone }}) 
 export default compose(
   layoutCentered,
   asyncConnect(asyncConnectProps),
-  connect(mapStateToProps, { completeSignup: complete, push: routeActions.push })
+  connect(mapStateToProps, { completeSignup: complete })
 )(SignupComplete);

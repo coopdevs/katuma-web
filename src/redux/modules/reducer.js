@@ -14,11 +14,11 @@ import productsReducer from './products/';
 import suppliersReducer from './suppliers/suppliers';
 import producersReducer from './producers/producers';
 import {reducer as form} from 'redux-form';
-import { routeReducer } from 'react-router-redux';
+import { routerReducer } from 'react-router-redux';
 import {reducer as reduxAsyncConnect} from 'redux-async-connect';
 
 const appReducers = combineReducers({
-  routing: routeReducer,
+  routing: routerReducer,
   reduxAsyncConnect,
   auth,
   signupCreateReducer,

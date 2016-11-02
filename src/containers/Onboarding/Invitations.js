@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { routeActions } from 'react-router-redux';
+import { browserHistory } from 'react-router';
 import { asyncConnect } from 'redux-async-connect';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
@@ -17,7 +17,6 @@ class Invitations extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    push: PropTypes.func.isRequired,
     invitationsSent: PropTypes.bool,
     submitting: PropTypes.bool,
   };
@@ -29,12 +28,12 @@ class Invitations extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { invitationsSent: oldInvitationsSent, push, group } = this.props;
+    const { invitationsSent: oldInvitationsSent, group } = this.props;
     const { invitationsSent } = newProps;
 
     if (oldInvitationsSent === invitationsSent) return;
 
-    push(getNextOnboardingUrl('create_producer', group.id));
+    browserHistory.push(getNextOnboardingUrl('create_producer', group.id));
   }
 
   /**
@@ -102,5 +101,5 @@ const mapStateToProps = (state, ownProps) => {
 export default compose(
   layoutCentered,
   asyncConnect(asyncConnectProps),
-  connect(mapStateToProps, { push: routeActions.push })
+  connect(mapStateToProps)
 )(Invitations);

@@ -62,8 +62,8 @@ app.use((req, res, next) => {
   }
 
   const client = new ApiHttp(req.session.user_id);
+  const store = createStore(client);
   const history = createHistory(req.originalUrl);
-  const store = createStore(history, client);
 
   function hydrateOnClient() {
     res.send('<!doctype html>\n' +
