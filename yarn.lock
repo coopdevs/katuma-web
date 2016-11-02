@@ -1561,7 +1561,7 @@ fastparse@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/fastparse/-/fastparse-1.1.1.tgz#d1e2643b38a94d7583b479060e6c4affc94071f8"
 
-fbjs@^0.8.0:
+fbjs@^0.8.4:
   version "0.8.5"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.5.tgz#f69ba8a876096cb1b9bffe4d7c1e71c19d39d008"
   dependencies:
@@ -3668,9 +3668,9 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
-react-dom@15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.0.0.tgz#49a91a663d8ff9f699eb4997f0027ead8abe0d44"
+react-dom@15.3.2:
+  version "15.3.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.3.2.tgz#c46b0aa5380d7b838e7a59c4a7beff2ed315531f"
 
 react-helmet@3.1.0:
   version "3.1.0"
@@ -3746,13 +3746,13 @@ react-transform-hmr@1.0.1:
     global "^4.3.0"
     react-proxy "^1.1.1"
 
-react@15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.0.0.tgz#3c7e16531d630e15c1a50a947f14ba61746af8a7"
+react@15.3.2:
+  version "15.3.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.3.2.tgz#a7bccd2fee8af126b0317e222c28d1d54528d09e"
   dependencies:
-    fbjs "^0.8.0"
+    fbjs "^0.8.4"
     loose-envify "^1.1.0"
-    object-assign "^4.0.1"
+    object-assign "^4.1.0"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -3902,9 +3902,9 @@ redux-async-connect@enricostano/redux-async-connect#fix/precompiled-lib:
   version "1.0.0-rc4"
   resolved "https://codeload.github.com/enricostano/redux-async-connect/tar.gz/c1d9934a1c4a196cd2e5930b9b6d798accc3ede5"
 
-redux-form@6.0.5:
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.0.5.tgz#c40082f861c18798ae0be011bc56d3d98a1f03ad"
+redux-form@6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.1.1.tgz#0a007d64abf1373962ed1fde90001ec433b0c28a"
   dependencies:
     array-findindex-polyfill "^0.1.0"
     deep-equal "^1.0.1"
