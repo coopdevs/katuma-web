@@ -7,6 +7,7 @@ import { asyncConnect } from 'redux-async-connect';
 import layoutCentered from 'components/HOC/LayoutCentered';
 import Button from 'components/Button';
 
+import { send } from 'redux/modules/invitations/bulk';
 import BulkInvitationsForm, { BULK_INVITATIONS_FORM }from 'components/forms/invitations/Bulk';
 
 import { getNextOnboardingUrl } from './services';
@@ -16,6 +17,7 @@ import { loadGroup } from 'redux/modules/groups/groups';
 class Invitations extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
+    sendBulk: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     invitationsSent: PropTypes.bool,
     submitting: PropTypes.bool,
@@ -24,6 +26,7 @@ class Invitations extends Component {
   constructor(props) {
     super(props);
 
+    this.onSubmitSendBulk = this._onSubmitSendBulk.bind(this);
     this.onClickSendInvitations = this._onClickSendInvitations.bind(this);
   }
 
@@ -43,25 +46,43 @@ class Invitations extends Component {
     this.refs.bulk_invitations_form.submit();
   }
 
+  /**
+   * Send bulk invitations
+   *
+   * @param {Object} fields
+   */
+  _onSubmitSendBulk(fields) {
+    const { group: { id }, sendBulk } = this.props;
+    const data = {...fields, group_id: id };
+
+    return sendBulk(data);
+  }
+
   render() {
     const { submitting, group } = this.props;
 
     return (
       <div className={styles.layoutCentered}>
         <div className={styles.layoutCentered__body}>
-          <form>
-            <BulkInvitationsForm group={group} ref="bulk_invitations_form" />
-            <Button
-              link
-              linkTo={getNextOnboardingUrl('create_producer', group.id)}
-            >Saltar paso</Button>
-            <Button
-              type="submit"
-              primary
-              processing={submitting}
-              onClick={this.onClickSendInvitations}
-            >Enviar Invitaciones</Button>
-          </form>
+          <BulkInvitationsForm
+            group={group}
+            ref="bulk_invitations_form"
+            onSubmit={this.onSubmitSendBulk}
+          />
+          <Button
+            link
+            linkTo={getNextOnboardingUrl('create_producer', group.id)}
+          >
+            Saltar paso
+          </Button>
+          <Button
+            type="submit"
+            primary
+            processing={submitting}
+            onClick={this.onClickSendInvitations}
+          >
+            Enviar Invitaciones
+          </Button>
         </div>
       </div>
     );
@@ -101,5 +122,5 @@ const mapStateToProps = (state, ownProps) => {
 export default compose(
   layoutCentered,
   asyncConnect(asyncConnectProps),
-  connect(mapStateToProps)
+  connect(mapStateToProps, { sendBulk: send })
 )(Invitations);

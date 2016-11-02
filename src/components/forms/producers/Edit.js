@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, stopSubmit } from 'redux-form';
 
-import { edit as editProducer, resetForm as resetProducerForm} from 'redux/modules/producers/producers';
+import { resetForm as resetProducerForm} from 'redux/modules/producers/producers';
 
 import Fields from './Fields';
 
@@ -14,6 +14,7 @@ class EditProducerForm extends Component {
     producer: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     stopSubmit: PropTypes.func.isRequired,
     errors: PropTypes.object,
     editedProducer: PropTypes.bool,
@@ -43,32 +44,18 @@ class EditProducerForm extends Component {
   }
 
   render() {
-    return (<Fields />);
+    return (
+      <form onSubmit={this.props.handleSubmit}>
+        <Fields />
+      </form>
+    );
   }
 }
-
-/**
- * Edit producer form
- *
- * @param {Object} fields
- * @param {Function} dispatch
- * @param {Object} props
- */
-const onSubmit = (fields, dispatch, props) => {
-  const { producer } = props;
-  return dispatch(editProducer(producer.id, fields));
-};
-
-const reduxFormProps = {
-  form: EDIT_PRODUCER_FORM,
-  persistentSubmitErrors: true,
-  onSubmit,
-};
 
 const mapStateToProps = ({ producersReducer: { editedProducer, errors } }) =>
   ({ editedProducer, errors });
 
 export default compose(
-  reduxForm(reduxFormProps),
+  reduxForm({ form: EDIT_PRODUCER_FORM }),
   connect(mapStateToProps, { stopSubmit, resetForm: resetProducerForm})
 )(EditProducerForm);

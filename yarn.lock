@@ -4130,12 +4130,6 @@ sax@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.1.tgz#7b8e656190b228e81a66aea748480d828cd2d37a"
 
-scroll-behavior@^0.3.2:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/scroll-behavior/-/scroll-behavior-0.3.4.tgz#ea97ed081a6983402d25c1a3647f3e3d4e32c8ea"
-  dependencies:
-    dom-helpers "^2.4.0"
-
 semver@^4.3.4, "semver@2 || 3 || 4":
   version "4.3.6"
   resolved "https://registry.yarnpkg.com/semver/-/semver-4.3.6.tgz#300bc6e0e86374f7ba61068b5b1ecd57fc6532da"

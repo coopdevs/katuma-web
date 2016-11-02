@@ -5,6 +5,7 @@ import { SubmissionError } from 'redux-form';
 
 import { MODAL_TYPES } from '../constants';
 import { login as loginAction } from 'redux/modules/auth';
+import { signup as signupAction } from 'redux/modules/signup/create';
 import LoginForm from 'components/forms/Login';
 import SignupCreateForm from 'components/forms/Signup/Create';
 import Button from 'components/Button';
@@ -12,6 +13,7 @@ import Button from 'components/Button';
 class UserAccessModal extends Component {
   static propTypes = {
     login: PropTypes.func.isRequired,
+    signup: PropTypes.func.isRequired,
     user: PropTypes.object,
     showModal: PropTypes.bool.isRequired,
     onCloseModal: PropTypes.func.isRequired,
@@ -32,6 +34,7 @@ class UserAccessModal extends Component {
     this.onClickLogin = this._onClickLogin.bind(this);
     this.onLoginSubmit = this._onLoginSubmit.bind(this);
     this.onClickSignup = this._onClickSignup.bind(this);
+    this.onSignupSubmit = this._onSignupSubmit.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -56,6 +59,10 @@ class UserAccessModal extends Component {
         login: 'Email o contraseña son incorrectos'
       });
     });
+  }
+
+  _onSignupSubmit(fields) {
+    return this.props.signup(fields);
   }
 
   _onClickSignup() {
@@ -127,6 +134,7 @@ class UserAccessModal extends Component {
       <div>
         <SignupCreateForm
           ref="signup_form"
+          onSubmit={this.onSignupSubmit}
           onClickLogin={this.changeModalType.bind(this, MODAL_TYPES.login)}
         />
       </div>
@@ -179,4 +187,7 @@ const mapStateToProps = (state) => {
   return newState;
 };
 
-export default connect(mapStateToProps, { login: loginAction })(UserAccessModal);
+export default connect(
+  mapStateToProps,
+  { login: loginAction, signup: signupAction }
+)(UserAccessModal);

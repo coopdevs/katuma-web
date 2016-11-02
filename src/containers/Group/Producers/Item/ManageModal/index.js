@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Nav, NavItem, Modal } from 'react-bootstrap';
 
 import Button from 'components/Button';
+import { edit } from 'redux/modules/producers/producers';
 import EditProducerForm, { EDIT_PRODUCER_FORM } from 'components/forms/producers/Edit';
 import Products from '../Products/Base';
 
@@ -17,6 +18,7 @@ const DEFAULT_TAB = TABS.products;
 
 class ManageModal extends Component {
   static propTypes = {
+    editProducer: PropTypes.func.isRequired,
     group: PropTypes.object.isRequired,
     producer: PropTypes.object.isRequired,
     showModal: PropTypes.bool.isRequired,
@@ -29,6 +31,7 @@ class ManageModal extends Component {
 
     this.handleTabChange = this._handleTabChange.bind(this);
     this.onClickEdit = this._onClickEdit.bind(this);
+    this.onSubmitEditProducer = this._onSubmitEditProducer.bind(this);
     this.onCloseModal = this._onCloseModal.bind(this);
 
     this.state = {
@@ -44,10 +47,14 @@ class ManageModal extends Component {
   }
 
   /**
-   * Trigger form submit
+   * Submit edit producer form
+   *
+   * @param {Object} fields
    */
-  _onClickEdit() {
-    this._producer_form.submit();
+  _onSubmitEditProducer(fields) {
+    const { producer, editProducer } = props;
+
+    return editProducer(producer.id, fields);
   }
 
   /**
@@ -92,14 +99,15 @@ class ManageModal extends Component {
     const { producer } = this.props;
 
     return (
-        <EditProducerForm
-          ref={(domNode) => this._producer_form = domNode}
-          producer={producer}
-          initialValues={{
-            name: producer.name,
-            address: producer.address,
-          }}
-        />
+      <EditProducerForm
+        ref={(domNode) => this._producer_form = domNode}
+        producer={producer}
+        initialValues={{
+          name: producer.name,
+          address: producer.address,
+        }}
+        onSubmit={this.onSubmitEditProducer}
+      />
     );
   }
 
@@ -149,17 +157,15 @@ class ManageModal extends Component {
           <Modal.Title>{producer.name}</Modal.Title>
         </Modal.Header>
 
-        <form>
-          <Modal.Body>
-            {this.renderNavigation()}
-            <div className={styles.content}>
-              {this.renderDetails()}
-              {this.renderProducts()}
-            </div>
-          </Modal.Body>
+        <Modal.Body>
+          {this.renderNavigation()}
+          <div className={styles.content}>
+            {this.renderDetails()}
+            {this.renderProducts()}
+          </div>
+        </Modal.Body>
 
-          {this.renderFooterModal()}
-        </form>
+        {this.renderFooterModal()}
       </Modal>
     );
   }
@@ -174,4 +180,4 @@ const mapStateToProps = ({ form: allForms }) => {
   return { submitting: form.submitting };
 };
 
-export default connect(mapStateToProps)(ManageModal);
+export default connect(mapStateToProps, { editProducer: edit })(ManageModal);

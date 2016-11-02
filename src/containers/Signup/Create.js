@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import { signup as signupAction } from 'redux/modules/signup/create';
 import SignupCreateForm from 'components/forms/Signup/Create';
 import Button from 'components/Button';
 
@@ -8,11 +9,14 @@ import styles from '../../styles/layouts/index.scss';
 
 class SignupCreate extends Component {
   static propTypes = {
+    signup: PropTypes.func.isRequired,
     submitting: PropTypes.bool,
   };
 
   constructor(props) {
     super(props);
+
+    this.onSignupSubmit = this._onSignupSubmit.bind(this);
     this.onClickSignup = this._onClickSignup.bind(this);
   }
 
@@ -22,22 +26,29 @@ class SignupCreate extends Component {
     this.refs.signup_form.submit();
   }
 
+  _onSignupSubmit(fields) {
+    return this.props.signup(fields);
+  }
+
   render() {
     const { submitting } = this.props;
 
     return (
       <div className={styles.layoutCentered}>
         <div className={styles.layoutCentered__body}>
-          <form>
-            <SignupCreateForm ref="signup_form" />
+          <SignupCreateForm
+            ref="signup_form"
+            onSubmit={this.onSignupSubmit}
+          />
 
-            <Button
-              primary
-              processing={submitting}
-              onClick={this.onClickSignup}
-              type="submit"
-            >Crear cuenta</Button>
-          </form>
+          <Button
+            primary
+            processing={submitting}
+            onClick={this.onClickSignup}
+            type="submit"
+          >
+            Crear cuenta
+          </Button>
         </div>
       </div>
     );
@@ -52,4 +63,4 @@ const mapStateToProps = (state) => {
   return { submitting: signupCreate.submitting };
 };
 
-export default connect(mapStateToProps)(SignupCreate);
+export default connect(mapStateToProps, { signup: signupAction })(SignupCreate);
