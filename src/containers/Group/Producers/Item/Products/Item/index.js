@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
+import { getProductName } from 'presenters/product';
 
 class Item extends Component {
   static propTypes = {
@@ -13,7 +14,7 @@ class Item extends Component {
       <tr>
         <td>{product.name}</td>
         <td>{product.price}</td>
-        <td>{product.unit}</td>
+        <td>{getProductName(product.unit)}</td>
       </tr>
     );
   }

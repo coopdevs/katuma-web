@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import CreateProductForm from './CreateProductsForm';
 import List from './List';
 
 import { load } from 'redux/modules/products';
@@ -23,10 +24,11 @@ class ProducerProductsBase extends Component {
   }
 
   render() {
-    const { products } = this.props;
+    const { products, producer } = this.props;
 
     return (
       <div>
+        <CreateProductForm producer={producer} />
         <List products={products} />
       </div>
     );

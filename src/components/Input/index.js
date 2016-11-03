@@ -30,6 +30,8 @@ function getElement(type) {
   switch (type) {
     case 'textarea':
       return 'textarea';
+    case 'select':
+      return 'select';
     default:
       return 'input';
   }
@@ -41,7 +43,9 @@ class Input extends Component {
     name: PropTypes.string,
     type: PropTypes.string,
     label: PropTypes.string,
+    min: PropTypes.number,
     element: PropTypes.string,
+    selectOptions: PropTypes.array,
     rows: PropTypes.number,
     placeholder: PropTypes.string,
     errorsAlways: PropTypes.bool,
@@ -56,10 +60,22 @@ class Input extends Component {
     this.input_el.focus();
   }
 
+  renderSelect(selectOptions, elementProps) {
+    const { placeholder } = elementProps;
+    return (
+      <select value="2" {...elementProps}>
+        {placeholder && <option>{placeholder}</option>}
+        {selectOptions.map(({ value, label }) => (
+          <option key={value} value={value}>{label}</option>
+        ))}
+      </select>
+    );
+  }
+
   render() {
     const {
       input, name, type, label, placeholder,
-      errorsAlways, rows, isLast,
+      errorsAlways, rows, isLast, selectOptions, min,
       meta: { touched, error }
     } = this.props;
 
@@ -67,6 +83,7 @@ class Input extends Component {
 
     const elementProps = {
       ...input,
+      min,
       id: name,
       ref: (c) => (this.input_el = c),
       type,
@@ -77,10 +94,11 @@ class Input extends Component {
     const hasErrors = errorsAlways ? !!error : touched && !!error;
 
     return (
-      <div className={getInputClasses(error, type, isLast)}>
-        <label htmlFor={name}>{label}</label>
+      <div className={getInputClasses(hasErrors, type, isLast)}>
+        {label && <label htmlFor={name}>{label}</label>}
         {element === 'input' && <input {...elementProps} />}
         {element === 'textarea' && <textarea rows={rows} {...elementProps} />}
+        {element === 'select' && this.renderSelect(selectOptions, elementProps)}
         {hasErrors && <div className={`text-danger ${styles.error}`}>{error}</div>}
       </div>
     );

@@ -11,8 +11,10 @@ class List extends Component {
   render() {
     const { products } = this.props;
 
+    if (!products.length) return null;
+
     return (
-        <table className={styles.productList}>
+      <table className={styles.productList}>
         <thead>
           <tr>
             <th>Nombre</th>
