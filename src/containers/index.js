@@ -1,6 +1,6 @@
-export App from './App/App';
-export Home from './Home/Home';
-export Login from './Login/Login';
+export App from './App';
+export Home from './Home';
+export Login from './Login';
 export { Create as Signup, Complete as SignupComplete } from './Signup';
 export InvitationComplete from './Invitation/Complete';
 export GroupsList from './Groups';
@@ -11,5 +11,5 @@ export {
   OnboardingCreateProducer,
   OnboardingInvitations,
 } from './Onboarding';
-export NotFound from './NotFound/NotFound';
+export NotFound from './NotFound';
 
