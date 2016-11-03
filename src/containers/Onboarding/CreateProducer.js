@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 import { asyncConnect } from 'redux-async-connect';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
+import { create as createProducer } from 'redux/modules/producers/producers';
 import CreateProducerForm, { CREATE_PRODUCER_FORM } from 'components/forms/producers/Create';
 import { loadGroup } from 'redux/modules/groups/groups';
 import { create } from 'redux/modules/suppliers/suppliers';
@@ -18,6 +19,7 @@ class CreateProducer extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
     createSupplier: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     createdGroupId: PropTypes.number,
     submitting: PropTypes.bool,
   };
@@ -26,6 +28,7 @@ class CreateProducer extends Component {
     super(props);
 
     this.onClickCreate = this._onClickCreate.bind(this);
+    this.onSubmitCreateProducer = this._onSubmitCreateProducer.bind(this);
     this.onProducerCreated = this._onProducerCreated.bind(this);
   }
 
@@ -34,6 +37,15 @@ class CreateProducer extends Component {
    */
   _onClickCreate() {
     this._producer_form.submit();
+  }
+
+  /**
+   * Submit edit producer form
+   *
+   * @param {Object} fields
+   */
+  _onSubmitCreateProducer(fields) {
+    return this.props.create(fields);
   }
 
   /**
@@ -59,8 +71,9 @@ class CreateProducer extends Component {
         <div className={styles.layoutCentered__body}>
           <CreateProducerForm
             ref={(domNode) => this._producer_form = domNode}
-            initialValues={{ group_id: group.id }}
+            onSubmit={this.onSubmitCreateProducer}
             onCreated={this.onProducerCreated}
+            initialValues={{ group_id: group.id }}
           />
           <Button
             primary
@@ -99,5 +112,5 @@ const mapStateToProps = (state, ownProps) => {
 export default compose(
   layoutCentered,
   asyncConnect(asyncConnectProps),
-  connect(mapStateToProps, { createSupplier: create })
+  connect(mapStateToProps, { create: createProducer, createSupplier: create })
 )(CreateProducer);

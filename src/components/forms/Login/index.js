@@ -40,4 +40,7 @@ class LoginForm extends Component {
   }
 }
 
-export default reduxForm({ form: 'login' })(LoginForm);
+export default reduxForm({
+  form: 'login',
+  persistentSubmitErrors: true,
+})(LoginForm);

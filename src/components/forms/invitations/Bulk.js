@@ -95,6 +95,6 @@ const mapStateToProps = (state) => {
 };
 
 export default compose(
-  reduxForm({ form: BULK_INVITATIONS_FORM }),
+  reduxForm({ form: BULK_INVITATIONS_FORM, persistentSubmitErrors: true }),
   connect(mapStateToProps, { stopSubmit, resetForm: reset })
 )(BulkInvitationsForm);

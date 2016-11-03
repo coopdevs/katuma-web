@@ -46,20 +46,17 @@ export default class App extends Component {
   render() {
     const { children } = this.props;
     const { app: { head } } = config;
-    /* const layoutCentered = children && children.type && !!children.type.layoutCentered;*/
+    const layoutCentered = children && children.type && !!children.type.layoutCentered;
 
-    /* [styles.rootComponent_centered]: layoutCentered,*/
     return (
-      <div className={styles.app}>
+      <div
+        className={classNames({
+          [styles.rootComponent]: true,
+          [styles.rootComponent_centered]: layoutCentered,
+        })}
+      >
         <Helmet {...head}/>
-
-        <div
-          className={classNames({
-            [styles.rootComponent]: true,
-          })}
-        >
-          {children}
-        </div>
+        {children}
       </div>
     );
   }

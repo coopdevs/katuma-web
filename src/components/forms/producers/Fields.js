@@ -22,7 +22,6 @@ const Fields = () => (
       label="Direccion"
       type="textarea"
       errorsAlways
-      isLast
       rows={5}
       />
   </div>

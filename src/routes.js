@@ -71,7 +71,7 @@ export default (store) => {
 
   const redirectToGroups = (nextState, replace, cb) => {
     function goToGroups() {
-      const {auth: { user }} = store.getState();
+      const { auth: { user } } = store.getState();
 
       if (user) {
         replace('/groups');
@@ -113,14 +113,16 @@ export default (store) => {
       {/* Routes signup */}
       <Route path="signup">
         <IndexRoute component={Signup} />
-        <Route path="complete" context={store} component={SignupComplete}>
-          <Route path=":token" component={SignupComplete}/>
-        </Route>
+        <Route
+          path="complete/:token"
+          component={SignupComplete}
+          onEnter={SignupComplete.onEnter(store)}
+        />
       </Route>
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
-      <Route path="groups" component={GroupsBase} onEnter={redirectToGroupsDetail}>
+        <Route path="groups" component={GroupsBase} onEnter={redirectToGroupsDetail}>
           <IndexRoute component={GroupsList} />
           <Route path="list" component={GroupsList} />
 

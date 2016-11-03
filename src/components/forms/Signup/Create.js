@@ -90,7 +90,10 @@ class SignupCreate extends Component {
   }
 }
 
-const reduxFormProps = { form: SIGNUP_CREATE_FORM };
+const reduxFormProps = {
+  form: SIGNUP_CREATE_FORM,
+  persistentSubmitErrors: true,
+};
 
 const mapStateToProps = (state) => ({
   signupDone: state.signupCreateReducer.signupDone,

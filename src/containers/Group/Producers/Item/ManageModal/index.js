@@ -52,7 +52,7 @@ class ManageModal extends Component {
    * @param {Object} fields
    */
   _onSubmitEditProducer(fields) {
-    const { producer, editProducer } = props;
+    const { producer, editProducer } = this.props;
 
     return editProducer(producer.id, fields);
   }
@@ -101,12 +101,12 @@ class ManageModal extends Component {
     return (
       <EditProducerForm
         ref={(domNode) => this._producer_form = domNode}
+        onSubmit={this.onSubmitEditProducer}
         producer={producer}
         initialValues={{
           name: producer.name,
           address: producer.address,
         }}
-        onSubmit={this.onSubmitEditProducer}
       />
     );
   }
