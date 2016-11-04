@@ -29,6 +29,14 @@ class Sidebar extends Component {
             Productores
           </Link>
         </li>
+        <li>
+          <IndexLink
+            to={`/groups/${group.id}/orders`}
+            activeClassName={styles.activeLink}
+          >
+            Pedidos
+          </IndexLink>
+        </li>
       </ul>
     );
   }

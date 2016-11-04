@@ -11,6 +11,9 @@ import completeInvitationReducer, { COMPLETE_INVITATION_SUCCESS }from './invitat
 import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
 import productsReducer from './products/';
+import ordersReducer from './orders/orders';
+import orderLinesReducer from './order_lines/';
+import ordersFrequenciesReducer from './orders_frequencies/orders_frequencies';
 import suppliersReducer from './suppliers/suppliers';
 import producersReducer from './producers/producers';
 import {reducer as form} from 'redux-form';
@@ -29,6 +32,9 @@ const appReducers = combineReducers({
   suppliersReducer,
   producersReducer,
   productsReducer,
+  ordersReducer,
+  orderLinesReducer,
+  ordersFrequenciesReducer,
   invitationsReducer,
   bulkInvitationsReducer,
   completeInvitationReducer,
