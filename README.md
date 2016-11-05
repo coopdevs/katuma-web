@@ -1,7 +1,6 @@
 ## What?
 This is the future place for Katuma web interface. It will be a universal web app made in node.js and react.js
 
-=======
 This project is based on [React Redux universal hot example](https://github.com/erikras/react-redux-universal-hot-example).
 
 ## Participate!
