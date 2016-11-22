@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { asyncConnect } from 'redux-async-connect';
+import { asyncConnect } from 'redux-connect';
 
 import { load as loadProducts } from 'redux/modules/products/';
 import { load as loadOrderLines } from 'redux/modules/order_lines';
