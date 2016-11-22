@@ -10,7 +10,7 @@ import {Provider} from 'react-redux';
 
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { ReduxAsyncConnect } from 'redux-async-connect';
+import { ReduxAsyncConnect } from 'redux-connect';
 
 import getRoutes from './routes';
 

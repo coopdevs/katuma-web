@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { asyncConnect } from 'redux-async-connect';
+import { asyncConnect } from 'redux-connect';
 import Helmet from 'react-helmet';
 
 import { load as loadSuppliers, create } from 'redux/modules/suppliers/suppliers';

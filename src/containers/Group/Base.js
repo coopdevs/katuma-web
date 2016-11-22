@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import _ from 'underscore';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { asyncConnect } from 'redux-async-connect';
+import { asyncConnect } from 'redux-connect';
 
 import { getMember } from 'presenters/member';
 import { loadGroup } from 'redux/modules/groups/groups';

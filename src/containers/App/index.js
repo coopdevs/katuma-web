@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { browserHistory } from 'react-router';
 
-import { asyncConnect } from 'redux-async-connect';
+import { asyncConnect } from 'redux-connect';
 
 import sprite from '../../helpers/Sprite';
 import config from '../../config';

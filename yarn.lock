@@ -368,7 +368,7 @@ babel-plugin-undefined-to-void@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/babel-plugin-undefined-to-void/-/babel-plugin-undefined-to-void-1.1.6.tgz#7f578ef8b78dfae6003385d8417a61eda06e2f81"
 
-babel-runtime@^6.11.6, babel-runtime@^6.6.1:
+babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.6.1:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.18.0.tgz#0f4177ffd98492ef13b9f823e9994a02584c9078"
   dependencies:
@@ -2688,6 +2688,10 @@ lodash@^4.0.0, lodash@^4.12.0, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.6.1:
   version "4.16.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.4.tgz#01ce306b9bad1319f2a5528674f88297aeb70127"
 
+lodash@^4.13.1:
+  version "4.17.2"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
+
 lodash@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-1.0.2.tgz#8f57560c83b59fc270bd3d561b690043430e2551"
@@ -3904,9 +3908,23 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "~0.1.0"
 
-redux-async-connect@enricostano/redux-async-connect#fix/precompiled-lib:
-  version "1.0.0-rc4"
-  resolved "https://codeload.github.com/enricostano/redux-async-connect/tar.gz/c1d9934a1c4a196cd2e5930b9b6d798accc3ede5"
+reduce-reducers@^0.1.0:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.1.2.tgz#fa1b4718bc5292a71ddd1e5d839c9bea9770f14b"
+
+redux-actions@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-0.12.0.tgz#8a4f0114f1bde2e6b61d5b7205d4818004c67461"
+  dependencies:
+    lodash "^4.13.1"
+    reduce-reducers "^0.1.0"
+
+redux-connect@4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/redux-connect/-/redux-connect-4.0.2.tgz#dc46283ff5a9895dcea84b23c1d101713e14b6bd"
+  dependencies:
+    babel-runtime "^6.18.0"
+    redux-actions "^0.12.0"
 
 redux-form@6.0.5:
   version "6.0.5"

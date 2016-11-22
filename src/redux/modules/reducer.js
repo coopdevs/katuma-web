@@ -15,7 +15,7 @@ import suppliersReducer from './suppliers/suppliers';
 import producersReducer from './producers/producers';
 import {reducer as form} from 'redux-form';
 import { routerReducer } from 'react-router-redux';
-import {reducer as reduxAsyncConnect} from 'redux-async-connect';
+import {reducer as reduxAsyncConnect} from 'redux-connect';
 
 const appReducers = combineReducers({
   routing: routerReducer,
