@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { asyncConnect } from 'redux-async-connect';
+import { asyncConnect } from 'redux-connect';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 import { create as createProducer } from 'redux/modules/producers/producers';
