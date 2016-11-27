@@ -14,7 +14,7 @@ const RESET_FORM = 'redux-example/order_lines/RESET_FORM';
 import mergeResponse from 'redux/lib/merge';
 
 const initialState = {
-  orderLines: { entities: [], byId: {}, byOrderId: [] },
+  orderLines: { entities: [], byId: {}, byOrderId: {} },
   loading: false,
   errors: null,
 };

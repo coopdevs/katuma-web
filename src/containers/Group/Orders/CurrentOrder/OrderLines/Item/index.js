@@ -13,8 +13,10 @@ class Item extends Component {
     return (
       <tr>
         <td>{orderLine.name}</td>
-        <td>{orderLine.price}</td>
+        <td>{orderLine.quantity}</td>
         <td>{getProductName(orderLine.unit)}</td>
+        <td>{orderLine.price}</td>
+        <td>{orderLine.total}</td>
       </tr>
     );
   }

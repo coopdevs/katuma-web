@@ -14,7 +14,7 @@ class List extends Component {
     if (!orders.length) return (<span>Ningun pedido!</span>);
 
     return (
-      <table>
+      <table className="table table-striped">
         <thead>
           <tr>
             <th>Completar</th>

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 class Item extends Component {
   static propTypes = {
@@ -11,8 +12,8 @@ class Item extends Component {
 
     return (
       <tr>
-        <td>{order.confirm_before}</td>
-        <td>{order.created_at}</td>
+        <td>{moment().utc(order.confirm_before).format('dddd, MMMM Do YYYY')}</td>
+        <td>{moment().utc(order.created_at).format('dddd, MMMM Do YYYY')}</td>
       </tr>
     );
   }

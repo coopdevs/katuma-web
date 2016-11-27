@@ -16,7 +16,7 @@ const RESET_FORM = 'redux-example/products/RESET_FORM';
 import mergeResponse from 'redux/lib/merge';
 
 const initialState = {
-  products: { entities: [], byId: {}, byProducerId: [] },
+  products: { entities: [], byId: {}, byProducerId: {} },
   loading: false,
   errors: null,
 };

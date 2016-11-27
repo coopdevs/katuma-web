@@ -6,25 +6,39 @@ import styles from './styles/index.scss';
 class List extends Component {
   static propTypes = {
     orderLines: PropTypes.array.isRequired,
+    grandTotal: PropTypes.number.isRequired,
   }
 
   render() {
-    const { orderLines } = this.props;
+    const { orderLines, grandTotal } = this.props;
 
     if (!orderLines.length) return null;
 
     return (
-      <table className={styles.productList}>
+      <table className={`table ${styles.productList}`}>
         <thead>
           <tr>
             <th>Producto</th>
-            <th>Precio</th>
+            <th>Cantidad</th>
             <th>Unidades</th>
+            <th>Precio</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
           {orderLines.map((orderLine) => <Item key={orderLine.id} orderLine={orderLine} />)}
         </tbody>
+        <tfoot>
+          <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td>
+              {grandTotal}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     );
   }
