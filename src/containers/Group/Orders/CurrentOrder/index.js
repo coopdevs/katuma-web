@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { load } from 'redux/modules/products/';
 import { load as load2 } from 'redux/modules/order_lines';
@@ -28,10 +29,13 @@ class CurrentOrder extends Component {
   }
 
   render() {
-    const { orderLines, grandTotal } = this.props;
+    const { order, orderLines, grandTotal } = this.props;
 
     return (
       <div>
+        <div>
+          Confirmar antes del dia: {moment().utc(order.confirm_before).format('dddd, MMMM Do YYYY')}
+        </div>
         <OrderLines orderLines={orderLines} grandTotal={grandTotal} />
       </div>
     );
