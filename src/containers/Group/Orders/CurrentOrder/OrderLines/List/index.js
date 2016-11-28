@@ -1,12 +1,52 @@
 import React, { Component, PropTypes } from 'react';
 
 import Item from '../Item';
+import AddProductsModal from '../../AddProductsModal';
+import Button from 'components/Button';
 import styles from './styles/index.scss';
 
 class List extends Component {
   static propTypes = {
     orderLines: PropTypes.array.isRequired,
     grandTotal: PropTypes.number.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.onOpenModal = this._onOpenModal.bind(this);
+    this.onCloseModal = this._onCloseModal.bind(this);
+
+    this.state = { showModal: false };
+  }
+
+  /**
+   * Open modal
+   */
+  _onOpenModal() {
+    this.setState({ showModal: true });
+  }
+
+  /**
+   * Close modal
+   */
+  _onCloseModal() {
+    this.setState({ showModal: false });
+  }
+
+  renderAddProducts() {
+    const { showModal } = this.state;
+
+    return (
+      <div>
+        <Button primary onClick={this.onOpenModal}>+</Button>
+
+        <AddProductsModal
+          showModal={showModal}
+          onCloseModal={this.onCloseModal}
+        />
+      </div>
+    );
   }
 
   render() {
@@ -30,7 +70,9 @@ class List extends Component {
         </tbody>
         <tfoot>
           <tr>
-            <td/>
+            <td>
+              {this.renderAddProducts()}
+            </td>
             <td/>
             <td/>
             <td/>
