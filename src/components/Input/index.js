@@ -63,7 +63,7 @@ class Input extends Component {
   renderSelect(selectOptions, elementProps) {
     const { placeholder } = elementProps;
     return (
-      <select value="2" {...elementProps}>
+      <select {...elementProps}>
         {placeholder && <option>{placeholder}</option>}
         {selectOptions.map(({ value, label }) => (
           <option key={value} value={value}>{label}</option>
