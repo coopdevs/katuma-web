@@ -1,5 +1,7 @@
 import _ from 'underscore';
 
+import parseParamsToQueryString from 'helpers/api/queryStringParser';
+
 const LOAD = 'redux-example/products/LOAD';
 const LOAD_SUCCESS = 'redux-example/products/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/products/LOAD_FAIL';
@@ -14,7 +16,7 @@ const RESET_FORM = 'redux-example/products/RESET_FORM';
 import mergeResponse from 'redux/lib/merge';
 
 const initialState = {
-  products: { entities: [], byId: {}, byProducerId: [] },
+  products: { entities: [], byId: {}, byProducerId: {} },
   loading: false,
   errors: null,
 };
@@ -120,12 +122,14 @@ export function reset() {
 /**
  * Load products for that producer
  *
- * @param producerId
+ * @param params {Object} group_id, producer_id
  */
-export function load(producerId) {
+export function load(params) {
+  const queryParams = parseParamsToQueryString(params);
+
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get(`/products?producer_id=${producerId}`)
+    promise: (client) => client.get(`/products${queryParams}`)
   };
 }
 

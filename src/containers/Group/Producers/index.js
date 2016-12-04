@@ -40,7 +40,7 @@ class GroupProducers extends Component {
   }
 
   /**
-   * Open modal
+   * Close modal
    */
   _onCloseModal() {
     this.setState({ showModal: false });

@@ -16,6 +16,11 @@ import {
   GroupBase,
   GroupMembers,
   GroupProducers,
+  GroupOrders,
+  GroupOrdersList,
+  GroupOrderBase,
+  GroupOrderShow,
+  GroupOrderEdit,
   OnboardingCreateGroup,
   OnboardingInvitations,
   OnboardingCreateProducer,
@@ -131,6 +136,13 @@ export default (store) => {
             <IndexRoute component={GroupMembers}/>
             <Route path="members" component={GroupMembers}/>
             <Route path="producers" component={GroupProducers}/>
+            <Route path="orders" component={GroupOrders}>
+              <IndexRoute component={GroupOrdersList}/>
+              <Route path=":order_id" component={GroupOrderBase}>
+                <IndexRoute component={GroupOrderShow}/>
+                <Route path="edit" component={GroupOrderEdit}/>
+              </Route>
+            </Route>
           </Route>
         </Route>
 

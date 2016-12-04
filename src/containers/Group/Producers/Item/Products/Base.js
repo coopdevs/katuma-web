@@ -20,7 +20,7 @@ class ProducerProductsBase extends Component {
   componentWillMount() {
     const { producer, loadProducts } = this.props;
 
-    loadProducts(producer.id);
+    loadProducts({ producer_id: producer.id });
   }
 
   render() {
