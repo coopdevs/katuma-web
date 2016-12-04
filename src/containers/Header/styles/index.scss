@@ -1,5 +1,9 @@
 @import "../../../styles/variables.scss";
 
+$header-height: 70px !default;
+$header-logo-size: 50px !default;
+$header-logo-font-size: ceil(($header-logo-size / 2)) !default;
+
 .header {
 
   height: $header-height;

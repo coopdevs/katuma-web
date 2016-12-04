@@ -33,25 +33,3 @@ $gray_15: #f2f2f2;
 $katuma_primary: $gray_2;
 $katuma_active: #1bbb96;
 $katuma_soft_gray: $gray_15;
-
-
-//== Spacing
-//
-// ## Define common space sizes.
-
-$space-byte: 5px !default;
-$space-kilo-byte: ($space-byte * 2) !default;
-$space-mega-byte: ($space-byte * 3) !default;
-$space-giga-byte: ($space-byte * 4) !default;
-$space-tera-byte: ($space-byte * 5) !default;
-$space-peta-byte: ($space-byte * 6) !default;
-$space-exa-byte : ($space-byte * 7) !default;
-$space-zeta-byte: ($space-byte * 8) !default;
-
-
-//== Header
-//
-
-$header-height: 70px !default;
-$header-logo-size: 50px !default;
-$header-logo-font-size: ceil(($header-logo-size / 2)) !default;
