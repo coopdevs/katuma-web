@@ -64,9 +64,6 @@ class LoggedOutMenu extends Component {
       <nav>
         <ul>
           <li>
-            <Button linkLookAndFeel onClick={this.openLogin}>Grupos</Button>
-          </li>
-          <li>
             <Button onClick={this.openLogin}>Entrar</Button>
           </li>
           <li>
