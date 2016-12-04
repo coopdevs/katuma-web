@@ -60,7 +60,7 @@ class CreateProducer extends Component {
     const { createSupplier, group } = this.props;
 
     createSupplier({ group_id: group.id, producer_id: producer.id });
-    browserHistory.push(getNextOnboardingUrl('finish'));
+    browserHistory.push(getNextOnboardingUrl('create_products', group.id, producer.id));
   }
 
   render() {

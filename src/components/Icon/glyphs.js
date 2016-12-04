@@ -12,7 +12,11 @@ function requireAll(requireContext) {
 }
 
 // All the icons
-export const GLYPHS = requireAll(svgIcons).reduce((state, icon) => ({
-  ...state,
-  [camelCase(icon.slice(1))]: icon
-}), {});
+export const GLYPHS = requireAll(svgIcons).reduce((state, icon) => {
+  if (!icon) return state;
+
+  return {
+    ...state,
+    [camelCase(icon.slice(1))]: icon
+  };
+}, {});

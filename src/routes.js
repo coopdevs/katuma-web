@@ -19,6 +19,7 @@ import {
   OnboardingCreateGroup,
   OnboardingInvitations,
   OnboardingCreateProducer,
+  OnboardingCreateProducts,
   InvitationComplete,
   NotFound,
 } from 'containers';
@@ -137,6 +138,7 @@ export default (store) => {
           <IndexRoute component={OnboardingCreateGroup}/>
           <Route path=":id/invitations" component={OnboardingInvitations}/>
           <Route path=":id/producer" component={OnboardingCreateProducer}/>
+          <Route path=":id/producer/:producer_id/products" component={OnboardingCreateProducts}/>
         </Route>
       </Route>
 

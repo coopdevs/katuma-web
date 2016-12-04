@@ -46,7 +46,7 @@ function getClasses({ link, primary, linkLookAndFeel, size }) {
     'btn': true,
     'btn-primary': (!link && !linkLookAndFeel),
     'btn-success': primary,
-    'btn-link': link,
+    'btn-link': link && !primary,
     'btn-lg': isSize(size),
     'btn-sm': isSize(size),
     'btn-xs': isSize(size),
