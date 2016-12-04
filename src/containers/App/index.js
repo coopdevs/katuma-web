@@ -52,7 +52,7 @@ export default class App extends Component {
       <div
         className={classNames({
           [styles.rootComponent]: true,
-          [styles.rootComponent_centered]: layoutCentered,
+          [styles.rootComponent__centered]: layoutCentered,
         })}
       >
         <Helmet {...head}/>

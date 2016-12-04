@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import { MODAL_TYPES } from './constants';
 import Button from 'components/Button';
 import UserAccessModal from './UserAccessModal';
 
-class Anonymous extends Component {
+class LoggedOutMenu extends Component {
   static propTypes = {
     user: PropTypes.object,
   };
@@ -60,24 +61,24 @@ class Anonymous extends Component {
     if (user) return null;
 
     return (
-      <ul>
-        <li>
-          <Button linkLookAndFeel onClick={this.openLogin}>Grupos</Button>
-        </li>
-        <li>
-          <Button onClick={this.openLogin}>Entrar</Button>
-        </li>
-        <li>
-          <Button primary onClick={this.openSignup}>Registrate</Button>
-        </li>
-        <UserAccessModal
-          showModal={showModal}
-          modalType={modalType}
-          onCloseModal={this.onCloseModal}
-        />
-      </ul>
+      <nav>
+        <ul>
+          <li>
+            <Button onClick={this.openLogin}>Entrar</Button>
+          </li>
+          <li>
+            <Button primary onClick={this.openSignup}>Registrarse</Button>
+          </li>
+          <UserAccessModal
+            showModal={showModal}
+            modalType={modalType}
+            onCloseModal={this.onCloseModal}
+          />
+        </ul>
+      </nav>
     );
   }
 }
 
-export default Anonymous;
+const mapStateToProps = (state) => ({user: state.auth.user});
+export default connect(mapStateToProps)(LoggedOutMenu);

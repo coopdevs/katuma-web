@@ -1,0 +1,26 @@
+// Reset default list styles
+@mixin list-reset() {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  > dt,
+  > dd {
+    margin-left: 0;
+  }
+}
+
+// Turns list items into inline-block
+@mixin list-inline($pad-left: 5px, $pad-right: 5px) {
+  @include list-reset;
+  > li {
+    display: inline-block;
+    padding-left: $pad-left;
+    padding-right: $pad-right;
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+}

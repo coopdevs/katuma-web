@@ -1,6 +1,38 @@
-@import "../../../styles/_katuma-colors.scss";
+@import "../../../styles/variables.scss";
 
-.navigation {
+$header-height: 70px !default;
+$header-logo-size: 50px !default;
+$header-logo-font-size: ceil(($header-logo-size / 2)) !default;
+
+.header {
+
+  height: $header-height;
+  line-height: $header-height;
   background-color: white;
-  border-bottom: 1px solid $katuma_primary;
+  border-bottom: 1px solid $gray_11;
+
+  &__logo {
+    display: inline-block;
+    font-family: $font-family-serif;
+    font-size: $header-logo-font-size;
+    line-height: 1.7;
+    color: black;
+    border: 2px solid black;
+    text-decoration: none;
+    text-align: center;
+    transition: .25s ease-in-out all;
+    font-weight: 100;
+    width: $header-logo-size;
+    &:hover {
+      color: white;
+      background-color: black;
+    }
+  }
+  nav {
+    text-align: right;
+    ul {
+      @include list-inline;
+    }
+  }
+
 }
