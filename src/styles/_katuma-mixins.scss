@@ -10,7 +10,7 @@
 }
 
 // Turns list items into inline-block
-@mixin list-inline($pad-left: $space-byte, $pad-right: $space-byte) {
+@mixin list-inline($pad-left: 5px, $pad-right: 5px) {
   @include list-reset;
   > li {
     display: inline-block;
