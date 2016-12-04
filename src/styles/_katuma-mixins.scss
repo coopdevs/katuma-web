@@ -1,18 +1,3 @@
-// Mixins
-// --------------------------------------------------
-/**
- *  Define custom mixins
- *  (not provided by Bootstrap).
- *
- */
-
-
-// Sizing shortcuts
-@mixin size($width, $height) {
-  width: $width;
-  height: $height;
-}
-
 // Reset default list styles
 @mixin list-reset() {
   margin: 0;

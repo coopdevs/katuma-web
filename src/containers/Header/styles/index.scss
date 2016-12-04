@@ -13,11 +13,12 @@
     font-size: $header-logo-font-size;
     line-height: 1.7;
     color: black;
-    border: 3px solid black;
+    border: 2px solid black;
     text-decoration: none;
     text-align: center;
     transition: .25s ease-in-out all;
-    @include size($header-logo-size, $header-logo-size);
+    font-weight: 100;
+    width: $header-logo-size;
     &:hover {
       color: white;
       background-color: black;

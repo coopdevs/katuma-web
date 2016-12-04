@@ -64,7 +64,7 @@ export default class App extends Component {
 
 const asyncConnectProps = [{
   promise: ({ store: { dispatch, getState } }) => {
-    const p
+    const promises = [];
 
     if (!isAuthLoaded(getState())) {
       promises.push(dispatch(loadAuth()));
