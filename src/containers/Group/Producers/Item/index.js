@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'underscore';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 import { create, destroy } from 'redux/modules/suppliers/suppliers';
 import { isRole } from 'presenters/member';
 import Button from 'components/Button';
+
+import ManageProducerModal from './ManageModal/';
 
 class Item extends Component {
   static propTypes = {
@@ -22,6 +23,24 @@ class Item extends Component {
 
     this.activate = this._activate.bind(this);
     this.desactivate = this._desactivate.bind(this);
+    this.onOpenModal = this._onOpenModal.bind(this);
+    this.onCloseModal = this._onCloseModal.bind(this);
+
+    this.state = { showModal: false };
+  }
+
+  /**
+   * Open modal
+   */
+  _onOpenModal() {
+    this.setState({ showModal: true });
+  }
+
+  /**
+   * Open modal
+   */
+  _onCloseModal() {
+    this.setState({ showModal: false });
   }
 
   /**
@@ -82,17 +101,47 @@ class Item extends Component {
     );
   }
 
-  render() {
-    const { producer, group } = this.props;
+  /**
+   * Manage producer modal
+   */
+  renderManageProducerModal() {
+    if (!this.isEditable()) return null;
+
+    const { group, producer } = this.props;
+    const { showModal } = this.state;
 
     return (
-      <div>
-        <Link to={`/groups/${group.id}/producers/${producer.id}`}>
-          {producer.name}
-        </Link>
+      <ManageProducerModal
+        onCloseModal={this.onCloseModal}
+        showModal={showModal}
+        group={group}
+        producer={producer}
+      />
+    );
+  }
 
+  /**
+   * Producer name based on permissions
+   */
+  renderName() {
+    const { producer } = this.props;
+
+    if (this.isEditable()) {
+      return (
+        <Button linkLookAndFeel onClick={this.onOpenModal}>{producer.name}</Button>
+      );
+    }
+
+    return (<span>{producer.name}</span>);
+  }
+
+  render() {
+    return (
+      <li>
+        {this.renderName()}
         {this.renderToggleSupplierButton()}
-      </div>
+        {this.renderManageProducerModal()}
+      </li>
     );
   }
 }

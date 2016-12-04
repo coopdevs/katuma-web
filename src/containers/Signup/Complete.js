@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { routeActions } from 'react-router-redux';
-import { asyncConnect } from 'redux-async-connect';
+import { browserHistory } from 'react-router';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 
@@ -15,10 +14,8 @@ import { getNextOnboardingUrl } from '../Onboarding/services';
 class SignupComplete extends Component {
   static propTypes = {
     completeSignup: PropTypes.func.isRequired,
-    validSignup: PropTypes.bool.isRequired,
     signupDone: PropTypes.bool.isRequired,
     params: PropTypes.object.isRequired,
-    push: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -27,22 +24,34 @@ class SignupComplete extends Component {
     this.handleSubmit = this._handleSubmit.bind(this);
   }
 
-  componentWillMount() {
-    const { validSignup, push } = this.props;
-
-    if (validSignup) return;
-
-    push('/signup');
-  }
-
   componentWillReceiveProps(newProps) {
-    const { signupDone: oldSignupDone, push } = this.props;
+    const { signupDone: oldSignupDone } = this.props;
     const { signupDone } = newProps;
 
     if (oldSignupDone === signupDone) return;
 
-    push(getNextOnboardingUrl());
+    browserHistory.push(getNextOnboardingUrl());
   }
+
+  /**
+   * On enter hook to check if signup is valid
+   */
+  static onEnter = (store) => (nextState, replace, cb) => {
+    const { params: { token } } = nextState;
+    const { signupCompleteReducer: { validSignup } } = store.getState();
+
+    if (validSignup) {
+      cb();
+    } else {
+      store
+        .dispatch(checkSignup(token))
+        .then(cb)
+        .catch(() => {
+          replace('/signup');
+          cb();
+        });
+    }
+  };
 
   /**
   * Submit signup create form
@@ -50,8 +59,6 @@ class SignupComplete extends Component {
   * @param {Object} fields
   */
   _handleSubmit(fields) {
-    // do something on success
-    /* window.location = '/onboarding';*/
     const { params: { token }, completeSignup } = this.props;
     return completeSignup(token, fields);
   }
@@ -70,20 +77,11 @@ class SignupComplete extends Component {
   }
 }
 
-const asyncConnectProps = [{
-  promise: (options) => {
-    const { store: { dispatch }, params: { token } } = options;
-    return dispatch(checkSignup(token));
-  },
-}];
-
-const mapStateToProps = ({ signupCompleteReducer: { validSignup, signupDone }}) => ({
-  validSignup,
+const mapStateToProps = ({ signupCompleteReducer: { signupDone }}) => ({
   signupDone,
 });
 
 export default compose(
   layoutCentered,
-  asyncConnect(asyncConnectProps),
-  connect(mapStateToProps, { completeSignup: complete, push: routeActions.push })
+  connect(mapStateToProps, { completeSignup: complete })
 )(SignupComplete);

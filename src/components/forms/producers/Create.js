@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { reduxForm, Field, stopSubmit } from 'redux-form';
+import { reduxForm, stopSubmit } from 'redux-form';
 
-import Input from 'components/Input';
-import { create as createProducer, resetCreated as resetCreatedProducer } from 'redux/modules/producers/producers';
+import { resetForm as resetProducerForm } from 'redux/modules/producers/producers';
+
+import Fields from './Fields';
 
 export const CREATE_PRODUCER_FORM = 'createProducer';
 
@@ -12,21 +13,22 @@ class CreateProducerForm extends Component {
   static propTypes = {
     onCreated: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
-    resetCreated: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    resetForm: PropTypes.func.isRequired,
     stopSubmit: PropTypes.func.isRequired,
     errors: PropTypes.object,
     createdProducer: PropTypes.object,
   }
 
   componentWillReceiveProps(newProps) {
-    const { resetCreated, onCreated, createdProducer: oldCreatedProducer } = this.props;
+    const { resetForm, onCreated, createdProducer: oldCreatedProducer } = this.props;
     const { errors, createdProducer } = newProps;
 
     this.checkErrors(errors);
 
     if ((oldCreatedProducer === createdProducer) || !createdProducer) return;
 
-    resetCreated();
+    resetForm();
     onCreated(createdProducer);
   }
 
@@ -44,53 +46,17 @@ class CreateProducerForm extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          <Field name="group_id" component={Input} type="hidden" />
-          <Field
-            name="name"
-            component={Input}
-            placeholder="Nombre del productor"
-            label="Nombre"
-            type="text"
-            errorsAlways
-            setInitialFocus
-          />
-          <Field
-            name="address"
-            component={Input}
-            placeholder="Direccion del productor. Calle, localidad, provincia,..."
-            label="Direccion"
-            type="textarea"
-            errorsAlways
-            rows={5}
-          />
-        </div>
-      </div>
+      <form onSubmit={this.props.handleSubmit}>
+        <Fields />
+      </form>
     );
   }
 }
-
-/**
- * Create producer form
- *
- * @param {Object} fields
- * @param {Function} dispatch
- */
-const onSubmit = (fields, dispatch) => {
-  return dispatch(createProducer(fields));
-};
-
-const reduxFormProps = {
-  form: CREATE_PRODUCER_FORM,
-  persistentSubmitErrors: true,
-  onSubmit,
-};
 
 const mapStateToProps = ({ producersReducer: { createdProducer, errors } }) =>
   ({ createdProducer, errors });
 
 export default compose(
-  reduxForm(reduxFormProps),
-  connect(mapStateToProps, { stopSubmit, resetCreated: resetCreatedProducer })
+  reduxForm({ form: CREATE_PRODUCER_FORM, persistentSubmitErrors: true }),
+  connect(mapStateToProps, { stopSubmit, resetForm: resetProducerForm })
 )(CreateProducerForm);

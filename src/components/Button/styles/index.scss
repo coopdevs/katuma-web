@@ -30,6 +30,7 @@
   font-size: inherit;
   box-shadow: none;
   border: 0;
+
   &:hover {
     color: $katuma_active;
     text-decoration: underline;
@@ -39,6 +40,7 @@
   &:focus,
   &:active,
   &:active:focus {
+    color: $katuma_active;
     outline: none;
     box-shadow: none;
   }

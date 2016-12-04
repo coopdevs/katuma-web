@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field, stopSubmit, reset } from 'redux-form';
 
-import { signup, resetSignup } from 'redux/modules/signup/create';
+import { resetSignup } from 'redux/modules/signup/create';
 import Input from 'components/Input';
 import MessagePane from 'components/MessagePane';
 import SignupFooter from './Footer';
@@ -90,20 +90,9 @@ class SignupCreate extends Component {
   }
 }
 
-/**
- * Submit signup create form
- *
- * @param {Object} fields
- * @param {Function} dispatch
- */
-const onSubmit = (fields, dispatch) => {
-  return dispatch(signup(fields));
-};
-
 const reduxFormProps = {
   form: SIGNUP_CREATE_FORM,
   persistentSubmitErrors: true,
-  onSubmit,
 };
 
 const mapStateToProps = (state) => ({

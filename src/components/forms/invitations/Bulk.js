@@ -5,7 +5,7 @@ import { reduxForm, Field, stopSubmit, reset } from 'redux-form';
 
 import Input from 'components/Input';
 import MessagePane from 'components/MessagePane';
-import { send as sendBulk, BULK } from 'redux/modules/invitations/bulk';
+import { BULK } from 'redux/modules/invitations/bulk';
 
 export const BULK_INVITATIONS_FORM = 'bulkInvitations';
 
@@ -14,6 +14,7 @@ class BulkInvitationsForm extends Component {
     group: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     stopSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
     errors: PropTypes.object,
     invitationsSent: PropTypes.bool,
@@ -70,7 +71,7 @@ class BulkInvitationsForm extends Component {
           <p>Hemos enviado las invitaciones a los emails que has introducido</p>
         </MessagePane>
 
-        <div>
+        <form onSubmit={this.props.handleSubmit}>
           <Field
             name="emails"
             component={Input}
@@ -81,31 +82,11 @@ class BulkInvitationsForm extends Component {
             setInitialFocus
             rows={5}
           />
-        </div>
+        </form>
       </div>
     );
   }
 }
-
-/**
- * Submit signup create form
- *
- * @param {Object} fields
- * @param {Function} dispatch
- * @param {Function} ownProps
- */
-const onSubmit = (fields, dispatch, ownProps) => {
-  const { group: { id } } = ownProps;
-  const data = {...fields, group_id: id };
-
-  return dispatch(sendBulk(data));
-};
-
-const reduxFormProps = {
-  form: BULK_INVITATIONS_FORM,
-  persistentSubmitErrors: true,
-  onSubmit,
-};
 
 const mapStateToProps = (state) => {
   const { bulkInvitationsReducer: { invitationsSent, errors } } = state;
@@ -114,6 +95,6 @@ const mapStateToProps = (state) => {
 };
 
 export default compose(
-  reduxForm(reduxFormProps),
+  reduxForm({ form: BULK_INVITATIONS_FORM, persistentSubmitErrors: true }),
   connect(mapStateToProps, { stopSubmit, resetForm: reset })
 )(BulkInvitationsForm);

@@ -10,14 +10,18 @@ import bulkInvitationsReducer from './invitations/bulk';
 import completeInvitationReducer, { COMPLETE_INVITATION_SUCCESS }from './invitations/complete';
 import invitationsReducer from './invitations/list';
 import groupsReducer from './groups/groups';
+import productsReducer from './products/';
+import ordersReducer from './orders/orders';
+import orderLinesReducer from './order_lines/';
+import ordersFrequenciesReducer from './orders_frequencies/orders_frequencies';
 import suppliersReducer from './suppliers/suppliers';
 import producersReducer from './producers/producers';
 import {reducer as form} from 'redux-form';
-import { routeReducer } from 'react-router-redux';
-import {reducer as reduxAsyncConnect} from 'redux-async-connect';
+import { routerReducer } from 'react-router-redux';
+import {reducer as reduxAsyncConnect} from 'redux-connect';
 
 const appReducers = combineReducers({
-  routing: routeReducer,
+  routing: routerReducer,
   reduxAsyncConnect,
   auth,
   signupCreateReducer,
@@ -27,6 +31,10 @@ const appReducers = combineReducers({
   groupsReducer,
   suppliersReducer,
   producersReducer,
+  productsReducer,
+  ordersReducer,
+  orderLinesReducer,
+  ordersFrequenciesReducer,
   invitationsReducer,
   bulkInvitationsReducer,
   completeInvitationReducer,

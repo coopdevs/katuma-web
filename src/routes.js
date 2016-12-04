@@ -15,11 +15,16 @@ import {
   GroupsList,
   GroupBase,
   GroupMembers,
-  GroupProducersBase,
-  GroupProducersList,
-  GroupProducersDetails,
+  GroupProducers,
+  GroupOrders,
+  GroupOrdersList,
+  GroupOrderBase,
+  GroupOrderShow,
+  GroupOrderEdit,
   OnboardingCreateGroup,
   OnboardingInvitations,
+  OnboardingCreateProducer,
+  OnboardingCreateProducts,
   InvitationComplete,
   NotFound,
 } from 'containers';
@@ -72,7 +77,7 @@ export default (store) => {
 
   const redirectToGroups = (nextState, replace, cb) => {
     function goToGroups() {
-      const {auth: { user }} = store.getState();
+      const { auth: { user } } = store.getState();
 
       if (user) {
         replace('/groups');
@@ -114,23 +119,29 @@ export default (store) => {
       {/* Routes signup */}
       <Route path="signup">
         <IndexRoute component={Signup} />
-        <Route path="complete" context={store} component={SignupComplete}>
-          <Route path=":token" component={SignupComplete}/>
-        </Route>
+        <Route
+          path="complete/:token"
+          component={SignupComplete}
+          onEnter={SignupComplete.onEnter(store)}
+        />
       </Route>
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
-      <Route path="groups" component={GroupsBase} onEnter={redirectToGroupsDetail}>
+        <Route path="groups" component={GroupsBase} onEnter={redirectToGroupsDetail}>
           <IndexRoute component={GroupsList} />
           <Route path="list" component={GroupsList} />
 
           <Route path=":id" component={GroupBase}>
             <IndexRoute component={GroupMembers}/>
             <Route path="members" component={GroupMembers}/>
-            <Route path="producers" component={GroupProducersBase}>
-              <IndexRoute component={GroupProducersList} />
-              <Route path=":producer_id" component={GroupProducersDetails}/>
+            <Route path="producers" component={GroupProducers}/>
+            <Route path="orders" component={GroupOrders}>
+              <IndexRoute component={GroupOrdersList}/>
+              <Route path=":order_id" component={GroupOrderBase}>
+                <IndexRoute component={GroupOrderShow}/>
+                <Route path="edit" component={GroupOrderEdit}/>
+              </Route>
             </Route>
           </Route>
         </Route>
@@ -138,6 +149,8 @@ export default (store) => {
         <Route path="onboarding">
           <IndexRoute component={OnboardingCreateGroup}/>
           <Route path=":id/invitations" component={OnboardingInvitations}/>
+          <Route path=":id/producer" component={OnboardingCreateProducer}/>
+          <Route path=":id/producer/:producer_id/products" component={OnboardingCreateProducts}/>
         </Route>
       </Route>
 

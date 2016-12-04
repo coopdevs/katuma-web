@@ -1,5 +1,15 @@
+// .input styles
+//
+// .input_last - When input is the last in a group
+//
+// No styleguide reference
+.input {
+  &_last {
+    margin-bottom: 0;
+  }
+}
 .error {
   font-size: 0.85em;
   line-height: 1.3em;
-  margin-top: 1em;
+  margin-top: 0.3em;
 }

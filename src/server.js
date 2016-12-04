@@ -15,7 +15,7 @@ import PrettyError from 'pretty-error';
 import http from 'http';
 
 import { match } from 'react-router';
-import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
+import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 import createHistory from 'react-router/lib/createMemoryHistory';
 
 import { Provider } from 'react-redux';
@@ -62,8 +62,8 @@ app.use((req, res, next) => {
   }
 
   const client = new ApiHttp(req.session.user_id);
+  const store = createStore(client);
   const history = createHistory(req.originalUrl);
-  const store = createStore(history, client);
 
   function hydrateOnClient() {
     res.send('<!doctype html>\n' +

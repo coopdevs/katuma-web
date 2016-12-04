@@ -45,10 +45,10 @@ module.exports = {
     popovers: true,
     type: true,
     utilities: true,
+    navs: true,
+    navbar: true,
 
     // NOT USED
-    navs: false,
-    navbar: false,
     jumbotron: false,
     wells: false,
     grid: false,
@@ -69,7 +69,7 @@ module.exports = {
     tooltip: false,
     popover: false,
     scrollspy: false,
+    affix: false,
     tab: false,
-    affix: false
   },
 };

@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { routeActions } from 'react-router-redux';
-import { asyncConnect } from 'redux-async-connect';
+import { browserHistory } from 'react-router';
+import { asyncConnect } from 'redux-connect';
 import Helmet from 'react-helmet';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
@@ -18,7 +18,6 @@ class InvitationComplete extends Component {
     validInvitation: PropTypes.bool.isRequired,
     invitationDone: PropTypes.bool.isRequired,
     params: PropTypes.object.isRequired,
-    push: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -28,20 +27,20 @@ class InvitationComplete extends Component {
   }
 
   componentWillMount() {
-    const { validInvitation, push } = this.props;
+    const { validInvitation } = this.props;
 
     if (validInvitation) return;
 
-    push('/');
+    browserHistory.push('/');
   }
 
   componentWillReceiveProps(newProps) {
-    const { invitationDone: oldInvitation, push } = this.props;
+    const { invitationDone: oldInvitation } = this.props;
     const { invitationDone } = newProps;
 
     if (oldInvitation === invitationDone) return;
 
-    push('/');
+    browserHistory.push('/');
   }
 
   /**
@@ -84,5 +83,5 @@ const mapStateToProps = ({ completeInvitationReducer: { validInvitation, invitat
 export default compose(
   layoutCentered,
   asyncConnect(asyncConnectProps),
-  connect(mapStateToProps, { completeInvitation: complete, push: routeActions.push })
+  connect(mapStateToProps, { completeInvitation: complete })
 )(InvitationComplete);

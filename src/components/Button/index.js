@@ -46,7 +46,7 @@ function getClasses({ link, primary, linkLookAndFeel, size }) {
     'btn': true,
     'btn-primary': (!link && !linkLookAndFeel),
     'btn-success': primary,
-    'btn-link': link,
+    'btn-link': link && !primary,
     'btn-lg': isSize(size),
     'btn-sm': isSize(size),
     'btn-xs': isSize(size),
@@ -67,8 +67,8 @@ const renderButton = (attributes, text, processing) => (
   </button>
 );
 
-const renderLink = (attributes, text, processing) => (
-  <Link to={attributes.linkTo} {...attributes}>
+const renderLink = (linkTo, attributes, text, processing) => (
+  <Link to={linkTo} {...attributes}>
     {renderContent(text, processing)}
   </Link>
 );
@@ -97,9 +97,11 @@ const Button = (props) => {
     className: getClasses(props),
   };
 
-  if (attributes.linkTo) return (renderLink(attributes, text, processing));
-
   const domAttributes = _.omit(attributes, _.keys(PROP_TYPES));
+
+  if (attributes.linkTo) {
+    return (renderLink(attributes.linkTo, domAttributes, text, processing));
+  }
 
   return (renderButton(domAttributes, text, processing));
 };

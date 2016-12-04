@@ -9,16 +9,18 @@ import ApiAjax from './helpers/api/apiAjax';
 import {Provider} from 'react-redux';
 
 import { Router, browserHistory } from 'react-router';
-import { ReduxAsyncConnect } from 'redux-async-connect';
-import useScroll from 'scroll-behavior/lib/useStandardScroll';
+import { syncHistoryWithStore } from 'react-router-redux';
+import { ReduxAsyncConnect } from 'redux-connect';
 
 import getRoutes from './routes';
 
 const client = new ApiAjax();
+const store = createStore(client, window.__data);
 
-const history = useScroll(() => browserHistory)();
+// Create an enhanced history that syncs navigation events with the store
+const history = syncHistoryWithStore(browserHistory, store);
+
 const dest = document.getElementById('content');
-const store = createStore(history, client, window.__data);
 
 const component = (
   <Router

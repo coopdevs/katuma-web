@@ -2,11 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 
+import { create as createProducer } from 'redux/modules/producers/producers';
 import CreateProducerForm, { CREATE_PRODUCER_FORM } from 'components/forms/producers/Create';
 import Button from 'components/Button';
 
 class CreateProducerModal extends Component {
   static propTypes = {
+    create: PropTypes.func.isRequired,
     onCreated: PropTypes.func.isRequired,
     group: PropTypes.object.isRequired,
     showModal: PropTypes.bool.isRequired,
@@ -17,6 +19,7 @@ class CreateProducerModal extends Component {
   constructor(props) {
     super(props);
 
+    this.onSubmitCreateProducer = this._onSubmitCreateProducer.bind(this);
     this.onClickCreate = this._onClickCreate.bind(this);
   }
 
@@ -25,6 +28,15 @@ class CreateProducerModal extends Component {
    */
   _onClickCreate() {
     this._producer_form.submit();
+  }
+
+  /**
+   * Submit edit producer form
+   *
+   * @param {Object} fields
+   */
+  _onSubmitCreateProducer(fields) {
+    return this.props.create(fields);
   }
 
   /**
@@ -51,26 +63,25 @@ class CreateProducerModal extends Component {
           <Modal.Title>Crea un productor</Modal.Title>
         </Modal.Header>
 
-        <form>
-          <Modal.Body>
-            <CreateProducerForm
-              ref={(domNode) => this._producer_form = domNode}
-              initialValues={{ group_id: group.id }}
-              onCreated={onCreated}
-            />
-          </Modal.Body>
+        <Modal.Body>
+          <CreateProducerForm
+            ref={(domNode) => this._producer_form = domNode}
+            onSubmit={this.onSubmitCreateProducer}
+            onCreated={onCreated}
+            initialValues={{ group_id: group.id }}
+          />
+        </Modal.Body>
 
-          <Modal.Footer>
-            <Button
-              primary
-              processing={!!submitting}
-              onClick={this.onClickCreate}
-              type="submit"
-            >
-              Crear
-            </Button>
-          </Modal.Footer>
-        </form>
+        <Modal.Footer>
+          <Button
+            primary
+            processing={!!submitting}
+            onClick={this.onClickCreate}
+            type="submit"
+          >
+            Crear
+          </Button>
+        </Modal.Footer>
       </Modal>
     );
   }
@@ -84,4 +95,7 @@ const mapStateToProps = ({ form: allForms }) => {
   return { submitting: form.submitting };
 };
 
-export default connect(mapStateToProps)(CreateProducerModal);
+export default connect(
+  mapStateToProps,
+  { create: createProducer }
+)(CreateProducerModal);

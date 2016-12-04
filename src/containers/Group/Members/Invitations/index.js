@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
+import { send as sendBulkInvitations } from 'redux/modules/invitations/bulk';
 import BulkInvitationsForm, { BULK_INVITATIONS_FORM }from 'components/forms/invitations/Bulk';
 import { send } from 'redux/modules/invitations/list';
 import { isRole } from 'presenters/member';
@@ -13,6 +14,7 @@ class Invitations extends Component {
     group: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     send: PropTypes.func.isRequired,
+    sendBulk: PropTypes.func.isRequired,
     submitting: PropTypes.bool,
   }
 
@@ -20,6 +22,7 @@ class Invitations extends Component {
     super(props);
 
     this.onClickSendInvitations = this._onClickSendInvitations.bind(this);
+    this.onSubmitSendBulk = this._onSubmitSendBulk.bind(this);
     this.onResendInvitation = this._onResendInvitation.bind(this);
   }
 
@@ -40,6 +43,18 @@ class Invitations extends Component {
   }
 
   /**
+   * Send bulk invitations
+   *
+   * @param {Object} fields
+   */
+  _onSubmitSendBulk(fields) {
+    const { group: { id }, sendBulk } = this.props;
+    const data = {...fields, group_id: id };
+
+    return sendBulk(data);
+  }
+
+  /**
    * Render send bulk invitations form.
    */
   renderSendInvitationsForm() {
@@ -49,15 +64,21 @@ class Invitations extends Component {
     if (!isAdmin) return null;
 
     return (
-      <form>
-        <BulkInvitationsForm group={group} ref="bulk_invitations_form" />
+      <div>
+        <BulkInvitationsForm
+          group={group}
+          ref="bulk_invitations_form"
+          onSubmit={this.onSubmitSendBulk}
+        />
         <Button
           type="submit"
           primary
           processing={submitting}
           onClick={this.onClickSendInvitations}
-        >Enviar Invitaciones</Button>
-      </form>
+        >
+          Enviar Invitaciones
+        </Button>
+      </div>
     );
   }
 
@@ -88,7 +109,6 @@ class Invitations extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { invitationsReducer, form: allForms } = state;
   const { group: { id } } = ownProps;
-
   const newState = {
     invitations: invitationsReducer.invitations.byGroupId[id] || [],
   };
@@ -103,4 +123,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, { send })(Invitations);
+export default connect(
+  mapStateToProps,
+  { send, sendBulk: sendBulkInvitations }
+)(Invitations);

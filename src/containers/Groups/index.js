@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { asyncConnect } from 'redux-async-connect';
+import { asyncConnect } from 'redux-connect';
 import { Link } from 'react-router';
 
 import { load as loadGroups } from 'redux/modules/groups/groups';

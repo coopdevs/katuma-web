@@ -3,10 +3,10 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
-
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
-import { routeActions } from 'react-router-redux';
-import { asyncConnect } from 'redux-async-connect';
+import { browserHistory } from 'react-router';
+
+import { asyncConnect } from 'redux-connect';
 
 import sprite from '../../helpers/Sprite';
 import config from '../../config';
@@ -15,7 +15,6 @@ import styles from './styles/index.scss';
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    push: PropTypes.func.isRequired,
     user: PropTypes.object,
   };
 
@@ -30,13 +29,13 @@ export default class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { push, user: oldUser } = this.props;
+    const { user: oldUser } = this.props;
     const { user } = nextProps;
 
     if (!oldUser && user) {
-      push('/groups');
+      browserHistory.push('/groups');
     } else if (oldUser && !user) {
-      push('/login');
+      browserHistory.push('/login');
     }
   }
 
@@ -50,17 +49,14 @@ export default class App extends Component {
     const layoutCentered = children && children.type && !!children.type.layoutCentered;
 
     return (
-      <div className={styles.app}>
+      <div
+        className={classNames({
+          [styles.rootComponent]: true,
+          [styles.rootComponent_centered]: layoutCentered,
+        })}
+      >
         <Helmet {...head}/>
-
-        <div
-          className={classNames({
-            [styles.rootComponent]: true,
-            [styles.rootComponent_centered]: layoutCentered,
-          })}
-        >
-          {children}
-        </div>
+        {children}
       </div>
     );
   }
@@ -81,5 +77,5 @@ const mapStateToProps = (state) => ({ user: state.auth.user });
 
 export default compose(
   asyncConnect(asyncConnectProps),
-  connect(mapStateToProps, { push: routeActions.push })
+  connect(mapStateToProps)
 )(App);
