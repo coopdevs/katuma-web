@@ -167,7 +167,7 @@ export function load(groupId, all) {
 export function loadEntity(id) {
   return {
     types: [LOAD_ORDER, LOAD_ORDER_SUCCESS, LOAD_ORDER_FAIL],
-    promise: (client) => client.get(`/orders/${id}`)
+    promise: (client) => client.get(`/orders/${id}`),
   };
 }
 
