@@ -11,13 +11,13 @@ const Header = () => {
     <div className={styles.header}>
       <div className="wrap container-fluid">
         <div className="row">
-          <div className="col-xs-6">
+          <div className={`col-xs-4 ${styles.header__logoWrapper}`}>
             <IndexLink to="/" className={styles.header__logo}>K</IndexLink>
           </div>
-          <div className="col-xs-6">
+          <nav className={`col-xs-8 ${styles.header__menu}`}>
             <LoggedIn />
             <LoggedOut />
-          </div>
+          </nav>
         </div>
       </div>
     </div>

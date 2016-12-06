@@ -5,6 +5,8 @@ import { MODAL_TYPES } from './constants';
 import Button from 'components/Button';
 import UserAccessModal from './UserAccessModal';
 
+import headerStyles from '../../styles/index.scss';
+
 class LoggedOutMenu extends Component {
   static propTypes = {
     user: PropTypes.object,
@@ -62,11 +64,11 @@ class LoggedOutMenu extends Component {
 
     return (
       <nav>
-        <ul>
-          <li>
+        <ul className={headerStyles.navigationList}>
+          <li className={headerStyles.navigationList__button}>
             <Button onClick={this.openLogin}>Entrar</Button>
           </li>
-          <li>
+          <li className={headerStyles.navigationList__button}>
             <Button primary onClick={this.openSignup}>Registrarse</Button>
           </li>
           <UserAccessModal
