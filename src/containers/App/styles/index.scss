@@ -57,10 +57,9 @@ a {
 //
 // .rootComponent_centered - Vertical centered layout
 //
-$navbar_height: 70px;
 .rootComponent {
-  height: calc(100% - $navbar_height);
-  padding-top: $navbar_height;
+  height: calc(100% - #{$header_height});
+  padding-top: $header_height;
   display: flex;
   flex-direction: column;
 
