@@ -26,12 +26,13 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: rgba(0, 0, 0, .2);
+        background-color: rgba(0, 0, 0, .1);
         display: block;
         opacity: 0;
       }
 
       &:hover {
+        background-color: rgba(0, 0, 0, .05);
         &:after {
           opacity: 1;
         }
@@ -68,6 +69,15 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
   &__menu {
     display: flex;
     justify-content: flex-end;
+  }
+
+  &__menuContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    .navigationList {
+      align-self: flex-start;
+    }
   }
 
   &__logo {

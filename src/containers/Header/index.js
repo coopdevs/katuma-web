@@ -14,10 +14,10 @@ const Header = () => {
           <div className={`col-xs-4 ${styles.header__logoWrapper}`}>
             <IndexLink to="/" className={styles.header__logo}>K</IndexLink>
           </div>
-          <nav className={`col-xs-8 ${styles.header__menu}`}>
+          <div className={`col-xs-8 ${styles.header__menu}`}>
             <LoggedIn />
             <LoggedOut />
-          </nav>
+          </div>
         </div>
       </div>
     </div>

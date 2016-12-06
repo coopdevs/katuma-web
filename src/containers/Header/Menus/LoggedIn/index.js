@@ -35,22 +35,38 @@ class LoggedInMenu extends Component {
     if (!user) return null;
 
     return (
-      <ul className={headerStyles.navigationList}>
-        <li className={headerStyles.navigationList__navItem}>
-          <Link
-            to="/groups"
-            activeClassName={headerStyles.activeLink}
-          >
-            Grupos
+      <div className={headerStyles.header__menuContent}>
+        <ul className={headerStyles.navigationList}>
+          <li className={headerStyles.navigationList__navItem}>
+            <Link
+              to="/discover"
+              activeClassName={headerStyles.activeLink}
+            >
+              Descubrir
           </Link>
-        </li>
-        <li>
+          </li>
+          <li className={headerStyles.navigationList__navItem}>
+            <Link
+              to="/groups"
+              activeClassName={headerStyles.activeLink}
+            >
+              Grupos
+            </Link>
+          </li>
+          <li className={headerStyles.navigationList__navItem}>
+            <Link
+              to="/providers"
+              activeClassName={headerStyles.activeLink}
+            >
+              Proveedores
+            </Link>
+          </li>
+        </ul>
+        <div>
           <strong>{user.full_name}</strong>
-        </li>
-        <li className={headerStyles.navigationList__button}>
           <Button onClick={this.logout}>Salir</Button>
-        </li>
-      </ul>
+        </div>
+      </div>
     );
   }
 }
