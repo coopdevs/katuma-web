@@ -8,7 +8,7 @@ import styles from './styles/index.scss';
 
 const Header = () => {
   return (
-    <div className={styles.header}>
+      <div className={`navbar navbar-fixed-top ${styles.header}`}>
       <div className="wrap container-fluid">
         <div className="row">
           <div className={`col-xs-4 ${styles.header__logoWrapper}`}>

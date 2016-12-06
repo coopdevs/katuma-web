@@ -1,11 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 import { logout } from 'redux/modules/auth';
-import Button from 'components/Button';
+
 
 import headerStyles from '../../styles/index.scss';
+import styles from './styles/index.scss';
+const USER_MENU = {
+  profile: 'profile',
+  logout: 'logout',
+};
 
 class LoggedInMenu extends Component {
   static propTypes = {
@@ -16,17 +22,33 @@ class LoggedInMenu extends Component {
   constructor(props) {
     super(props);
 
-    this.logout = this.handleLogout.bind(this);
+    this.onSelectUserMenu = this._onSelectUserMenu.bind(this);
   }
 
   /**
-   * Handle logout
+   * When user click on a user menu
    *
-   * @param {Event} event
+   * @param {String} key
    */
-  handleLogout(event) {
-    event.preventDefault();
-    this.props.logout();
+  _onSelectUserMenu(key) {
+    const { logout: doLogout } = this.props;
+
+    switch (key) {
+      case USER_MENU.logout:
+        doLogout();
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Render user link
+   */
+  renderUserLink() {
+    const { user } = this.props;
+
+    return (<span>{user.full_name}</span>);
   }
 
   render() {
@@ -62,9 +84,18 @@ class LoggedInMenu extends Component {
             </Link>
           </li>
         </ul>
-        <div>
-          <strong>{user.full_name}</strong>
-          <Button onClick={this.logout}>Salir</Button>
+        <div className={styles.userMenu}>
+          <DropdownButton
+            onSelect={this.onSelectUserMenu}
+            id="user_preferences"
+            bsStyle="link"
+            title={this.renderUserLink()}
+            pullRight
+          >
+            <MenuItem eventKey={USER_MENU.profile}>Tu cuenta</MenuItem>
+            <MenuItem divider />
+            <MenuItem eventKey={USER_MENU.logout}>Salir</MenuItem>
+          </DropdownButton>
         </div>
       </div>
     );

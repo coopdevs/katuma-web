@@ -17,7 +17,8 @@ export default class Home extends Component {
         <div className={styles.welcome}>
           <div className="wrap container-fluid">
             <div className={`row ${styles.heading}`}>
-              <h1>Ahórrate los intermediarios, compra directamente a los productores.</h1>
+              <h1>Katuma</h1>
+              <h2>Ahórrate los intermediarios, compra directamente a los productores.</h2>
             </div>
           </div>
 

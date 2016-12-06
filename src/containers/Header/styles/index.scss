@@ -58,8 +58,6 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
   line-height: $header-height;
   background-color: white;
   box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.5);
-  position: relative;
-  z-index: 1;
 
   &__logoWrapper {
     display: flex;
@@ -74,9 +72,13 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
   &__menuContent {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+
     .navigationList {
       align-self: flex-start;
+    }
+
+    @media (min-width: $screen-sm-min) {
+      width: 100%;
     }
   }
 

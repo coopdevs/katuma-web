@@ -1,0 +1,10 @@
+.userMenu {
+  :global {
+    .btn-link {
+      &:focus,
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
