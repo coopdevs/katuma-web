@@ -1,12 +1,23 @@
 @import "../../../styles/variables.scss";
 
-$header-height: 70px !default;
+$header-height: 60px !default;
 $header-logo-size: 50px !default;
 $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
 
+.hamburger {
+  float: right;
+  font-size: .65rem;
+
+  @media (min-width: $screen-xs-min) {
+    display: none;
+  }
+}
 .navigationList {
   composes: cleanList from "../../../styles/utils.scss";
-  display: flex;
+  width: 100%;
+  @media (min-width: $screen-xs-min) {
+    display: flex;
+  }
 
   &__navItem {
     padding: 0;
@@ -14,7 +25,7 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
       display: block;
       font-weight: 100;
       color: $gray_6;
-      padding: 0 1em;
+      padding: .5em 1.9em;
       text-decoration: none;
       position: relative;
 
@@ -30,20 +41,27 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
         display: block;
         opacity: 0;
       }
-
       &:hover {
         background-color: rgba(0, 0, 0, .05);
-        &:after {
-          opacity: 1;
+      }
+
+      @media (min-width: $screen-xs-min) {
+        padding: 0 1em;
+        &:hover {
+          &:after {
+            opacity: 1;
+          }
         }
       }
     }
 
-    .activeLink {
-      &:after,
-      &:hover:after {
-        opacity: 1;
-        background-color: $katuma_active;
+    @media (min-width: $screen-xs-min) {
+      .activeLink {
+        &:after,
+        &:hover:after {
+          opacity: 1;
+          background-color: $katuma_active;
+        }
       }
     }
   }
@@ -54,35 +72,74 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
 }
 
 .header {
-  height: $header-height;
   line-height: $header-height;
   background-color: white;
+  border: 0;
   box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.5);
 
+  @media (min-width: $screen-xs-min) {
+    height: $header-height;
+  }
+
+  &__wrapper {
+    display: block;
+    @media (min-width: $screen-xs-min) {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
   &__logoWrapper {
-    display: flex;
-    align-items: center;
+    float: left;
+    @media (min-width: $screen-xs-min) {
+      float: none;
+      display: flex;
+      align-items: center;
+    }
   }
 
   &__menu {
-    display: flex;
-    justify-content: flex-end;
+    transition: .1s ease-in-out;
+    clear: both;
+    line-height: 1;
+    height: 0;
+    overflow: hidden;
+
+    &.isOpen {
+      height: auto;
+      overflow: visible;
+      margin: 1em 0;
+    }
+
+    @media (min-width: $screen-xs-min) {
+      display: flex;
+      height: auto;
+      line-height: $header-height;
+      margin: 0;
+      &.isOpen {
+        margin: 0;
+      }
+    }
   }
 
   &__menuContent {
-    display: flex;
-    justify-content: space-between;
-
+    margin-left: -2em;
+    margin-right: -2em;
     .navigationList {
       align-self: flex-start;
     }
 
-    @media (min-width: $screen-sm-min) {
+    @media (min-width: $screen-xs-min) {
+      display: flex;
+      justify-content: space-between;
       width: 100%;
+      margin: 0;
     }
   }
 
   &__logo {
+    display: inline-block;
+    vertical-align: middle;
     font-family: $font-family-serif;
     font-size: $header-logo-font-size;
     line-height: 1.7;

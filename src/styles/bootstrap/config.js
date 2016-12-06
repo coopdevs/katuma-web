@@ -47,6 +47,7 @@ module.exports = {
     utilities: true,
     navs: true,
     navbar: true,
+    'responsive-utilities': true,
 
     // NOT USED
     jumbotron: false,
@@ -55,7 +56,6 @@ module.exports = {
     scaffolding: false,
     glyphicons: false,
     carousel: false,
-    'responsive-utilities': false,
   },
   // We don't use boostrap's javascript
   scripts: {

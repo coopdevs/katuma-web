@@ -1,0 +1,20 @@
+@import "../../../../../styles/variables.scss";
+
+.userMenu {
+  float: right;
+  font-size: 1.2rem;
+  :global {
+    .btn-link {
+      &:focus,
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  @media (min-width: $screen-xs-min) {
+    font-size: 1rem;
+    float: none;
+    order: 2;
+  }
+}

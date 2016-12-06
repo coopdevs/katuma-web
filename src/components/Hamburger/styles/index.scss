@@ -1,0 +1,61 @@
+@import "../../../styles/variables.scss";
+
+.hamburger {
+  display: inline-block;
+  vertical-align: middle;
+  transform: rotate(0deg);
+  transition: .5s ease-in-out;
+  width: 3em;
+  height: 2.3em;
+  position: relative;
+  cursor: pointer;
+
+  span {
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+    display: block;
+    position: absolute;
+    height: .4em;
+    width: 100%;
+    background: $gray_4;
+    opacity: 1;
+    left: 0;
+
+    &:nth-child(1) {
+      top: 0;
+    }
+
+    &:nth-child(2),
+    &:nth-child(3) {
+      top: 0.9em;
+    }
+
+    &:nth-child(4) {
+      top: 1.9em;
+    }
+  }
+
+  &.isOpen {
+    span {
+      &:nth-child(1) {
+        top: 18px;
+        width: 0%;
+        left: 50%;
+      }
+
+      &:nth-child(2) {
+        transform: rotate(45deg);
+      }
+
+      &:nth-child(3) {
+        transform: rotate(-45deg);
+      }
+
+      &:nth-child(4) {
+        top: 18px;
+        width: 0%;
+        left: 50%;
+      }
+    }
+  }
+}
