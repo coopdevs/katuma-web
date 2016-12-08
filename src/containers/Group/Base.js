@@ -25,15 +25,15 @@ export default class Base extends Component {
   render() {
     const { users, user, memberships, group } = this.props;
 
+    // if (!user || !memberships.length) return null;
+
     if (!group) {
       return (<div>group not found</div>);
     }
 
     return (
       <div>
-        <Header />
-
-        <h1>{group.name}</h1>
+        <Header currentGroup={group}/>
         <Sidebar group={group} />
         {React.cloneElement(
           this.props.children,
@@ -49,15 +49,19 @@ const mapStateToProps = (_state, ownProps) => {
     const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
     const { params: { id } } = ownProps;
     const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id] || [];
+    const membersUserId = _.pluck(memberships, 'user_id');
+    const users = _.indexBy(usersReducer.users.entities.filter((user) => {
+      return _.include(membersUserId, user.id);
+    }), 'id');
     const userId = auth.user ? auth.user.id : null;
     const membership = _.findWhere(memberships, { user_id: userId });
-    const user = userId ? getMember(auth.user, membership) : {};
+    const user = userId && membership ? getMember(auth.user, membership) : {};
 
     return {
+      users,
+      user,
       memberships,
       group: groupsReducer.groups.byId[id],
-      users: usersReducer.users.byId,
-      user,
     };
   };
 };

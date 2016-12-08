@@ -3,6 +3,102 @@
 $header-logo-size: 50px !default;
 $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
 
+.dropDownMenu {
+  transition: .25s ease-in-out all;
+  float: right;
+  font-size: 1.2rem;
+
+  &_noSelector {
+    &:hover {
+      background-color: rgba(0, 0, 0, .05);
+    }
+  }
+
+  &__content {
+    display: inline-block;
+    line-height: $header_height;
+  }
+
+  :global {
+    .dropdown {
+      &:hover,
+      &.open {
+        background-color: rgba(0, 0, 0, .05);
+      }
+
+      &-toggle {
+        border: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      &-menu {
+        margin-top: 0;
+      }
+    }
+    .btn-link {
+      &:focus,
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  &_group &__content {
+    .groupName {
+      color: $gray_2;
+      font-size: 1.3em;
+      display: inline-block;
+      vertical-align: middle;
+      text-transform: uppercase;
+      font-family: $font-family-serif;
+      font-weight: 300;
+      display: none;
+      margin-right: .4em;
+    }
+
+    .logo {
+      margin-left: .3em;
+      margin-right: .3em;
+    }
+  }
+
+  &_group {
+    :global {
+      .caret {
+        margin-right: .6em;
+      }
+      .dropdown {
+        &-toggle {
+          padding: 0;
+        }
+        &-menu {
+          > li {
+            > a {
+              padding-top: 0.6em;
+              padding-bottom: 0.6em;
+              min-width: 20em;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: $screen-xs-min) {
+    font-size: 1rem;
+    float: none;
+    &_group &__content {
+      .groupName {
+        display: inline-block;
+      }
+    }
+    &_user {
+      order: 2;
+    }
+  }
+}
+
 .hamburger {
   float: right;
   font-size: .65rem;
@@ -64,13 +160,8 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
   border: 2px solid black;
   text-decoration: none;
   text-align: center;
-  transition: .25s ease-in-out all;
   font-weight: 100;
   width: $header-logo-size;
-  &:hover {
-    color: black;
-    background-color: white;
-  }
 }
 
 .menu {
@@ -91,10 +182,14 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
   }
 }
 
-.logoWrapper {
+@mixin logoWrapperCommon {
   float: none;
   display: flex;
   align-items: center;
+}
+
+.logoWrapper {
+  @include logoWrapperCommon;
 }
 
 .headerWrapper {
@@ -102,7 +197,7 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
   justify-content: space-between;
 }
 
-@mixin headerCommon{
+@mixin headerCommon {
   line-height: $header-height;
   background-color: white;
   border: 0;
@@ -170,9 +265,7 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
       }
 
       .logoWrapper {
-        float: none;
-        display: flex;
-        align-items: center;
+        @include logoWrapperCommon;
       }
 
       .menu {

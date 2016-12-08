@@ -4,7 +4,7 @@ import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 import { logout } from 'redux/modules/auth';
 
-import styles from './styles/index.scss';
+import styles from '../../styles/index.scss';
 
 const USER_MENU = {
   profile: 'profile',
@@ -46,7 +46,7 @@ class User extends Component {
   renderUserLink() {
     const { user } = this.props;
 
-    return (<span className={styles.userMenu__content}>{user.full_name}</span>);
+    return (<span className={styles.dropDownMenu__content}>{user.full_name}</span>);
   }
 
   render() {
@@ -55,7 +55,7 @@ class User extends Component {
     if (!user) return null;
 
     return (
-      <div className={styles.userMenu}>
+      <div className={`${styles.dropDownMenu} ${styles.dropDownMenu_user}`}>
         <DropdownButton
           onSelect={this.onSelectUserMenu}
           id="user_preferences"

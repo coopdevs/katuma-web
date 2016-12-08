@@ -1,18 +1,49 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { IndexLink } from 'react-router';
+import { browserHistory, IndexLink } from 'react-router';
 import classNames from 'classnames';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 
-import Hamburger from 'components/Hamburger';
 import UserMenu from './Menus/User';
-import LoggedIn from './Menus/LoggedIn';
 import LoggedOut from './Menus/LoggedOut';
 
 import styles from './styles/index.scss';
 
+function getName(group, showSelector) {
+  const name = group ? group.name : null;
+
+  if (showSelector) return name ? name : 'Tus grupos';
+
+  return name;
+}
+
+const renderNameContent = (group, showSelector) => {
+  const name = getName(group, showSelector);
+
+  return (
+    <span className={styles.dropDownMenu__content}>
+      <span to="/" className={styles.logo}>K</span>
+      {name &&
+        <span className={styles.groupName}>{name}</span>
+      }
+    </span>
+  );
+};
+
+const renderName = (group, showSelector) => {
+  if (showSelector) {
+    return (<span>{renderNameContent(group, showSelector)}</span>);
+  }
+
+  return (<IndexLink to="/">{renderNameContent(group, showSelector)}</IndexLink>);
+};
+
 class Header extends Component {
+  static displayName = 'Header';
   static propTypes = {
     user: PropTypes.object,
+    groups: PropTypes.array,
+    currentGroup: PropTypes.object,
     hideSignupButton: PropTypes.bool,
   };
 
@@ -20,6 +51,7 @@ class Header extends Component {
     super(props);
 
     this.onToggle = this._onToggle.bind(this);
+    this.onSelectGroup = this._onSelectGroup.bind(this);
     this.state = {
       isOpen: false
     };
@@ -27,6 +59,53 @@ class Header extends Component {
 
   _onToggle() {
     this.setState({ isOpen: !this.state.isOpen });
+  }
+
+  _onSelectGroup(eventKey) {
+    browserHistory.push(`/groups/${eventKey}`);
+  }
+
+  renderGroupsSelector() {
+    const { groups, currentGroup } = this.props;
+    const showSelector = groups.length > 1;
+    const classes = classNames({
+      [styles.dropDownMenu]: true,
+      [styles.dropDownMenu_group]: true,
+      [styles.dropDownMenu_noSelector]: !showSelector,
+    });
+
+    if (!showSelector) {
+      return (
+        <div className={classes}>
+          {renderName(currentGroup, showSelector)}
+        </div>
+      );
+    }
+
+    return (
+      <div className={classes}>
+        <DropdownButton
+          onSelect={this.onSelecGroup}
+          id="group_selector"
+          bsStyle="link"
+          title={renderName(currentGroup, showSelector)}
+        >
+          {groups.map((group) => {
+            const { id } = group;
+
+            return (
+              <MenuItem
+                key={id}
+                eventKey={id}
+                onSelect={this.onSelectGroup}
+              >
+                {group.name}
+              </MenuItem>
+            );
+          })}
+        </DropdownButton>
+      </div>
+    );
   }
 
   render() {
@@ -44,14 +123,8 @@ class Header extends Component {
         <div className="wrap container-fluid">
           <div className={`row ${styles.headerWrapper}`}>
             <div className={styles.logoWrapper}>
-              <IndexLink to="/" className={styles.logo}>K</IndexLink>
+              {this.renderGroupsSelector()}
             </div>
-
-            {user &&
-              <div className={styles.hamburger}>
-                <Hamburger onToggle={this.onToggle} isOpen={isOpen}/>
-              </div>
-            }
 
             <UserMenu />
 
@@ -62,7 +135,6 @@ class Header extends Component {
               })}
             >
               <LoggedOut hideSignupButton={hideSignupButton}/>
-              <LoggedIn />
             </div>
           </div>
         </div>
@@ -71,5 +143,8 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({user: state.auth.user});
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+  groups: state.groupsReducer.groups.entities,
+});
 export default connect(mapStateToProps)(Header);
