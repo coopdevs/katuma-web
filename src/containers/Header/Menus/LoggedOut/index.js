@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { MODAL_TYPES } from './constants';
 import Button from 'components/Button';
-import UserAccessModal from './UserAccessModal';
 
 import headerStyles from '../../styles/index.scss';
 
@@ -12,52 +10,13 @@ class LoggedOutMenu extends Component {
     user: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-
-
-    this.openLogin = this._openLogin.bind(this);
-    this.openSignup = this._openSignup.bind(this);
-    this.onCloseModal = this._onCloseModal.bind(this);
-
-    this.state = {
-      showModal: false,
-      modalType: ''
-    };
-  }
-
-  /**
-   * Open modal with login form
-   */
-  _openLogin() {
-    this.setState({
-      showModal: true,
-      modalType: MODAL_TYPES.login,
-    });
-  }
-
-  /**
-   * Open modal with signup form
-   */
-  _openSignup() {
-    this.setState({
-      showModal: true,
-      modalType: MODAL_TYPES.signup,
-    });
-  }
-
-  /**
-   * Open modal with signup form
-   */
-  _onCloseModal() {
-    this.setState({
-      showModal: false,
-      modalType: '',
-    });
-  }
+  static contextTypes = {
+    openLoginDialog: PropTypes.func.isRequired,
+    openSignupDialog: PropTypes.func.isRequired,
+  };
 
   render() {
-    const { showModal, modalType } = this.state;
+    const { openLoginDialog, openSignupDialog} = this.context;
     const { user } = this.props;
 
     if (user) return null;
@@ -66,16 +25,11 @@ class LoggedOutMenu extends Component {
       <nav>
         <ul className={headerStyles.navigationList}>
           <li className={headerStyles.navigationList__button}>
-            <Button onClick={this.openLogin}>Entrar</Button>
+            <Button onClick={openLoginDialog}>Accede a tu cuenta</Button>
           </li>
           <li className={headerStyles.navigationList__button}>
-            <Button primary onClick={this.openSignup}>Registrarse</Button>
+            <Button primary onClick={openSignupDialog}>Registrate</Button>
           </li>
-          <UserAccessModal
-            showModal={showModal}
-            modalType={modalType}
-            onCloseModal={this.onCloseModal}
-          />
         </ul>
       </nav>
     );

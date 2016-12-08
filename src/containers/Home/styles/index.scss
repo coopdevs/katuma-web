@@ -1,7 +1,5 @@
 @import "../../../styles/variables.scss";
 
-@import url('http://fonts.googleapis.com/css?family=Roboto:100,300,400');
-
 $jambotron_inner_padding: 2.5em;
 $jambotron_scale: 0.8rem;
 
@@ -11,7 +9,7 @@ $jambotron_scale: 0.8rem;
   position: relative;
   font-weight: 300;
   background-color: transparent;
-  background-image: url(../images/sheep-bw.jpg);
+  background-image: url(../images/sheep.jpg);
   border-bottom: 3px solid $katuma_active;
   background-size: cover;
   color: white;
@@ -28,7 +26,7 @@ $jambotron_scale: 0.8rem;
   }
 
   @media (min-width: $screen-xs-min) {
-    background-position: 0 -5em;
+    background-position: 0 -4em;
   }
 
   @media (min-width: $screen-md-min) {

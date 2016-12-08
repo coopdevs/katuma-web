@@ -17,25 +17,6 @@ const PROP_TYPES = {
 };
 
 /**
- * Get button size
- *
- * @param {String} size
- * @param {Boolean}
- */
-function isSize(size) {
-  switch (size) {
-    case 'lg':
-      return true;
-    case 'sm':
-      return true;
-    case 'xs':
-      return true;
-    default:
-      return false;
-  }
-}
-
-/**
  * Get css classes for button
  *
  * @param {String} error
@@ -47,9 +28,9 @@ function getClasses({ link, primary, linkLookAndFeel, size }) {
     'btn-primary': (!link && !linkLookAndFeel),
     'btn-success': primary,
     'btn-link': link && !primary,
-    'btn-lg': isSize(size),
-    'btn-sm': isSize(size),
-    'btn-xs': isSize(size),
+    'btn-lg': size === 'lg',
+    'btn-sm': size === 'sm',
+    'btn-xs': size === 'xs',
     [styles.link]: linkLookAndFeel,
   });
 }

@@ -1,12 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
 import Header from '../Header';
 import Icon from '../../components/Icon/';
+import Button from 'components/Button/';
 import { GLYPHS } from '../../components/Icon/glyphs';
 import styles from './styles/index.scss';
 
 export default class Home extends Component {
+  static contextTypes = {
+    openSignupDialog: PropTypes.func.isRequired,
+  };
+
   render() {
     return (
       <div className={styles.home}>
@@ -17,8 +22,19 @@ export default class Home extends Component {
         <div className={styles.welcome}>
           <div className="wrap container-fluid">
             <div className={`row ${styles.heading}`}>
-              <h1>Katuma</h1>
-              <h2>Ahórrate los intermediarios, compra directamente a los productores.</h2>
+              <div className="col-xs-12">
+                <h1>Katuma</h1>
+                <h2>Ahórrate los intermediarios, compra directamente a los productores.</h2>
+              </div>
+              <div className="col-xs-12">
+              <Button
+                onClick={this.context.openSignupDialog}
+                size="lg"
+                primary
+              >
+                Empieza ahora
+              </Button>
+              </div>
             </div>
           </div>
 

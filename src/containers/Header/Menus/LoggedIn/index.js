@@ -17,7 +17,7 @@ class LoggedInMenu extends Component {
     return (
       <div className={headerStyles.header__menuContent}>
         <ul className={headerStyles.navigationList}>
-          <li className={headerStyles.navigationList__navItem}>
+          <li className={headerStyles.navItem}>
             <Link
               to="/discover"
               activeClassName={headerStyles.activeLink}
@@ -25,7 +25,7 @@ class LoggedInMenu extends Component {
               Descubrir
           </Link>
           </li>
-          <li className={headerStyles.navigationList__navItem}>
+          <li className={headerStyles.navItem}>
             <Link
               to="/groups"
               activeClassName={headerStyles.activeLink}
@@ -33,7 +33,7 @@ class LoggedInMenu extends Component {
               Grupos
             </Link>
           </li>
-          <li className={headerStyles.navigationList__navItem}>
+          <li className={headerStyles.navItem}>
             <Link
               to="/providers"
               activeClassName={headerStyles.activeLink}
