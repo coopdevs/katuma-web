@@ -46,7 +46,7 @@ class User extends Component {
   renderUserLink() {
     const { user } = this.props;
 
-    return (<span>{user.full_name}</span>);
+    return (<span className={styles.userMenu__content}>{user.full_name}</span>);
   }
 
   render() {

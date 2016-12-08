@@ -17,7 +17,7 @@ export default class Home extends Component {
       <div className={styles.home}>
         <Helmet title="Bienvenido" />
 
-        <Header />
+        <Header hideSignupButton/>
 
         <div className={styles.welcome}>
           <div className="wrap container-fluid">

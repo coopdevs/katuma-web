@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IndexLink } from 'react-router';
 import classNames from 'classnames';
 
-// import Hamburger from 'components/Hamburger';
+import Hamburger from 'components/Hamburger';
 import UserMenu from './Menus/User';
 import LoggedIn from './Menus/LoggedIn';
 import LoggedOut from './Menus/LoggedOut';
@@ -13,13 +13,16 @@ import styles from './styles/index.scss';
 class Header extends Component {
   static propTypes = {
     user: PropTypes.object,
+    hideSignupButton: PropTypes.bool,
   };
 
   constructor(props) {
     super(props);
 
     this.onToggle = this._onToggle.bind(this);
-    this.state = { isOpen: false };
+    this.state = {
+      isOpen: false
+    };
   }
 
   _onToggle() {
@@ -27,12 +30,9 @@ class Header extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, hideSignupButton } = this.props;
     const { isOpen } = this.state;
 
-    // <div className={styles.hamburger}>
-    //   <Hamburger onToggle={this.onToggle} isOpen={isOpen}/>
-    // </div>
     return (
         <nav
           className={classNames({
@@ -47,15 +47,21 @@ class Header extends Component {
               <IndexLink to="/" className={styles.logo}>K</IndexLink>
             </div>
 
+            {user &&
+              <div className={styles.hamburger}>
+                <Hamburger onToggle={this.onToggle} isOpen={isOpen}/>
+              </div>
+            }
+
             <UserMenu />
 
             <div
               className={classNames({
                 [styles.menu]: true,
-                [styles.isOpen]: user && isOpen,
+                [styles.isOpen]: isOpen,
               })}
             >
-              <LoggedOut />
+              <LoggedOut hideSignupButton={hideSignupButton}/>
               <LoggedIn />
             </div>
           </div>

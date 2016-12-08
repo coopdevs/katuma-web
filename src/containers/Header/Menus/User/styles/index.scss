@@ -3,7 +3,24 @@
 .userMenu {
   float: right;
   font-size: 1.2rem;
+
+  &__content {
+    line-height: $header_height;
+  }
+
   :global {
+    .dropdown {
+      &:hover,
+      &.open {
+        background-color: rgba(0, 0, 0, .05);
+      }
+
+      &-toggle {
+        border: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
     .btn-link {
       &:focus,
       &:hover {

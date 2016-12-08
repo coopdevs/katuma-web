@@ -8,6 +8,7 @@ import headerStyles from '../../styles/index.scss';
 class LoggedOutMenu extends Component {
   static propTypes = {
     user: PropTypes.object,
+    hideSignupButton: PropTypes.bool,
   };
 
   static contextTypes = {
@@ -17,7 +18,7 @@ class LoggedOutMenu extends Component {
 
   render() {
     const { openLoginDialog, openSignupDialog} = this.context;
-    const { user } = this.props;
+    const { user, hideSignupButton } = this.props;
 
     if (user) return null;
 
@@ -27,9 +28,11 @@ class LoggedOutMenu extends Component {
           <li className={headerStyles.navigationList__button}>
             <Button onClick={openLoginDialog}>Accede a tu cuenta</Button>
           </li>
-          <li className={headerStyles.navigationList__button}>
-            <Button primary onClick={openSignupDialog}>Registrate</Button>
-          </li>
+          {!hideSignupButton &&
+            <li className={headerStyles.navigationList__button}>
+              <Button primary onClick={openSignupDialog}>Registrate</Button>
+            </li>
+          }
         </ul>
       </nav>
     );

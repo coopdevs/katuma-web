@@ -15,7 +15,7 @@ class LoggedInMenu extends Component {
     if (!user) return null;
 
     return (
-      <div className={headerStyles.header__menuContent}>
+      <div className={headerStyles.menuContent}>
         <ul className={headerStyles.navigationList}>
           <li className={headerStyles.navItem}>
             <Link

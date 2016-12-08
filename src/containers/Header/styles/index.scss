@@ -6,6 +6,7 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
 .hamburger {
   float: right;
   font-size: .65rem;
+  margin-left: 1.2em;
 
   @media (min-width: $screen-xs-min) {
     display: none;
@@ -22,13 +23,11 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
   }
 }
 
-.navItem {
-  padding: 0;
+@mixin navItemCommon {
   a {
     display: block;
     font-weight: 100;
     color: $gray_6;
-    padding: .5em 1.9em;
     text-decoration: none;
     position: relative;
 
@@ -42,30 +41,16 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
       right: 0;
       background-color: rgba(0, 0, 0, .1);
       display: block;
-      opacity: 0;
     }
 
     &:hover {
       background-color: rgba(0, 0, 0, .05);
     }
-
-    &.activeLink {
-      &:after,
-      &:hover:after {
-        opacity: 1;
-        background-color: $katuma_active;
-      }
-    }
-
-    @media (min-width: $screen-xs-min) {
-      padding: 0 1em;
-      &:hover {
-        &:after {
-          opacity: 1;
-        }
-      }
-    }
   }
+}
+
+.navItem {
+  @include navItemCommon;
 }
 
 .logo {
@@ -99,7 +84,6 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
 .menuContent {
   display: flex;
   justify-content: space-between;
-  width: 100%;
   margin: 0;
 
   .navigationList {
@@ -118,74 +102,119 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
   justify-content: space-between;
 }
 
-.header {
+@mixin headerCommon{
   line-height: $header-height;
   background-color: white;
   border: 0;
   box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+  @include headerCommon;
   height: $header-height;
 
   &_responsive {
+    @include headerCommon;
     height: auto;
-    .headwerWrapper {
+
+    .headerWrapper {
       display: block;
+    }
 
-      .menu {
-        display: block;
-        clear: both;
-        line-height: 1;
-        height: 0;
-        overflow: hidden;
-        &.isOpen {
-          height: auto;
-          overflow: visible;
-          margin: 1em 0;
-        }
-      }
-
-      .logoWrapper {
-        float: left;
-      }
-
-      .menuContent {
-        margin-left: -2em;
-        margin-right: -2em;
-      }
-
-      @media (min-width: $screen-xs-min) {
-        height: $header-height;
-
-        .headerWrapper {
-          display: flex;
-          justify-content: space-between;
-        }
-
-        .logoWrapper {
-          float: none;
-          display: flex;
-          align-items: center;
-        }
-
-        menu {
-          display: flex;
-          height: auto;
-          line-height: $header-height;
-          margin: 0;
-          &.isOpen {
-            margin: 0;
-          }
-        }
-
-        .menuContent {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-          margin: 0;
-        }
+    .menu {
+      display: block;
+      width: 100%;
+      clear: both;
+      line-height: 1;
+      height: 0;
+      overflow: hidden;
+      &.isOpen {
+        height: auto;
+        overflow: visible;
+        padding: 1em 0;
       }
     }
 
+    .logoWrapper {
+      float: left;
+      display: block;
+      height: $header_height;
+    }
+
+    .menuContent {
+      margin-left: -2em;
+      margin-right: -2em;
+    }
+
+    .navigationList {
+      display: block;
+    }
+
+    .navItem {
+      padding: 0;
+      a {
+        padding: 1em 1.9em;
+        &:after {
+          opacity: 0;
+        }
+      }
+
+    }
+
     @media (min-width: $screen-xs-min) {
+      height: $header-height;
+
+      .headerWrapper {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .logoWrapper {
+        float: none;
+        display: flex;
+        align-items: center;
+      }
+
+      .menu {
+        width: auto;
+        display: flex;
+        height: auto;
+        line-height: $header-height;
+        margin: 0;
+        &.isOpen {
+          padding: 0;
+        }
+      }
+
+      .menuContent {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0;
+      }
+
+      .navigationList {
+        display: flex;
+      }
+
+      .navItem {
+        a {
+          padding: 0 1em;
+          &:hover {
+            &:after {
+              opacity: 1;
+            }
+          }
+
+          &.activeLink {
+            &:after,
+            &:hover:after {
+              opacity: 1;
+              background-color: $katuma_active;
+            }
+          }
+        }
+      }
     }
   }
 }
