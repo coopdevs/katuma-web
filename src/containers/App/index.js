@@ -61,8 +61,10 @@ export default class App extends Component {
 
     if (!oldUser && user) {
       browserHistory.push('/groups');
+      this.onCloseModal();
     } else if (oldUser && !user) {
       browserHistory.push('/login');
+      this.onCloseModal();
     }
   }
 
