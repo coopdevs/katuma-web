@@ -11,7 +11,7 @@ $jambotron_scale: 0.8rem;
   position: relative;
   font-weight: 300;
   background-color: transparent;
-  background-image: url(../images/sheep.jpg);
+  background-image: url(../images/sheep-bw.jpg);
   border-bottom: 3px solid $katuma_active;
   background-size: cover;
   color: white;
@@ -23,9 +23,18 @@ $jambotron_scale: 0.8rem;
     top: 0;
     left: 0;
     right: 0;
-    height: 6.5em;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0% ,rgba(0, 0, 0, 0) 100%);
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .6);
   }
+
+  @media (min-width: $screen-xs-min) {
+    background-position: 0 -5em;
+  }
+
+  @media (min-width: $screen-md-min) {
+    background-position: 0 -10em;
+  }
+
 
   :global {
     .wrap {
@@ -39,10 +48,13 @@ $jambotron_scale: 0.8rem;
   // We set base font in header
   font-size: $jambotron_scale;
   font-family: $font-family-serif;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 1);
-  padding: 4.5em $jambotron_inner_padding 0 $jambotron_inner_padding;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  padding: 4.5em 0;
+  min-height: 8em;
 
   h1 {
+    display: block;
+    width: 100%;
     font-size: 4em;
     font-weight: 100;
     text-transform: uppercase;
@@ -50,6 +62,7 @@ $jambotron_scale: 0.8rem;
   }
 
   h2 {
+    width: 15em;
     font-size: 2em;
     font-weight: 100;
     margin-top: 0;
@@ -57,9 +70,9 @@ $jambotron_scale: 0.8rem;
 }
 
 .services {
+  font-family: $font-family-serif;
   font-size: $jambotron_scale;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
 
   &__inner {
     padding: 2.8em $jambotron_inner_padding;
@@ -79,7 +92,8 @@ $jambotron_scale: 0.8rem;
     }
 
     p {
-      font-size: 1.6em;
+      font-size: 1.3em;
+      line-height: 1.2;
       margin: 0 0 0.8em 0;
       text-align: center;
     }
@@ -87,7 +101,7 @@ $jambotron_scale: 0.8rem;
     strong {
       display: block;
       font-size: 1.1em;
-      text-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
+      font-weight: 100;
     }
   }
 
@@ -96,9 +110,9 @@ $jambotron_scale: 0.8rem;
     margin-right: 1em;
     border-radius: 0.1em;
     svg {
-      fill: white;
-      width: 4em;
-      height: 4em;
+      fill: rgba(0, 0, 0, .3);
+      width: 3em;
+      height: 3em;
     }
   }
 }

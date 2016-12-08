@@ -22,24 +22,6 @@ export default class Home extends Component {
             </div>
           </div>
 
-          <div className={styles.services}>
-            <div className="wrap container-fluid">
-              <div className={`row ${styles.services__inner}`}>
-                <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
-                  <div className={styles.services__icon}><Icon glyph={GLYPHS.cogs} /></div>
-                  <p><strong>Gestiona fácilmente</strong> grupos de consumo.</p>
-                </div>
-                <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
-                  <div className={styles.services__icon}><Icon glyph={GLYPHS.users} /></div>
-                  <p><strong>Crea vínculos de calidad</strong> con los productores.</p>
-                </div>
-                <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
-                  <div className={styles.services__icon}><Icon glyph={GLYPHS.lineChart} /></div>
-                  <p><strong>Un mercado alternativo</strong> para productores.</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className={styles.phrase}>
@@ -49,6 +31,25 @@ export default class Home extends Component {
                 <strong>KATUMA</strong> es una <strong>herramienta</strong> para administradores, miembros y productores de
                 <strong> grupos de consumo colaborativo</strong>.
               </p>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.services}>
+          <div className="wrap container-fluid">
+            <div className={`row ${styles.services__inner}`}>
+              <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
+                <div className={styles.services__icon}><Icon glyph={GLYPHS.cogs} /></div>
+                <p><strong>Gestiona fácilmente</strong> grupos de consumo.</p>
+              </div>
+              <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
+                <div className={styles.services__icon}><Icon glyph={GLYPHS.users} /></div>
+                <p><strong>Crea vínculos de calidad</strong> con los productores.</p>
+              </div>
+              <div className={`col-xs-12 col-sm-4 ${styles.services__item}`}>
+                <div className={styles.services__icon}><Icon glyph={GLYPHS.lineChart} /></div>
+                <p><strong>Un mercado alternativo</strong> para productores.</p>
+              </div>
             </div>
           </div>
         </div>
