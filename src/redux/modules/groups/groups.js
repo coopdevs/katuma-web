@@ -14,6 +14,7 @@ import mergeResponse from 'redux/lib/merge';
 
 const initialState = {
   groups: { entities: [], byId: {} },
+  loading: false,
   createdGroupId: null,
   errors: null,
 };

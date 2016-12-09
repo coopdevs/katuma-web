@@ -12,6 +12,10 @@ import { load as loadMemberships } from 'redux/modules/groups/memberships';
 import Header from '../Header';
 import Sidebar from './Sidebar';
 
+const ErrorMessage = ({ message }) => (
+  <div>{message}</div>
+);
+
 export default class Base extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
@@ -22,47 +26,47 @@ export default class Base extends Component {
     group: PropTypes.object,
   }
 
-  render() {
+  renderChildren() {
     const { users, user, memberships, group } = this.props;
 
-    // if (!user || !memberships.length) return null;
+    if (!group) return (<ErrorMessage message="Group not found"/>);
 
-    if (!group) {
-      return (<div>group not found</div>);
-    }
+    return React.cloneElement(
+      this.props.children,
+      { group, user, memberships, users }
+    );
+  }
+
+  render() {
+    const { group } = this.props;
 
     return (
       <div>
         <Header currentGroup={group}/>
-        <Sidebar group={group} />
-        {React.cloneElement(
-          this.props.children,
-          { group, user, memberships, users }
-        )}
+        {group && <Sidebar group={group} />}
+        {this.renderChildren()}
       </div>
     );
   }
 }
 
-const mapStateToProps = (_state, ownProps) => {
-  return (state) => {
-    const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
-    const { params: { id } } = ownProps;
-    const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id] || [];
-    const membersUserId = _.pluck(memberships, 'user_id');
-    const users = _.indexBy(usersReducer.users.entities.filter((user) => {
-      return _.include(membersUserId, user.id);
-    }), 'id');
-    const userId = auth.user ? auth.user.id : null;
-    const membership = _.findWhere(memberships, { user_id: userId });
-    const user = userId && membership ? getMember(auth.user, membership) : {};
+const mapStateToProps = (state, ownProps) => {
+  const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
+  const { params: { id } } = ownProps;
+  const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id] || [];
+  const membersUserId = _.pluck(memberships, 'user_id');
+  const users = _.indexBy(usersReducer.users.entities.filter((user) => {
+    return _.include(membersUserId, user.id);
+  }), 'id');
+  const userId = auth.user ? auth.user.id : null;
+  const membership = _.findWhere(memberships, { user_id: userId });
+  const user = userId && membership ? getMember(auth.user, membership) : {};
 
-    return {
-      users,
-      user,
-      memberships,
-      group: groupsReducer.groups.byId[id],
-    };
+  return {
+    users,
+    user,
+    memberships,
+    group: groupsReducer.groups.byId[id],
   };
 };
 

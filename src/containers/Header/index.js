@@ -14,7 +14,7 @@ function getName(group, showSelector) {
 
   if (showSelector) return name ? name : 'Tus grupos';
 
-  return name;
+  return name ? name : 'Katuma';
 }
 
 const renderNameContent = (group, showSelector) => {

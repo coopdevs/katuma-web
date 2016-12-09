@@ -6,6 +6,7 @@ const LOAD_SUCCESS = 'group/memberships/LOAD_SUCCESS';
 const LOAD_FAIL = 'group/memberships/LOAD_FAIL';
 
 const initialState = {
+  loading: false,
   memberships: {
     entities: [],
     byBasicResourceGroupId: {},
