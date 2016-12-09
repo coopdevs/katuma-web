@@ -6,9 +6,9 @@ const LOAD_SUCCESS = 'group/memberships/LOAD_SUCCESS';
 const LOAD_FAIL = 'group/memberships/LOAD_FAIL';
 
 const initialState = {
+  loading: false,
   memberships: {
     entities: [],
-    byUserID: [],
     byBasicResourceGroupId: {},
   },
 };
@@ -28,7 +28,6 @@ export default function membershipsReducer(state = initialState, action = {}) {
         loading: false,
         memberships: {
           entities: entities,
-          byUserID: _.indexBy(entities, 'user_id'),
           byBasicResourceGroupId: _.groupBy(entities, 'basic_resource_group_id'),
         },
       };

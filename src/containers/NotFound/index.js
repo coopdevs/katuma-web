@@ -1,4 +1,5 @@
 import React, { Component }from 'react';
+import { browserHistory } from 'react-router';
 
 import Icon from 'components/Icon/';
 import { GLYPHS } from 'components/Icon/glyphs';
@@ -10,7 +11,6 @@ import styles from './styles/index.scss';
 
 class NotFound extends Component {
   static layoutCentered = true;
-
   render() {
     return (
       <div className={layoutStyles.layoutCentered}>
@@ -19,7 +19,12 @@ class NotFound extends Component {
             <div className={styles.icon}><Icon glyph={GLYPHS.mapSigns} /></div>
             <h1>Upps!</h1>
             <p>Pagina no encontrada</p>
-            <Button primary linkTo="/">Volver</Button>
+            <Button
+              primary
+              onClick={() => browserHistory.goBack()}
+            >
+              Volver
+            </Button>
           </div>
         </div>
       </div>

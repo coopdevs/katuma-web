@@ -1,38 +1,313 @@
 @import "../../../styles/variables.scss";
 
-$header-height: 70px !default;
 $header-logo-size: 50px !default;
 $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
 
-.header {
+.dropDownMenu {
+  transition: .25s ease-in-out all;
+  float: right;
+  font-size: 1.2rem;
 
-  height: $header-height;
+  &_noSelector {
+    &:hover {
+      background-color: rgba(0, 0, 0, .05);
+    }
+  }
+
+  &__content {
+    display: inline-block;
+    line-height: $header_height;
+  }
+
+  :global {
+    .dropdown {
+      &:hover,
+      &.open {
+        background-color: rgba(0, 0, 0, .05);
+      }
+
+      &-toggle {
+        border: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      &-menu {
+        margin-top: 0;
+      }
+    }
+    .btn-link {
+      &:focus,
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  &_group &__content {
+    .groupName {
+      color: $gray_2;
+      font-size: 1.3em;
+      display: inline-block;
+      vertical-align: middle;
+      text-transform: uppercase;
+      font-family: $font-family-serif;
+      font-weight: 300;
+      display: none;
+      margin-right: .4em;
+    }
+
+    .logo {
+      margin-left: .3em;
+      margin-right: .3em;
+    }
+  }
+
+  &_group {
+    :global {
+      .caret {
+        margin-right: .6em;
+      }
+      .dropdown {
+        &-toggle {
+          padding: 0;
+        }
+        &-menu {
+          > li {
+            > a {
+              padding-top: 0.6em;
+              padding-bottom: 0.6em;
+              min-width: 20em;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: $screen-xs-min) {
+    font-size: 1rem;
+    float: none;
+    &_group &__content {
+      .groupName {
+        display: inline-block;
+      }
+    }
+    &_user {
+      order: 2;
+    }
+  }
+}
+
+.hamburger {
+  float: right;
+  font-size: .65rem;
+  margin-left: 1.2em;
+
+  @media (min-width: $screen-xs-min) {
+    display: none;
+  }
+}
+
+.navigationList {
+  composes: cleanList from "../../../styles/utils.scss";
+  width: 100%;
+  display: flex;
+
+  &__button {
+    margin-left: .5em;
+  }
+}
+
+@mixin navItemCommon {
+  a {
+    display: block;
+    font-weight: 100;
+    color: $gray_6;
+    text-decoration: none;
+    position: relative;
+
+    &:after {
+      transition: .25s ease-in-out all;
+      content: '';
+      height: 3px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, .1);
+      display: block;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .05);
+    }
+  }
+}
+
+.navItem {
+  @include navItemCommon;
+}
+
+.logo {
+  display: inline-block;
+  vertical-align: middle;
+  font-family: $font-family-serif;
+  font-size: $header-logo-font-size;
+  line-height: 1.7;
+  background-color: black;
+  color: white;
+  border: 2px solid black;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 100;
+  width: $header-logo-size;
+}
+
+.menu {
+  transition: .1s ease-in-out;
+  display: flex;
+  height: auto;
+  line-height: $header-height;
+  margin: 0;
+}
+
+.menuContent {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+
+  .navigationList {
+    align-self: flex-start;
+  }
+}
+
+@mixin logoWrapperCommon {
+  float: none;
+  display: flex;
+  align-items: center;
+}
+
+.logoWrapper {
+  @include logoWrapperCommon;
+}
+
+.headerWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin headerCommon {
   line-height: $header-height;
   background-color: white;
-  border-bottom: 1px solid $gray_11;
+  border: 0;
+  box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.5);
+}
 
-  &__logo {
-    display: inline-block;
-    font-family: $font-family-serif;
-    font-size: $header-logo-font-size;
-    line-height: 1.7;
-    color: black;
-    border: 2px solid black;
-    text-decoration: none;
-    text-align: center;
-    transition: .25s ease-in-out all;
-    font-weight: 100;
-    width: $header-logo-size;
-    &:hover {
-      color: white;
-      background-color: black;
+.header {
+  @include headerCommon;
+  height: $header-height;
+
+  &_responsive {
+    @include headerCommon;
+    height: auto;
+
+    .headerWrapper {
+      display: block;
+    }
+
+    .menu {
+      display: block;
+      width: 100%;
+      clear: both;
+      line-height: 1;
+      height: 0;
+      overflow: hidden;
+      &.isOpen {
+        height: auto;
+        overflow: visible;
+        padding: 1em 0;
+      }
+    }
+
+    .logoWrapper {
+      float: left;
+      display: block;
+      height: $header_height;
+    }
+
+    .menuContent {
+      margin-left: -2em;
+      margin-right: -2em;
+    }
+
+    .navigationList {
+      display: block;
+    }
+
+    .navItem {
+      padding: 0;
+      a {
+        padding: 1em 1.9em;
+        &:after {
+          opacity: 0;
+        }
+      }
+
+    }
+
+    @media (min-width: $screen-xs-min) {
+      height: $header-height;
+
+      .headerWrapper {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .logoWrapper {
+        @include logoWrapperCommon;
+      }
+
+      .menu {
+        width: auto;
+        display: flex;
+        height: auto;
+        line-height: $header-height;
+        margin: 0;
+        &.isOpen {
+          padding: 0;
+        }
+      }
+
+      .menuContent {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0;
+      }
+
+      .navigationList {
+        display: flex;
+      }
+
+      .navItem {
+        a {
+          padding: 0 1em;
+          &:hover {
+            &:after {
+              opacity: 1;
+            }
+          }
+
+          &.activeLink {
+            &:after,
+            &:hover:after {
+              opacity: 1;
+              background-color: $katuma_active;
+            }
+          }
+        }
+      }
     }
   }
-  nav {
-    text-align: right;
-    ul {
-      @include list-inline;
-    }
-  }
-
 }

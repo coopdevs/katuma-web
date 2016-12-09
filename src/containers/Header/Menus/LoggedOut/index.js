@@ -1,79 +1,38 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { MODAL_TYPES } from './constants';
 import Button from 'components/Button';
-import UserAccessModal from './UserAccessModal';
+
+import headerStyles from '../../styles/index.scss';
 
 class LoggedOutMenu extends Component {
   static propTypes = {
     user: PropTypes.object,
+    hideSignupButton: PropTypes.bool,
   };
 
-  constructor(props) {
-    super(props);
-
-
-    this.openLogin = this._openLogin.bind(this);
-    this.openSignup = this._openSignup.bind(this);
-    this.onCloseModal = this._onCloseModal.bind(this);
-
-    this.state = {
-      showModal: false,
-      modalType: ''
-    };
-  }
-
-  /**
-   * Open modal with login form
-   */
-  _openLogin() {
-    this.setState({
-      showModal: true,
-      modalType: MODAL_TYPES.login,
-    });
-  }
-
-  /**
-   * Open modal with signup form
-   */
-  _openSignup() {
-    this.setState({
-      showModal: true,
-      modalType: MODAL_TYPES.signup,
-    });
-  }
-
-  /**
-   * Open modal with signup form
-   */
-  _onCloseModal() {
-    this.setState({
-      showModal: false,
-      modalType: '',
-    });
-  }
+  static contextTypes = {
+    openLoginDialog: PropTypes.func.isRequired,
+    openSignupDialog: PropTypes.func.isRequired,
+  };
 
   render() {
-    const { showModal, modalType } = this.state;
-    const { user } = this.props;
+    const { openLoginDialog, openSignupDialog} = this.context;
+    const { user, hideSignupButton } = this.props;
 
     if (user) return null;
 
     return (
       <nav>
-        <ul>
-          <li>
-            <Button onClick={this.openLogin}>Entrar</Button>
+        <ul className={headerStyles.navigationList}>
+          <li className={headerStyles.navigationList__button}>
+            <Button onClick={openLoginDialog}>Accede a tu cuenta</Button>
           </li>
-          <li>
-            <Button primary onClick={this.openSignup}>Registrarse</Button>
-          </li>
-          <UserAccessModal
-            showModal={showModal}
-            modalType={modalType}
-            onCloseModal={this.onCloseModal}
-          />
+          {!hideSignupButton &&
+            <li className={headerStyles.navigationList__button}>
+              <Button primary onClick={openSignupDialog}>Registrate</Button>
+            </li>
+          }
         </ul>
       </nav>
     );

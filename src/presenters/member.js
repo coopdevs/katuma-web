@@ -36,9 +36,9 @@ export function getRole(member) {
  * @param {Object} membership
  * @returns {Object}
  */
-export function getMember(user, { role }) {
+export function getMember(user, membership) {
   return {
     ...user,
-    role,
+    role: membership.role,
   };
 }

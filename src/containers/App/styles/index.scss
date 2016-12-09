@@ -46,6 +46,7 @@
 .defaultLink,
 a {
   color: $katuma_active;
+  text-decoration: none;
   &:hover,
   &:active {
     color: $katuma_active;
@@ -57,11 +58,13 @@ a {
 // .rootComponent_centered - Vertical centered layout
 //
 .rootComponent {
-  height: 100%;
+  height: calc(100% - #{$header_height});
+  padding-top: $header_height;
   display: flex;
   flex-direction: column;
 
   &__centered {
+    padding-top: 0;
     margin-top: 2em;
     align-items: center;
   }

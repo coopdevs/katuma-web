@@ -30,12 +30,12 @@ class Sidebar extends Component {
           </Link>
         </li>
         <li>
-          <IndexLink
+          <Link
             to={`/groups/${group.id}/orders`}
             activeClassName={styles.activeLink}
           >
             Pedidos
-          </IndexLink>
+          </Link>
         </li>
       </ul>
     );
