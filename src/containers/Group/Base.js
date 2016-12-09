@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
 
 import { getMember } from 'presenters/member';
-import { loadGroup } from 'redux/modules/groups/groups';
 import { load as loadUsers } from 'redux/modules/users/users';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
 
@@ -24,6 +23,7 @@ export default class Base extends Component {
     memberships: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     group: PropTypes.object,
+    loading: PropTypes.bool,
   }
 
   renderChildren() {
@@ -38,13 +38,13 @@ export default class Base extends Component {
   }
 
   render() {
-    const { group } = this.props;
+    const { group, loading } = this.props;
 
     return (
       <div>
         <Header currentGroup={group}/>
         {group && <Sidebar group={group} />}
-        {this.renderChildren()}
+        {!loading && this.renderChildren()}
       </div>
     );
   }
@@ -53,6 +53,7 @@ export default class Base extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
   const { params: { id } } = ownProps;
+  const loading = _.any([membershipsReducer.loading, usersReducer.loading]);
   const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id] || [];
   const membersUserId = _.pluck(memberships, 'user_id');
   const users = _.indexBy(usersReducer.users.entities.filter((user) => {
@@ -63,6 +64,7 @@ const mapStateToProps = (state, ownProps) => {
   const user = userId && membership ? getMember(auth.user, membership) : {};
 
   return {
+    loading,
     users,
     user,
     memberships,
@@ -73,7 +75,6 @@ const mapStateToProps = (state, ownProps) => {
 const asyncConnectProps = [{
   promise: ({ store: { dispatch }, params: { id } }) => {
     return Promise.all([
-      dispatch(loadGroup(id)),
       dispatch(loadUsers(id)),
       dispatch(loadMemberships(id)),
     ]);

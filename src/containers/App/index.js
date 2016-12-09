@@ -3,11 +3,11 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
-import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { browserHistory } from 'react-router';
-
 import { asyncConnect } from 'redux-connect';
 
+import { load as loadGroups } from 'redux/modules/groups/groups';
+import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { MODAL_TYPES } from 'components/dialogs/constants';
 import UserAccessDialog from 'components/dialogs/UserAccess';
 import sprite from '../../helpers/Sprite';
@@ -130,9 +130,14 @@ export default class App extends Component {
 const asyncConnectProps = [{
   promise: ({ store: { dispatch, getState } }) => {
     const promises = [];
+    const state = getState();
 
-    if (!isAuthLoaded(getState())) {
+    if (!isAuthLoaded(state)) {
       promises.push(dispatch(loadAuth()));
+    }
+
+    if (state.auth.user) {
+      promises.push(dispatch(loadGroups()));
     }
 
     return Promise.all(promises);

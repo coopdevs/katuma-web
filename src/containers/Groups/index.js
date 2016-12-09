@@ -1,10 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { asyncConnect } from 'redux-connect';
 import { Link } from 'react-router';
 
-import { load as loadGroups } from 'redux/modules/groups/groups';
 import Header from '../Header';
 
 export default class List extends Component {
@@ -43,17 +40,6 @@ export default class List extends Component {
   }
 }
 
-const asyncConnectProps = [{
-  promise: ({ store: { dispatch } }) => {
-    const promises = [];
-
-    promises.push(dispatch(loadGroups()));
-
-    return Promise.all(promises);
-  }
-}];
-
-export default compose(
-  asyncConnect(asyncConnectProps),
-  connect(state => ({ groups: state.groupsReducer.groups.entities }))
-)(List);
+export default connect((state) => ({
+  groups: state.groupsReducer.groups.entities,
+}))(List);
