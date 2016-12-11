@@ -8,8 +8,11 @@ import { getMember } from 'presenters/member';
 import { load as loadUsers } from 'redux/modules/users/users';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
 
+import Card from 'components/Card';
 import Header from '../Header';
-import Sidebar from './Sidebar';
+import Navigation from './Navigation';
+
+import styles from './styles/index.scss';
 
 const ErrorMessage = ({ message }) => (
   <div>{message}</div>
@@ -23,7 +26,6 @@ export default class Base extends Component {
     memberships: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     group: PropTypes.object,
-    loading: PropTypes.bool,
   }
 
   renderChildren() {
@@ -38,13 +40,21 @@ export default class Base extends Component {
   }
 
   render() {
-    const { group, loading } = this.props;
+    const { group } = this.props;
 
     return (
-      <div>
+      <div className={styles.group}>
         <Header currentGroup={group}/>
-        {group && <Sidebar group={group} />}
-        {!loading && this.renderChildren()}
+        <div className={`wrap container-fluid ${styles.group__contentWrapper}`}>
+          <div className="row">
+            <div className="col-xs-12">
+              <Card>
+                {group && <Navigation group={group} />}
+                <div className={styles.group__content}>{this.renderChildren()}</div>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -53,7 +63,6 @@ export default class Base extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { groupsReducer, membershipsReducer, usersReducer, auth } = state;
   const { params: { id } } = ownProps;
-  const loading = _.any([membershipsReducer.loading, usersReducer.loading]);
   const memberships = membershipsReducer.memberships.byBasicResourceGroupId[id] || [];
   const membersUserId = _.pluck(memberships, 'user_id');
   const users = _.indexBy(usersReducer.users.entities.filter((user) => {
@@ -64,7 +73,6 @@ const mapStateToProps = (state, ownProps) => {
   const user = userId && membership ? getMember(auth.user, membership) : {};
 
   return {
-    loading,
     users,
     user,
     memberships,

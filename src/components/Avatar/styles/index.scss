@@ -1,0 +1,19 @@
+@import "../../../styles/variables.scss";
+
+.avatar {
+  font-family: $font-family-serif;
+  font-weight: 300;
+  border-radius: 3px;
+  background-color: $gray_15;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  &_small {
+    font-size: $avatar_small_font_size;
+    width: $avatar_small;
+    height: $avatar_small;
+  }
+}
