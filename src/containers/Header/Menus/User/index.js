@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
+import Avatar from 'components/Avatar';
+import { getAvatarInfo } from 'presenters/user';
 import { logout } from 'redux/modules/auth';
 
 import styles from '../../styles/index.scss';
@@ -45,8 +47,20 @@ class User extends Component {
    */
   renderUserLink() {
     const { user } = this.props;
+    const avatarInfo = getAvatarInfo(user);
 
-    return (<span className={styles.dropDownMenu__content}>{user.full_name}</span>);
+    return (
+      <span className={styles.dropDownMenu__content}>
+        <div className={styles.userInfo}>
+          <div className={styles.userInfo__avatar}>
+            <Avatar {...avatarInfo} />
+          </div>
+          <span className={styles.userInfo__name}>
+            {user.full_name}
+          </span>
+        </div>
+      </span>
+    );
   }
 
   render() {

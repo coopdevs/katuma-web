@@ -3,6 +3,28 @@
 $header-logo-size: 50px !default;
 $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
 
+.userInfo {
+  &__name {
+    display: none;
+    margin-left: .4em;
+  }
+
+  &__avatar {
+    display: inline-block;
+  }
+
+  &__avatar,
+  &__name {
+    vertical-align: middle;
+  }
+
+  @media (min-width: $screen-xs-min) {
+    &__name {
+      display: inline-block;
+    }
+  }
+}
+
 .dropDownMenu {
   transition: .25s ease-in-out all;
   float: right;
