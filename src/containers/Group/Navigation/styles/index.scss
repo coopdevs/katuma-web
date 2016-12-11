@@ -1,6 +1,34 @@
-.activeLink {
-  color: red;
-  &:hover {
-    color: red;
+@import "../../../../styles/variables.scss";
+
+.groupNavigation {
+  padding-top: .5em;
+  background-color: $gray_16;
+
+  :global {
+    .nav-tabs {
+      > li {
+        > a {
+          border-radius: .1em .1em 0 0;
+          position: relative;
+          &:before {
+            border-radius: .1em .1em 0 0;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: .2em;
+          }
+        }
+
+        &.active {
+          > a {
+            &:before {
+              background-color: rgba($katuma_active, .8);
+            }
+          }
+        }
+      }
+    }
   }
 }

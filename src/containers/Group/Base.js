@@ -8,8 +8,11 @@ import { getMember } from 'presenters/member';
 import { load as loadUsers } from 'redux/modules/users/users';
 import { load as loadMemberships } from 'redux/modules/groups/memberships';
 
+import Card from 'components/Card';
 import Header from '../Header';
 import Navigation from './Navigation';
+
+import styles from './styles/index.scss';
 
 const ErrorMessage = ({ message }) => (
   <div>{message}</div>
@@ -40,10 +43,18 @@ export default class Base extends Component {
     const { group } = this.props;
 
     return (
-      <div>
+      <div className={styles.group}>
         <Header currentGroup={group}/>
-        {group && <Navigation group={group} />}
-        {this.renderChildren()}
+        <div className={`wrap container-fluid ${styles.group__contentWrapper}`}>
+          <div className="row">
+            <div className="col-xs-12">
+              <Card>
+                {group && <Navigation group={group} />}
+                <div className={styles.group__content}>{this.renderChildren()}</div>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

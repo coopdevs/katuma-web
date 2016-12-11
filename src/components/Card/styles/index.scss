@@ -1,0 +1,11 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 2px;
+  background: white;
+  font-size: 1em;
+  font-weight: 400;
+  min-height: 20em;
+  z-index: 1;
+  position: relative;
+}

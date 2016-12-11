@@ -121,20 +121,22 @@ class Header extends Component {
           })}
         >
         <div className="wrap container-fluid">
-          <div className={`row ${styles.headerWrapper}`}>
-            <div className={styles.logoWrapper}>
-              {this.renderGroupsSelector()}
-            </div>
+          <div className="row">
+            <div className={`col-xs-12 ${styles.headerWrapper}`}>
+              <div className={styles.logoWrapper}>
+                {this.renderGroupsSelector()}
+              </div>
 
-            <UserMenu />
+              <UserMenu />
 
-            <div
-              className={classNames({
-                [styles.menu]: true,
-                [styles.isOpen]: isOpen,
-              })}
-            >
-              <LoggedOut hideSignupButton={hideSignupButton}/>
+              <div
+                className={classNames({
+                  [styles.menu]: true,
+                  [styles.isOpen]: isOpen,
+                })}
+              >
+                <LoggedOut hideSignupButton={hideSignupButton}/>
+              </div>
             </div>
           </div>
         </div>

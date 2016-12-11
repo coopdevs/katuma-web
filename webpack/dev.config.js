@@ -45,6 +45,7 @@ babelLoaderQuery.extra['react-transform'].transforms.push({
 });
 
 var VENDOR_CSS = './src/styles/vendor/index.css';
+var GLOBAL_CSS = './src/styles/global/index.scss';
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -56,6 +57,7 @@ module.exports = {
       './src/client.js'
     ],
     vendor_styles: VENDOR_CSS,
+    global_styles: GLOBAL_CSS,
   },
   output: {
     path: assetsPath,
@@ -80,7 +82,17 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap'
+        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=2&sourceMap&!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap'),
+        include: path.resolve(__dirname, '../src/styles/global'),
+        exclude: [
+          path.resolve(__dirname, '../src/components'),
+          path.resolve(__dirname, '../src/containers'),
+        ]
+      },
+      {
+        test: /\.scss$/,
+        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap',
+        exclude: path.resolve(__dirname, '../src/styles/global'),
       },
       {
         test: webpackIsomorphicToolsPlugin.regular_expression('images'),
