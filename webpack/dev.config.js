@@ -82,12 +82,8 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=2&sourceMap&!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap'),
+        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=2&!autoprefixer?browsers=last 2 version!sass?outputStyle=compact'),
         include: path.resolve(__dirname, '../src/styles/global'),
-        exclude: [
-          path.resolve(__dirname, '../src/components'),
-          path.resolve(__dirname, '../src/containers'),
-        ]
       },
       {
         test: /\.scss$/,
