@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 import layoutCentered from 'components/HOC/LayoutCentered';
 
 import ProfileCompleteForm from 'components/forms/Profile/Complete';
+import Header from 'containers/Header';
 
 import styles from '../../styles/layouts/index.scss';
 import { checkSignup, complete } from 'redux/modules/signup/complete';
@@ -66,6 +67,7 @@ class SignupComplete extends Component {
   render() {
     return (
       <div className={styles.layoutCentered}>
+        <Header hideSignupButton />
         <div className={styles.layoutCentered__body}>
           <ProfileCompleteForm
             onSubmit={this.handleSubmit}

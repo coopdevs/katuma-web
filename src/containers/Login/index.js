@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { login as loginAction } from 'redux/modules/auth';
 import LoginForm from 'components/forms/Login';
 import Button from 'components/Button';
+import Header from 'containers/Header';
 
 import styles from '../../styles/layouts/index.scss';
 
@@ -43,6 +44,7 @@ class Login extends Component {
 
     return (
       <div className={styles.layoutCentered}>
+        <Header hideLoginButton />
         <div className={styles.layoutCentered__body}>
           <LoginForm
             ref="login_form"

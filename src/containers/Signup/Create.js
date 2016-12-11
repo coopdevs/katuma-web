@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { signup as signupAction } from 'redux/modules/signup/create';
 import SignupCreateForm from 'components/forms/Signup/Create';
 import Button from 'components/Button';
+import Header from 'containers/Header';
 
 import styles from '../../styles/layouts/index.scss';
 
@@ -35,6 +36,7 @@ class SignupCreate extends Component {
 
     return (
       <div className={styles.layoutCentered}>
+        <Header hideSignupButton />
         <div className={styles.layoutCentered__body}>
           <SignupCreateForm
             ref="signup_form"

@@ -9,6 +9,7 @@ class LoggedOutMenu extends Component {
   static propTypes = {
     user: PropTypes.object,
     hideSignupButton: PropTypes.bool,
+    hideLoginButton: PropTypes.bool,
   };
 
   static contextTypes = {
@@ -18,16 +19,18 @@ class LoggedOutMenu extends Component {
 
   render() {
     const { openLoginDialog, openSignupDialog} = this.context;
-    const { user, hideSignupButton } = this.props;
+    const { user, hideSignupButton, hideLoginButton } = this.props;
 
     if (user) return null;
 
     return (
       <nav>
         <ul className={headerStyles.navigationList}>
-          <li className={headerStyles.navigationList__button}>
-            <Button onClick={openLoginDialog}>Accede a tu cuenta</Button>
-          </li>
+          {!hideLoginButton &&
+            <li className={headerStyles.navigationList__button}>
+              <Button onClick={openLoginDialog}>Accede a tu cuenta</Button>
+            </li>
+          }
           {!hideSignupButton &&
             <li className={headerStyles.navigationList__button}>
               <Button primary onClick={openSignupDialog}>Registrate</Button>

@@ -64,17 +64,7 @@ a {
   flex-direction: column;
 
   &__centered {
-    padding-top: 0;
-    margin-top: 2em;
-    align-items: center;
-  }
-}
-
-@media (min-width: $screen-sm-min) {
-  .rootComponent {
-    &__centered {
-      margin-top: 0;
-      justify-content: center;
-    }
+    flex-direction: row;
+    justify-content: center;
   }
 }

@@ -48,6 +48,10 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
         background-color: rgba(0, 0, 0, .05);
       }
 
+      &-header {
+        text-transform: uppercase;
+      }
+
       &-toggle {
         border: 0;
         padding-top: 0;
@@ -93,6 +97,10 @@ $header-logo-font-size: ceil(($header-logo-size / 2)) !default;
       .dropdown {
         &-toggle {
           padding: 0;
+        }
+
+        &-header {
+          padding-top: .8em;
         }
         &-menu {
           > li {

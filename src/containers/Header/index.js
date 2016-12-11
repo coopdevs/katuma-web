@@ -45,6 +45,7 @@ class Header extends Component {
     groups: PropTypes.array,
     currentGroup: PropTypes.object,
     hideSignupButton: PropTypes.bool,
+    hideLoginButton: PropTypes.bool,
   };
 
   constructor(props) {
@@ -90,6 +91,8 @@ class Header extends Component {
           bsStyle="link"
           title={renderName(currentGroup, showSelector)}
         >
+          <MenuItem header>Tus grupos</MenuItem>
+          <MenuItem divider/>
           {groups.map((group) => {
             const { id } = group;
 
@@ -109,7 +112,7 @@ class Header extends Component {
   }
 
   render() {
-    const { user, hideSignupButton } = this.props;
+    const { user, hideSignupButton, hideLoginButton } = this.props;
     const { isOpen } = this.state;
 
     return (
@@ -135,7 +138,10 @@ class Header extends Component {
                   [styles.isOpen]: isOpen,
                 })}
               >
-                <LoggedOut hideSignupButton={hideSignupButton}/>
+                <LoggedOut
+                  hideSignupButton={hideSignupButton}
+                  hideLoginButton={hideLoginButton}
+                />
               </div>
             </div>
           </div>
