@@ -19,7 +19,7 @@ class List extends Component {
     if (!orderLines.length) return null;
 
     return (
-      <table className={`table ${styles.productList}`}>
+      <table className={`table ${styles.orderLineList}`}>
         <thead>
           <tr>
             <th>Producto</th>
