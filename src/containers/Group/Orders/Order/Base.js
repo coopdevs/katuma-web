@@ -18,8 +18,6 @@ class OrderBase extends Component {
   render() {
     const { children, order, orderLines, grandTotal } = this.props;
 
-    if (!order || !orderLines || !grandTotal) return null;
-
     return (
       React.cloneElement(
         children,

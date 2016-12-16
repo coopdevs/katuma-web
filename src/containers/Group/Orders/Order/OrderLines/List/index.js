@@ -16,8 +16,6 @@ class List extends Component {
   render() {
     const { orderLines, grandTotal } = this.props;
 
-    if (!orderLines.length) return null;
-
     return (
       <table className={`table ${styles.orderLineList}`}>
         <thead>
@@ -30,7 +28,7 @@ class List extends Component {
           </tr>
         </thead>
         <tbody>
-          {orderLines.map((orderLine) => <Item key={orderLine.id} orderLine={orderLine} />)}
+          {orderLines && orderLines.map((orderLine) => <Item key={orderLine.id} orderLine={orderLine} />)}
         </tbody>
         <tfoot>
           <tr>

@@ -27,5 +27,4 @@ class QuantityEditForm extends Component {
 
 export default reduxForm({
   form: 'quantity',
-  persistentSubmitErrors: true,
 })(QuantityEditForm);
