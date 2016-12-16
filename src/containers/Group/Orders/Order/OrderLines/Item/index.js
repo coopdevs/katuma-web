@@ -27,7 +27,7 @@ class Item extends Component {
         <td>
           <QuantityEditForm
             initialValues={{quantity: orderLine.quantity}}
-            handleSubmit={this.handleSubmit}
+            onSubmit={this.handleSubmit}
           />
         </td>
         <td>{getProductName(orderLine.unit)}</td>
