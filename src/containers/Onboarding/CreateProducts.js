@@ -3,8 +3,8 @@ import { compose } from 'redux';
 import { asyncConnect } from 'redux-connect';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
-import CreateProductForm from 'containers/Group/Producers/Item/Products/CreateProductsForm/';
-import List from 'containers/Group/Producers/Item/Products/List/';
+import CreateProductForm from 'containers/Group/Producers/Producer/Products/CreateProductsForm/';
+import List from 'containers/Group/Producers/Producer/Products/List/';
 import { loadEntity as loadProducer } from 'redux/modules/producers/producers';
 import { load as loadProducts } from 'redux/modules/products';
 import Button from 'components/Button';

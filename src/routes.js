@@ -16,6 +16,9 @@ import {
   GroupBase,
   GroupMembers,
   GroupProducers,
+  GroupProducersList,
+  GroupProducerBase,
+  GroupProducerProducts,
   GroupOrders,
   GroupOrdersList,
   GroupOrderBase,
@@ -135,7 +138,12 @@ export default (store) => {
           <Route path=":id" component={GroupBase}>
             <IndexRoute component={GroupMembers}/>
             <Route path="members" component={GroupMembers}/>
-            <Route path="producers" component={GroupProducers}/>
+            <Route path="producers" component={GroupProducers}>
+              <IndexRoute component={GroupProducersList}/>
+              <Route path=":producer_id" component={GroupProducerBase}>
+                <IndexRoute component={GroupProducerProducts}/>
+              </Route>
+            </Route>
             <Route path="orders" component={GroupOrders}>
               <IndexRoute component={GroupOrdersList}/>
               <Route path=":order_id" component={GroupOrderBase}>

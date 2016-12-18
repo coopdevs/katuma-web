@@ -5,7 +5,6 @@ import { Nav, NavItem, Modal } from 'react-bootstrap';
 import Button from 'components/Button';
 import { edit } from 'redux/modules/producers/producers';
 import EditProducerForm, { EDIT_PRODUCER_FORM } from 'components/forms/producers/Edit';
-import Products from '../Products/Base';
 
 import styles from './styles/index.scss';
 
@@ -112,19 +111,6 @@ class ManageModal extends Component {
   }
 
   /**
-   * Render products list
-   */
-  renderProducts() {
-    const { activeTab } = this.state;
-
-    if (activeTab !== TABS.products) return null;
-
-    const { producer } = this.props;
-
-    return (<Products producer={producer} />);
-  }
-
-  /**
    * Render modal footer
    */
   renderFooterModal() {
@@ -161,7 +147,6 @@ class ManageModal extends Component {
           {this.renderNavigation()}
           <div className={styles.content}>
             {this.renderDetails()}
-            {this.renderProducts()}
           </div>
         </Modal.Body>
 

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'underscore';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { create, destroy } from 'redux/modules/suppliers/suppliers';
 import { isRole } from 'presenters/member';
@@ -23,17 +24,9 @@ class Item extends Component {
 
     this.activate = this._activate.bind(this);
     this.desactivate = this._desactivate.bind(this);
-    this.onOpenModal = this._onOpenModal.bind(this);
     this.onCloseModal = this._onCloseModal.bind(this);
 
     this.state = { showModal: false };
-  }
-
-  /**
-   * Open modal
-   */
-  _onOpenModal() {
-    this.setState({ showModal: true });
   }
 
   /**
@@ -124,15 +117,13 @@ class Item extends Component {
    * Producer name based on permissions
    */
   renderName() {
-    const { producer } = this.props;
+    const { producer, group } = this.props;
 
-    if (this.isEditable()) {
-      return (
-        <Button linkLookAndFeel onClick={this.onOpenModal}>{producer.name}</Button>
-      );
-    }
-
-    return (<span>{producer.name}</span>);
+    return (
+      <Link to={`/groups/${group.id}/producers/${producer.id}`}>
+        {producer.name}
+      </Link>
+    );
   }
 
   render() {
