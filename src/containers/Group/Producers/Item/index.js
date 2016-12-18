@@ -7,8 +7,6 @@ import { create, destroy } from 'redux/modules/suppliers/suppliers';
 import { isRole } from 'presenters/member';
 import Button from 'components/Button';
 
-import ManageProducerModal from './ManageModal/';
-
 class Item extends Component {
   static propTypes = {
     producer: PropTypes.object.isRequired,
@@ -95,25 +93,6 @@ class Item extends Component {
   }
 
   /**
-   * Manage producer modal
-   */
-  renderManageProducerModal() {
-    if (!this.isEditable()) return null;
-
-    const { group, producer } = this.props;
-    const { showModal } = this.state;
-
-    return (
-      <ManageProducerModal
-        onCloseModal={this.onCloseModal}
-        showModal={showModal}
-        group={group}
-        producer={producer}
-      />
-    );
-  }
-
-  /**
    * Producer name based on permissions
    */
   renderName() {
@@ -131,7 +110,6 @@ class Item extends Component {
       <li>
         {this.renderName()}
         {this.renderToggleSupplierButton()}
-        {this.renderManageProducerModal()}
       </li>
     );
   }

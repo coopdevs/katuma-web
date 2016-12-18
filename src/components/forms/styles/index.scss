@@ -3,9 +3,8 @@
 /**
  * Display in horizontal row all the inputs
  */
-.inlineFormRow {
+.inlineFormRows {
   display: block;
-  margin-bottom: 1em;
 
   @media (min-width: $screen-sm-min) {
     display: flex;

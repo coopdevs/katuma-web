@@ -18,11 +18,12 @@ const getProductUnitOptions = () => {
 import Input from 'components/Input';
 
 const Fields = () => (
-  <div className="form-inline">
+  <div>
     <Field name="producer_id" component={Input} type="hidden" />
 
     <Field
       name="name"
+      label="Nombre"
       component={Input}
       placeholder="Nombre del producto"
       type="text"
@@ -31,6 +32,7 @@ const Fields = () => (
 
     <Field
       name="price"
+      label="Precio"
       component={Input}
       placeholder="Precio"
       type="number"
@@ -39,6 +41,7 @@ const Fields = () => (
 
     <Field
       name="unit"
+      label="Precio"
       type="select"
       selectOptions={getProductUnitOptions()}
       component={Input}

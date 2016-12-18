@@ -14,7 +14,6 @@ class List extends Component {
 
     return (
       <div className="panel panel-default">
-        <div className="panel-heading">Lista de productos</div>
         <table className={`table table-striped ${styles.productList}`}>
           <thead>
             <tr>

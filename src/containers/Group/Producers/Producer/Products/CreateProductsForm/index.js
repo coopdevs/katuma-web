@@ -41,25 +41,27 @@ class CreateProductForm extends Component {
     const { producer, submitting } = this.props;
 
     return (
-      <div className={formStyles.inlineFormRow}>
-        <Form
-          ref={(domNode) => this._product_form = domNode}
-          onSubmit={this.onSubmitCreateProduct}
-          producer={producer}
-          initialValues={{
-            producer_id: producer.id,
-            price: 0,
-          }}
-        />
-        <div>
-          <Button
-            primary
-            processing={!!submitting}
-            onClick={this.onClickCreate}
-            type="submit"
-          >
-            Crear
-          </Button>
+      <div className="panel panel-default">
+        <div className={`panel-body ${formStyles.inlineFormRow}`}>
+          <Form
+            ref={(domNode) => this._product_form = domNode}
+            onSubmit={this.onSubmitCreateProduct}
+            producer={producer}
+            initialValues={{
+              producer_id: producer.id,
+              price: 0,
+            }}
+          />
+          <div>
+            <Button
+              primary
+              processing={!!submitting}
+              onClick={this.onClickCreate}
+              type="submit"
+            >
+              Crear
+            </Button>
+          </div>
         </div>
       </div>
     );
