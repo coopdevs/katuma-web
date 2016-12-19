@@ -9,14 +9,16 @@ import CreateGroupForm from 'components/forms/groups/Create';
 
 import styles from '../../styles/layouts/index.scss';
 import { create } from 'redux/modules/groups/groups';
+import { create as createOrderFrequency } from 'redux/modules/orders_frequencies/orders_frequencies';
 
 import { getNextOnboardingUrl } from './services';
 
 class CreateGroup extends Component {
   static propTypes = {
     createGroup: PropTypes.func.isRequired,
+    createOrderFrequency: PropTypes.func.isRequired,
     createdGroupId: PropTypes.number,
-    params: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -40,7 +42,17 @@ class CreateGroup extends Component {
   * @param {Object} fields
   */
   _handleSubmit(fields) {
-    return this.props.createGroup(fields);
+    const promise = new Promise((resolve) => {
+      resolve(this.props.createGroup(fields));
+    });
+
+    promise.then((group) => {
+      const order_frequency = { group_id: group.id, ical: 'foo',  frequency_type: 1 };
+      this.props.createOrderFrequency(order_frequency);
+    })
+    .catch((reason) => {
+      console.log('Error in promise', reason);
+    });
   }
 
   render() {
@@ -58,5 +70,5 @@ const mapStateToProps = ({ groupsReducer: { createdGroupId }}) => ({ createdGrou
 
 export default compose(
   layoutCentered,
-  connect(mapStateToProps, { createGroup: create })
+  connect(mapStateToProps, { createGroup: create, createOrderFrequency: createOrderFrequency})
 )(CreateGroup);
