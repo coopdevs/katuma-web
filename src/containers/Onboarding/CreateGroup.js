@@ -46,9 +46,19 @@ class CreateGroup extends Component {
       resolve(this.props.createGroup(fields));
     });
 
+    const index = {
+      confirmation: 0,
+      delivery: 1
+    };
+
     promise.then((group) => {
-      const order_frequency = { group_id: group.id, ical: 'foo',  frequency_type: 1 };
-      this.props.createOrderFrequency(order_frequency);
+      const orderFrequency = {
+        group_id: group.id,
+        ical: 'foo',
+        frequency_type: index.delivery
+      };
+
+      this.props.createOrderFrequency(orderFrequency);
     })
     .catch((reason) => {
       console.log('Error in promise', reason);
