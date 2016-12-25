@@ -62,13 +62,13 @@ class CreateGroupForm extends Component {
             placeholder="Especifica el dia de entrega de la compra"
           >
             <option></option>
-            <option value="monday">Lunes</option>
-            <option value="tuesday">Martes</option>
-            <option value="wednesday">Miércoles</option>
-            <option value="thursday">Jueves</option>
-            <option value="friday">Viernes</option>
-            <option value="saturday">Sábado</option>
-            <option value="sunday">Domingo</option>
+            <option value="0">Lunes</option>
+            <option value="1">Martes</option>
+            <option value="2">Miércoles</option>
+            <option value="3">Jueves</option>
+            <option value="4">Viernes</option>
+            <option value="5">Sábado</option>
+            <option value="6">Domingo</option>
           </Field>
         </div>
         <Button

@@ -4080,6 +4080,10 @@ ripemd160@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/ripemd160/-/ripemd160-0.2.0.tgz#2bf198bde167cacfa51c0a928e84b68bbe171fce"
 
+rrule-alt@2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/rrule-alt/-/rrule-alt-2.2.3.tgz#1ebd16fe01ee47e8bd09e4d6b8b9aa04adb5ccd6"
+
 run-async@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-0.1.0.tgz#c8ad4a5e110661e402a7d21b530e009f25f8e389"

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import { RRule } from 'rrule-alt';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 
@@ -54,7 +55,7 @@ class CreateGroup extends Component {
     promise.then((group) => {
       const orderFrequency = {
         group_id: group.id,
-        ical: 'foo',
+        ical: this.buildIcal(fields),
         frequency_type: index.delivery
       };
 
@@ -63,6 +64,18 @@ class CreateGroup extends Component {
     .catch((reason) => {
       console.log('Error in promise', reason);
     });
+  }
+
+  buildIcal(fields) {
+    const days = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR, RRule.SA, RRule.SU];
+    const rule = new RRule.RRule({
+      freq: RRule.WEEKLY,
+      interval: 1,
+      byweekday: days[fields.delivery],
+      dtstart: new Date()
+    });
+
+    return rule.toString();
   }
 
   render() {
