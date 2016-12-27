@@ -62,7 +62,7 @@ class CreateGroup extends Component {
       this.props.createOrderFrequency(orderFrequency);
     })
     .catch((reason) => {
-      console.log('Error in promise', reason);
+      console.log(reason);
     });
   }
 
