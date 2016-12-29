@@ -68,7 +68,7 @@ class SignupCreate extends Component {
         <MessagePane isVisible={signupDone} onDissmis={this.onDissmis}>
           <h4>Email guardado!</h4>
           <p>Te hemos enviado un email. Por favor revisa en la bandeja de correo no deseado.</p>
-          <p>Abre el email y clicka en el enlace. Asi podras terminar el registro</p>
+          <p>Abre el email y clica en el enlace. Así podrás terminar el registro.</p>
         </MessagePane>
         <div>
           <Field

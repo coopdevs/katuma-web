@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import { RRule } from 'rrule-alt';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 
@@ -9,14 +10,16 @@ import CreateGroupForm from 'components/forms/groups/Create';
 
 import styles from '../../styles/layouts/index.scss';
 import { create } from 'redux/modules/groups/groups';
+import { create as createOrderFrequency } from 'redux/modules/orders_frequencies/orders_frequencies';
 
 import { getNextOnboardingUrl } from './services';
 
 class CreateGroup extends Component {
   static propTypes = {
     createGroup: PropTypes.func.isRequired,
+    createOrderFrequency: PropTypes.func.isRequired,
     createdGroupId: PropTypes.number,
-    params: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -40,7 +43,39 @@ class CreateGroup extends Component {
   * @param {Object} fields
   */
   _handleSubmit(fields) {
-    return this.props.createGroup(fields);
+    const promise = new Promise((resolve) => {
+      resolve(this.props.createGroup(fields));
+    });
+
+    const index = {
+      confirmation: 0,
+      delivery: 1
+    };
+
+    promise.then((group) => {
+      const orderFrequency = {
+        group_id: group.id,
+        ical: this.buildIcal(fields),
+        frequency_type: index.delivery
+      };
+
+      this.props.createOrderFrequency(orderFrequency);
+    })
+    .catch((reason) => {
+      console.log(reason);
+    });
+  }
+
+  buildIcal(fields) {
+    const days = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR, RRule.SA, RRule.SU];
+    const rule = new RRule.RRule({
+      freq: RRule.WEEKLY,
+      interval: 1,
+      byweekday: days[fields.delivery],
+      dtstart: new Date()
+    });
+
+    return rule.toString();
   }
 
   render() {
@@ -58,5 +93,5 @@ const mapStateToProps = ({ groupsReducer: { createdGroupId }}) => ({ createdGrou
 
 export default compose(
   layoutCentered,
-  connect(mapStateToProps, { createGroup: create })
+  connect(mapStateToProps, { createGroup: create, createOrderFrequency: createOrderFrequency})
 )(CreateGroup);

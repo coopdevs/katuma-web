@@ -52,6 +52,25 @@ class CreateGroupForm extends Component {
             setInitialFocus
           />
         </div>
+        <div>
+          <div>
+            <label>Día de entrega</label>
+          </div>
+          <Field
+            name="delivery"
+            component="select"
+            placeholder="Especifica el dia de entrega de la compra"
+          >
+            <option></option>
+            <option value="0">Lunes</option>
+            <option value="1">Martes</option>
+            <option value="2">Miércoles</option>
+            <option value="3">Jueves</option>
+            <option value="4">Viernes</option>
+            <option value="5">Sábado</option>
+            <option value="6">Domingo</option>
+          </Field>
+        </div>
         <Button
           type="submit"
           primary

@@ -3705,7 +3705,7 @@ react-redux@4.4.5:
     lodash "^4.2.0"
     loose-envify "^1.1.0"
 
-react-router-bootstrap@^0.23.1:
+react-router-bootstrap@0.23.1:
   version "0.23.1"
   resolved "https://registry.yarnpkg.com/react-router-bootstrap/-/react-router-bootstrap-0.23.1.tgz#a1e0b82f49d25a6083c72202ad16aaa64bba0e0c"
 
@@ -4079,6 +4079,10 @@ rimraf@~2.5.1, rimraf@~2.5.4:
 ripemd160@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/ripemd160/-/ripemd160-0.2.0.tgz#2bf198bde167cacfa51c0a928e84b68bbe171fce"
+
+rrule-alt@2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/rrule-alt/-/rrule-alt-2.2.3.tgz#1ebd16fe01ee47e8bd09e4d6b8b9aa04adb5ccd6"
 
 run-async@^0.1.0:
   version "0.1.0"
