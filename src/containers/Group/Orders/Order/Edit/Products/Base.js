@@ -5,14 +5,11 @@ import styles from './styles/index.scss';
 
 class ProductsBase extends Component {
   static propTypes = {
-    products: PropTypes.array,
-    onSubmitQuantityChange: PropTypes.func.isRequired,
+    products: PropTypes.array.isRequired,
   }
 
   render() {
-    const { products, onSubmitQuantityChange } = this.props;
-
-    if (!products) return null;
+    const { products } = this.props;
 
     return (
       <table className={styles.productList}>
@@ -25,7 +22,7 @@ class ProductsBase extends Component {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => <Item key={product.id} product={product} onSubmitQuantityChange={onSubmitQuantityChange}/>)}
+          {products.map((product) => <Item key={product.id} product={product} />)}
         </tbody>
       </table>
     );

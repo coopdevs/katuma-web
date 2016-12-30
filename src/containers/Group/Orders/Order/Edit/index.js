@@ -6,7 +6,7 @@ import moment from 'moment';
 import { load as loadSuppliers } from 'redux/modules/suppliers/suppliers';
 import { create, edit } from 'redux/modules/order_lines';
 import Products from './Products/Base';
-import OrderLines from '../OrderLines/Base';
+import Cart from './Cart/Base';
 
 class Edit extends Component {
   static propTypes = {
@@ -19,27 +19,19 @@ class Edit extends Component {
     createOrderLine: PropTypes.func,
   }
 
-  constructor(props) {
-    super(props);
-
-    this.onSubmitQuantityChange = this._onSubmitQuantityChange.bind(this);
-  }
-
-  _onSubmitQuantityChange() {
-    console.log('DALE!');
-  }
-
   render() {
     const { activeProducts, order, orderLines, grandTotal } = this.props;
 
     return (
       <div className="row">
         <div className="col-xs-8">
-          <Products products={activeProducts} onSubmitQuantityChange={this.onSubmitQuantityChange}/>
+          <Products
+            products={activeProducts}
+          />
         </div>
         <div className="col-xs-4">
           Confirmar antes del dia: {moment().utc(order.confirm_before).format('dddd, MMMM Do YYYY')}
-          <OrderLines orderLines={orderLines} grandTotal={grandTotal}/>
+          <Cart orderLines={orderLines} grandTotal={grandTotal}/>
         </div>
       </div>
     );
@@ -59,9 +51,18 @@ const mapStateToProps = (state, props) => {
   const activeProducts = state.productsReducer.products.entities.filter((product) => {
     return _.contains(_.pluck(suppliers, 'producer_id'), product.producer_id);
   });
+  const orderLinesByProductId = _.indexBy(props.orderLines, 'product_id');
 
   return {
-    activeProducts,
+    activeProducts: _.map(activeProducts, (product) => {
+      const orderLine = orderLinesByProductId[product.id];
+
+      return {
+        ...product,
+        quantity: orderLine && orderLine.quantity || 0,
+        orderline_id: orderLine && orderLine.id,
+      };
+    }),
   };
 };
 
