@@ -5,18 +5,23 @@ import Input from 'components/Input';
 
 class QuantityEditForm extends Component {
   static propTypes = {
+    productId: PropTypes.number.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    orderLineId: PropTypes.number,
   }
 
   render() {
+    const { productId } = this.props;
+
     return (
       <div>
         <form onSubmit={this.props.handleSubmit}>
           <Field
-            name="quantity"
+            name={`quantity_${productId}`}
             component={Input}
             type="text"
-            ref="quantity"
+            ref={`quantity_${productId}`}
+            size="1"
             errorsAlways
           />
         </form>
@@ -25,6 +30,4 @@ class QuantityEditForm extends Component {
   }
 }
 
-export default reduxForm({
-  form: 'quantity',
-})(QuantityEditForm);
+export default reduxForm({})(QuantityEditForm);
