@@ -8,6 +8,26 @@ import Button from 'components/Button';
 
 const CREATE_GROUP_FORM = 'createGroup';
 
+const renderField = ({ input, label, placeholder, meta: { touched, error } }) => (
+  <div>
+    <div>
+      <label>{label}</label>
+    </div>
+    <select {...input} placeholder={placeholder}>
+      <option></option>
+      <option value="0">Lunes</option>
+      <option value="1">Martes</option>
+      <option value="2">Miércoles</option>
+      <option value="3">Jueves</option>
+      <option value="4">Viernes</option>
+      <option value="5">Sábado</option>
+      <option value="6">Domingo</option>
+    </select>
+   {touched && error && <span>{error}</span>}
+  </div>
+);
+
+
 class CreateGroupForm extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
@@ -52,25 +72,18 @@ class CreateGroupForm extends Component {
             setInitialFocus
           />
         </div>
-        <div>
-          <div>
-            <label>Día de entrega</label>
-          </div>
-          <Field
-            name="delivery"
-            component="select"
-            placeholder="Especifica el dia de entrega de la compra"
-          >
-            <option></option>
-            <option value="0">Lunes</option>
-            <option value="1">Martes</option>
-            <option value="2">Miércoles</option>
-            <option value="3">Jueves</option>
-            <option value="4">Viernes</option>
-            <option value="5">Sábado</option>
-            <option value="6">Domingo</option>
-          </Field>
-        </div>
+        <Field
+          name="delivery"
+          component={renderField}
+          label="Día de entrega"
+          placeholder="Especifica el día de entrega de la compra"
+        />
+        <Field
+          name="confirmation"
+          component={renderField}
+          label="Día de confirmación"
+          placeholder="Especifica el día de confirmación de la compra"
+        />
         <Button
           type="submit"
           primary

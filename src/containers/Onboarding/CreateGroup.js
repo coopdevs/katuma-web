@@ -47,35 +47,50 @@ class CreateGroup extends Component {
       resolve(this.props.createGroup(fields));
     });
 
-    const index = {
-      confirmation: 0,
-      delivery: 1
-    };
-
     promise.then((group) => {
-      const orderFrequency = {
-        group_id: group.id,
-        ical: this.buildIcal(fields),
-        frequency_type: index.delivery
-      };
-
-      this.props.createOrderFrequency(orderFrequency);
+      return new Promise((resolve) => {
+        this.orderFrequencyFor(group, fields, 'delivery');
+        resolve(group);
+      });
+    })
+    .then((group) => {
+      this.orderFrequencyFor(group, fields, 'confirmation');
     })
     .catch((reason) => {
       console.log(reason);
     });
   }
 
-  buildIcal(fields) {
+  orderFrequencyFor(group, fields, type) {
+    const index = {
+      confirmation: 0,
+      delivery: 1
+    };
+    const orderFrequencyData = { group_id: group.id };
+
+    if (type === 'delivery') {
+      Object.assign(orderFrequencyData, orderFrequencyData, {
+        ical: this.weeklyIcalString(fields.delivery),
+        frequency_type: index.delivery
+      });
+    } else {
+      Object.assign(orderFrequencyData, orderFrequencyData, {
+        ical: this.weeklyIcalString(fields.confirmation),
+        frequency_type: index.confirmation
+      });
+    }
+
+    this.props.createOrderFrequency(orderFrequencyData);
+  }
+
+  weeklyIcalString(index) {
     const days = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR, RRule.SA, RRule.SU];
     const rule = new RRule.RRule({
       freq: RRule.WEEKLY,
-      interval: 1,
-      byweekday: days[fields.delivery],
-      dtstart: new Date()
+      byweekday: days[index]
     });
 
-    return rule.toString();
+    return 'RRULE:' + rule.toString();
   }
 
   render() {
