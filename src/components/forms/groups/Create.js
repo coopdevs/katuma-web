@@ -3,10 +3,20 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field, stopSubmit } from 'redux-form';
 
-import Input from 'components/Input';
+import styles from './styles/index.scss';
 import Button from 'components/Button';
 
 const CREATE_GROUP_FORM = 'createGroup';
+
+const renderInputField = ({ input, label, placeholder, meta: { touched, error } }) => (
+  <div>
+    <div>
+      <label>{label}</label>
+    </div>
+    <input className="form-control" {...input} placeholder={placeholder} />
+    {touched && <div className={`text-danger ${styles.error}`}>{error}</div>}
+  </div>
+);
 
 const renderField = ({ input, label, placeholder, meta: { touched, error } }) => (
   <div>
@@ -23,10 +33,11 @@ const renderField = ({ input, label, placeholder, meta: { touched, error } }) =>
       <option value="5">Sábado</option>
       <option value="6">Domingo</option>
     </select>
-   {touched && error && <span>{error}</span>}
+    {touched && <div className={`text-danger ${styles.error}`}>{error}</div>}
   </div>
 );
 
+const required = value => value ? undefined : 'no puede estar en blanco';
 
 class CreateGroupForm extends Component {
   static propTypes = {
@@ -61,28 +72,27 @@ class CreateGroupForm extends Component {
 
     return (
       <form onSubmit={handleSubmit}>
-        <div>
-          <Field
-            name="name"
-            component={Input}
-            placeholder="Elige un nombre para tu grupo de compra"
-            label="Nombre del grupo"
-            type="text"
-            errorsAlways
-            setInitialFocus
-          />
-        </div>
+        <Field
+          name="name"
+          id="groupNameField"
+          component={renderInputField}
+          placeholder="Elige un nombre para tu grupo de compra"
+          label="Nombre del grupo"
+          validate={required}
+        />
         <Field
           name="delivery"
           component={renderField}
           label="Día de entrega"
           placeholder="Especifica el día de entrega de la compra"
+          validate={required}
         />
         <Field
           name="confirmation"
           component={renderField}
           label="Día de confirmación"
           placeholder="Especifica el día de confirmación de la compra"
+          validate={required}
         />
         <Button
           type="submit"
