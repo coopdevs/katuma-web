@@ -81,16 +81,16 @@ class CreateGroupForm extends Component {
           label="Nombre del grupo"
         />
         <Field
-          name="delivery"
-          component={renderSelectField}
-          label="Día de entrega"
-          placeholder="Especifica el día de entrega de la compra"
-        />
-        <Field
           name="confirmation"
           component={renderSelectField}
           label="Día de confirmación"
           placeholder="Especifica el día de confirmación de la compra"
+        />
+        <Field
+          name="delivery"
+          component={renderSelectField}
+          label="Día de entrega"
+          placeholder="Especifica el día de entrega de la compra"
         />
         <Button
           type="submit"
