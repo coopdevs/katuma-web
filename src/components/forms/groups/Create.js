@@ -23,7 +23,7 @@ const renderSelectField = ({ input, label, placeholder, meta: { touched, error }
     <div>
       <label>{label}</label>
     </div>
-    <select {...input} placeholder={placeholder}>
+    <select {...input}>
       <option></option>
       <option value="0">Lunes</option>
       <option value="1">Martes</option>
@@ -34,6 +34,7 @@ const renderSelectField = ({ input, label, placeholder, meta: { touched, error }
       <option value="6">Domingo</option>
     </select>
     {touched && <div className={`text-danger ${styles.error}`}>{error}</div>}
+    <div className={`${styles.explanation}`}>{placeholder}</div>
   </div>
 );
 
@@ -84,13 +85,13 @@ class CreateGroupForm extends Component {
           name="confirmation"
           component={renderSelectField}
           label="Día de confirmación"
-          placeholder="Especifica el día de confirmación de la compra"
+          placeholder="Especifica el día de confirmación de los pedidos"
         />
         <Field
           name="delivery"
           component={renderSelectField}
           label="Día de entrega"
-          placeholder="Especifica el día de entrega de la compra"
+          placeholder="Especifica el día de entrega de los pedidos"
         />
         <Button
           type="submit"
