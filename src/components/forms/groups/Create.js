@@ -18,7 +18,7 @@ const renderInputField = ({ input, label, placeholder, meta: { touched, error } 
   </div>
 );
 
-const renderField = ({ input, label, placeholder, meta: { touched, error } }) => (
+const renderSelectField = ({ input, label, placeholder, meta: { touched, error } }) => (
   <div>
     <div>
       <label>{label}</label>
@@ -39,6 +39,24 @@ const renderField = ({ input, label, placeholder, meta: { touched, error } }) =>
 
 const required = value => value ? undefined : 'no puede estar en blanco';
 
+const validate = values => {
+  const errors = {};
+
+  if (!values.name) {
+    errors.name = required(values.name);
+  }
+
+  if (!values.delivery) {
+    errors.delivery = required(values.delivery);
+  }
+
+  if (!values.confirmation) {
+    errors.confirmation = required(values.confirmation);
+  }
+
+  return errors;
+};
+
 class CreateGroupForm extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
@@ -51,22 +69,6 @@ class CreateGroupForm extends Component {
     super(props);
   }
 
-  componentWillReceiveProps({ errors }) {
-    this.checkErrors(errors);
-  }
-
-  /**
-   * When api request has errors show it
-   * on the form.
-   *
-   * @param {Object} errors.
-   */
-  checkErrors(errors) {
-    if (!errors) return;
-
-    this.props.stopSubmit(CREATE_GROUP_FORM, errors);
-  }
-
   render() {
     const { handleSubmit, submitting } = this.props;
 
@@ -74,30 +76,26 @@ class CreateGroupForm extends Component {
       <form onSubmit={handleSubmit}>
         <Field
           name="name"
-          id="groupNameField"
           component={renderInputField}
           placeholder="Elige un nombre para tu grupo de compra"
           label="Nombre del grupo"
-          validate={required}
         />
         <Field
           name="delivery"
-          component={renderField}
+          component={renderSelectField}
           label="Día de entrega"
           placeholder="Especifica el día de entrega de la compra"
-          validate={required}
         />
         <Field
           name="confirmation"
-          component={renderField}
+          component={renderSelectField}
           label="Día de confirmación"
           placeholder="Especifica el día de confirmación de la compra"
-          validate={required}
         />
         <Button
           type="submit"
           primary
-          processing={submitting}
+          disabled={submitting}
         >Crear grupo</Button>
       </form>
     );
@@ -106,7 +104,7 @@ class CreateGroupForm extends Component {
 
 const reduxFormProps = {
   form: CREATE_GROUP_FORM,
-  persistentSubmitErrors: true,
+  validate
 };
 
 const mapStateToProps = (state) => {
