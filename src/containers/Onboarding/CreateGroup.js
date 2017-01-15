@@ -90,7 +90,7 @@ class CreateGroup extends Component {
       byweekday: days[index]
     });
 
-    return 'RRULE:' + rule.toString();
+    return `RRULE:${rule.toString()}`;
   }
 
   render() {
