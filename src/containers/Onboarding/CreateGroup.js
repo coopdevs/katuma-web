@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { RRule } from 'rrule-alt';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 
@@ -13,6 +12,7 @@ import { create } from 'redux/modules/groups/groups';
 import { create as createOrderFrequency } from 'redux/modules/orders_frequencies/orders_frequencies';
 
 import { getNextOnboardingUrl } from './services';
+import weeklyIcalString from 'services/weeklyIcal';
 
 class CreateGroup extends Component {
   static propTypes = {
@@ -70,19 +70,9 @@ class CreateGroup extends Component {
 
   orderFrequencyFor(groupId, day, type) {
     return Object.assign({}, { group_id: groupId, }, {
-      ical: this.weeklyIcalString(day),
+      ical: weeklyIcalString(day),
       frequency_type: type
     });
-  }
-
-  weeklyIcalString(index) {
-    const days = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR, RRule.SA, RRule.SU];
-    const rule = new RRule.RRule({
-      freq: RRule.WEEKLY,
-      byweekday: days[index]
-    });
-
-    return `RRULE:${rule.toString()}`;
   }
 
   render() {
