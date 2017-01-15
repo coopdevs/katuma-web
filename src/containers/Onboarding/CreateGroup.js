@@ -48,39 +48,31 @@ class CreateGroup extends Component {
     });
 
     promise.then((group) => {
-      return new Promise((resolve) => {
-        this.orderFrequencyFor(group, fields, 'delivery');
-        resolve(group);
-      });
+      const orderFrequency = this.orderFrequencyFor(
+        group.id,
+        fields.delivery,
+        'delivery'
+      );
+      this.props.createOrderFrequency(orderFrequency);
+
+      return group;
     })
     .then((group) => {
-      this.orderFrequencyFor(group, fields, 'confirmation');
+      const orderFrequency = this.orderFrequencyFor(
+        group.id,
+        fields.confirmation,
+        'confirmation'
+      );
+      this.props.createOrderFrequency(orderFrequency);
     })
-    .catch((reason) => {
-      console.log(reason);
-    });
+    .catch(reason => { console.log(reason); });
   }
 
-  orderFrequencyFor(group, fields, type) {
-    const index = {
-      confirmation: 0,
-      delivery: 1
-    };
-    const orderFrequencyData = { group_id: group.id };
-
-    if (type === 'delivery') {
-      Object.assign(orderFrequencyData, orderFrequencyData, {
-        ical: this.weeklyIcalString(fields.delivery),
-        frequency_type: index.delivery
-      });
-    } else {
-      Object.assign(orderFrequencyData, orderFrequencyData, {
-        ical: this.weeklyIcalString(fields.confirmation),
-        frequency_type: index.confirmation
-      });
-    }
-
-    this.props.createOrderFrequency(orderFrequencyData);
+  orderFrequencyFor(groupId, day, type) {
+    return Object.assign({}, { group_id: groupId, }, {
+      ical: this.weeklyIcalString(day),
+      frequency_type: type
+    });
   }
 
   weeklyIcalString(index) {
