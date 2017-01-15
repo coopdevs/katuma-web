@@ -3906,7 +3906,7 @@ redux-connect@4.0.2:
     babel-runtime "^6.18.0"
     redux-actions "^0.12.0"
 
-redux-form@^6.4.3:
+redux-form@~6.4.3:
   version "6.4.3"
   resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.4.3.tgz#bd83a77770d9805f7b595a4ff18f00fe4267d3c8"
   dependencies:
