@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { RRule } from 'rrule-alt';
 
 import layoutCentered from 'components/HOC/LayoutCentered';
 
@@ -13,6 +12,7 @@ import { create } from 'redux/modules/groups/groups';
 import { create as createOrderFrequency } from 'redux/modules/orders_frequencies/orders_frequencies';
 
 import { getNextOnboardingUrl } from './services';
+import weeklyIcalString from 'services/weeklyIcal';
 
 class CreateGroup extends Component {
   static propTypes = {
@@ -47,35 +47,32 @@ class CreateGroup extends Component {
       resolve(this.props.createGroup(fields));
     });
 
-    const index = {
-      confirmation: 0,
-      delivery: 1
-    };
-
     promise.then((group) => {
-      const orderFrequency = {
-        group_id: group.id,
-        ical: this.buildIcal(fields),
-        frequency_type: index.delivery
-      };
+      const orderFrequency = this.orderFrequencyFor(
+        group.id,
+        fields.delivery,
+        'delivery'
+      );
+      this.props.createOrderFrequency(orderFrequency);
 
+      return group;
+    })
+    .then((group) => {
+      const orderFrequency = this.orderFrequencyFor(
+        group.id,
+        fields.confirmation,
+        'confirmation'
+      );
       this.props.createOrderFrequency(orderFrequency);
     })
-    .catch((reason) => {
-      console.log(reason);
-    });
+    .catch(reason => { console.log(reason); });
   }
 
-  buildIcal(fields) {
-    const days = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR, RRule.SA, RRule.SU];
-    const rule = new RRule.RRule({
-      freq: RRule.WEEKLY,
-      interval: 1,
-      byweekday: days[fields.delivery],
-      dtstart: new Date()
+  orderFrequencyFor(groupId, day, type) {
+    return Object.assign({}, { group_id: groupId, }, {
+      ical: weeklyIcalString(day),
+      frequency_type: type
     });
-
-    return rule.toString();
   }
 
   render() {
