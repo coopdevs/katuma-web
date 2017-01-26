@@ -42,6 +42,7 @@ class CreateProductForm extends Component {
 
     return (
       <div className="panel panel-default">
+        <div className="panel-heading">Crear producto</div>
         <div className={`panel-body ${formStyles.inlineFormRow}`}>
           <Form
             ref={(domNode) => this._product_form = domNode}

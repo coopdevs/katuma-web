@@ -25,18 +25,17 @@ class ProducerProductsBase extends Component {
           <BreadcrumbItem><Link to={urlBase}>Productores</Link></BreadcrumbItem>
           <BreadcrumbItem isActive>{producer.name}</BreadcrumbItem>
         </Breadcrumb>
+        <h3>Lista de productos</h3>
         <div className="row">
           <div className={classNames({
             'col-xs-12': true,
             'col-sm-6': !products.length,
             'col-sm-4': !!products.length
           })}>
-            <h3>Crear Producto</h3>
             <CreateProductForm producer={producer} />
           </div>
           {!!products.length &&
             <div className="col-xs-12 col-sm-8 first-sm">
-              <h3>Lista de productos</h3>
               <List products={products} producer={producer} />
             </div>
           }
