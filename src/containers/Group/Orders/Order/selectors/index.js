@@ -1,8 +1,8 @@
 import _ from 'underscore';
 import { createSelector } from 'reselect';
 
-const getTotal = (orderLine) => {
-  return orderLine.quantity * orderLine.price;
+const getTotal = (orderLine, product) => {
+  return orderLine.quantity * product.price;
 };
 
 export const getOrderLines = createSelector(
@@ -12,10 +12,12 @@ export const getOrderLines = createSelector(
   ],
   (orderLines, productsById) => {
     return orderLines.map((orderLine) => {
+      const product = productsById[orderLine.product_id];
+
       return {
-        ...productsById[orderLine.product_id],
+        ...product,
         ...orderLine,
-        total: getTotal(orderLine),
+        total: getTotal(orderLine, product),
       };
     });
   }

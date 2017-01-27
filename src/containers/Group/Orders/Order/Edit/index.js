@@ -27,6 +27,7 @@ class Edit extends Component {
         <div className="col-xs-8">
           <Products
             products={activeProducts}
+            order={order}
           />
         </div>
         <div className="col-xs-4">

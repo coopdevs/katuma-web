@@ -6,10 +6,11 @@ import styles from './styles/index.scss';
 class ProductsBase extends Component {
   static propTypes = {
     products: PropTypes.array.isRequired,
+    order: PropTypes.object.isRequired,
   }
 
   render() {
-    const { products } = this.props;
+    const { products, order } = this.props;
 
     return (
       <table className={styles.productList}>
@@ -22,7 +23,7 @@ class ProductsBase extends Component {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => <Item key={product.id} product={product} />)}
+          {products.map((product) => <Item key={product.id} product={product} order={order}/>)}
         </tbody>
       </table>
     );

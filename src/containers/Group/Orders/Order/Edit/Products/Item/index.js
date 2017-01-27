@@ -2,15 +2,17 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { getProductName } from 'presenters/product';
-import { edit, create } from 'redux/modules/order_lines';
+import { edit, create, destroy } from 'redux/modules/order_lines';
 
 import QuantityEditForm from 'components/forms/order/QuantityEdit';
 
 class Item extends Component {
   static propTypes = {
     product: PropTypes.object.isRequired,
+    order: PropTypes.object.isRequired,
     editOrderLine: PropTypes.func.isRequired,
     createOrderLine: PropTypes.func.isRequired,
+    destroyOrderLine: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -20,15 +22,19 @@ class Item extends Component {
   }
 
   _handleSubmit(fields) {
-    const { editOrderLine, createOrderLine } = this.props;
+    const { order, editOrderLine, createOrderLine, destroyOrderLine } = this.props;
     const { productId, orderLineId } = fields;
     const quantity = fields[`quantity_${productId}`];
 
-    if (orderLineId) {
-      return editOrderLine(orderLineId, { quantity });
+    if (!orderLineId) {
+      return createOrderLine({ order_id: order.id, product_id: productId, quantity });
     }
 
-    return createOrderLine({ product_id: productId, quantity });
+    if (quantity === '0') {
+      return destroyOrderLine(orderLineId);
+    }
+
+    return editOrderLine(orderLineId, { quantity });
   }
 
   render() {
@@ -58,4 +64,4 @@ class Item extends Component {
   }
 }
 
-export default connect(null, { editOrderLine: edit, createOrderLine: create })(Item);
+export default connect(null, { editOrderLine: edit, createOrderLine: create, destroyOrderLine: destroy })(Item);

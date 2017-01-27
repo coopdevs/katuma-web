@@ -181,7 +181,7 @@ export function edit(id, data) {
 export function destroy(id) {
   return {
     types: [DELETE_ORDER_LINE, DELETE_ORDER_LINE_SUCCESS, DELETE_ORDER_LINE_FAIL],
-    promise: (client) => client.delete(`/order_lines/${id}`, { data: { id }}),
+    promise: (client) => client.delete(`/order_lines/${id}`),
     requestData: { id }
   };
 }
