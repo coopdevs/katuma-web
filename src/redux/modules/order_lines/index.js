@@ -9,6 +9,9 @@ const CREATE_ORDER_LINE_FAIL = 'redux-example/order_lines/CREATE_ORDER_LINE_FAIL
 const EDIT_ORDER_LINE = 'redux-example/order_lines/EDIT_ORDER_LINE';
 const EDIT_ORDER_LINE_SUCCESS = 'redux-example/order_lines/EDIT_ORDER_LINE_SUCCESS';
 const EDIT_ORDER_LINE_FAIL = 'redux-example/order_lines/EDIT_ORDER_LINE_FAIL';
+const DELETE_ORDER_LINE = 'redux-example/order_lines/DELETE_ORDER_LINE';
+const DELETE_ORDER_LINE_SUCCESS = 'redux-example/order_lines/DELETE_ORDER_LINE_SUCCESS';
+const DELETE_ORDER_LINE_FAIL = 'redux-example/order_lines/DELETE_ORDER_LINE_FAIL';
 const RESET_FORM = 'redux-example/order_lines/RESET_FORM';
 
 import mergeResponse from 'redux/lib/merge';
@@ -56,7 +59,7 @@ export default function orderLinesReducer(state = initialState, action = {}) {
       };
 
     case CREATE_ORDER_LINE_SUCCESS:
-      entities = [...state.order_lines.entities, action.result];
+      entities = [...state.orderLines.entities, action.result];
 
       return {
         ...state,
@@ -81,7 +84,7 @@ export default function orderLinesReducer(state = initialState, action = {}) {
       };
 
     case EDIT_ORDER_LINE_SUCCESS:
-      entities = mergeResponse(state.producers.entities, action.result);
+      entities = mergeResponse(state.orderLines.entities, action.result);
 
       return {
         ...state,
@@ -105,6 +108,23 @@ export default function orderLinesReducer(state = initialState, action = {}) {
         errors: null,
       };
 
+
+    case DELETE_ORDER_LINE_SUCCESS:
+      entities = _.reject(state.orderLines.entities, (orderLine) => {
+        return orderLine.id === action.requestData.id;
+      });
+
+      return {
+        ...state,
+        orderLines: {
+          entities,
+          byId: _.indexBy(entities, 'id'),
+          byOrderId: _.groupBy(entities, 'order_id'),
+        },
+      };
+
+    case DELETE_ORDER_LINE:
+    case DELETE_ORDER_LINE_FAIL:
     default:
       return state;
   }
@@ -150,5 +170,18 @@ export function edit(id, data) {
   return {
     types: [EDIT_ORDER_LINE, EDIT_ORDER_LINE_SUCCESS, EDIT_ORDER_LINE_FAIL],
     promise: (client) => client.put(`/order_lines/${id}`, { data }),
+  };
+}
+
+/**
+ * Delete order_line
+ *
+ * @param {Number} id
+ */
+export function destroy(id) {
+  return {
+    types: [DELETE_ORDER_LINE, DELETE_ORDER_LINE_SUCCESS, DELETE_ORDER_LINE_FAIL],
+    promise: (client) => client.delete(`/order_lines/${id}`),
+    requestData: { id }
   };
 }

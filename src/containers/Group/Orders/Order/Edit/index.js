@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 
-import OrderLines from '../OrderLines/Base';
+import Products from './Products/Base';
+import Cart from './Cart/Base';
 
 class Edit extends Component {
   static propTypes = {
@@ -13,13 +14,20 @@ class Edit extends Component {
 
   render() {
     const { order, orderLines, grandTotal } = this.props;
+    const groupId = this.props.params.id;
 
     return (
-      <div className="panel panel-default">
-        <div>
-          Confirmar antes del dia: {moment().utc(order.confirm_before).format('dddd, MMMM Do YYYY')}
+      <div className="row">
+        <div className="col-xs-8">
+          <Products
+            groupId={groupId}
+            order={order}
+          />
         </div>
-        <OrderLines orderLines={orderLines} grandTotal={grandTotal}/>
+        <div className="col-xs-4">
+          Confirmar antes del dia: {moment().utc(order.confirm_before).format('dddd, MMMM Do YYYY')}
+          <Cart orderLines={orderLines} grandTotal={grandTotal}/>
+        </div>
       </div>
     );
   }

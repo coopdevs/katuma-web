@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import Item from '../Item';
 import styles from './styles/index.scss';
+import { getGrandTotal } from '../../selectors';
 
 class List extends Component {
   static propTypes = {
@@ -9,17 +11,11 @@ class List extends Component {
     grandTotal: PropTypes.number.isRequired,
   }
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { orderLines, grandTotal } = this.props;
 
-    if (!orderLines.length) return null;
-
     return (
-      <table className={`table ${styles.productList}`}>
+      <table className={`table ${styles.orderLineList}`}>
         <thead>
           <tr>
             <th>Producto</th>
@@ -30,7 +26,7 @@ class List extends Component {
           </tr>
         </thead>
         <tbody>
-          {orderLines.map((orderLine) => <Item key={orderLine.id} orderLine={orderLine} />)}
+          {orderLines && orderLines.map((orderLine) => <Item key={orderLine.id} orderLine={orderLine} />)}
         </tbody>
         <tfoot>
           <tr>
@@ -48,4 +44,12 @@ class List extends Component {
   }
 }
 
-export default List;
+const mapStateToProps = (state, props) => {
+  return {
+    grandTotal: getGrandTotal(state, props),
+  };
+};
+
+export default connect(
+  mapStateToProps
+)(List);

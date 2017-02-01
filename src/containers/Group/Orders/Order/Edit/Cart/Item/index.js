@@ -3,10 +3,13 @@ import { connect } from 'react-redux';
 
 import { getProductName } from 'presenters/product';
 import { edit, destroy } from 'redux/modules/order_lines';
+
 import QuantityEditForm from 'components/forms/order/QuantityEdit';
 import Button from 'components/Button';
 import Icon from 'components/Icon/';
 import { GLYPHS } from 'components/Icon/glyphs';
+
+import styles from './styles/index.scss';
 
 class Item extends Component {
   static propTypes = {
@@ -24,8 +27,9 @@ class Item extends Component {
 
   _handleSubmit(fields) {
     const { orderLine, editOrderLine } = this.props;
+    const quantity = fields[`quantity_${orderLine.product_id}`];
 
-    return editOrderLine(orderLine.id, fields);
+    return editOrderLine(orderLine.id, { quantity });
   }
 
   _handleDestroy() {
@@ -38,9 +42,14 @@ class Item extends Component {
     const { orderLine } = this.props;
 
     return (
-      <tr>
-        <td>{orderLine.name}</td>
-        <td>
+      <div className={styles.cartItem}>
+        <div>
+          <ul className="list-unstyled">
+            <li>{orderLine.name}</li>
+            <li>{orderLine.price} / {getProductName(orderLine.unit)}</li>
+          </ul>
+        </div>
+        <div>
           <QuantityEditForm
             form={`quantity_${orderLine.product_id}`}
             initialValues={{quantity: orderLine.quantity}}
@@ -48,24 +57,15 @@ class Item extends Component {
             orderLineId={orderLine.id}
             onSubmit={this.handleSubmit}
           />
-        </td>
-        <td>{getProductName(orderLine.unit)}</td>
-        <td>{orderLine.price}</td>
-        <td>{orderLine.total}</td>
-        <td>
+        </div>
+        <div className={styles.cartButton}>
           <Button onClick={this.handleDestroy} size="xs">
             <Icon glyph={GLYPHS.check}/>
           </Button>
-        </td>
-      </tr>
+        </div>
+      </div>
     );
   }
 }
 
-export default connect(
-  null,
-  {
-    editOrderLine: edit,
-    destroyOrderLine: destroy
-  }
-)(Item);
+export default connect(null, { editOrderLine: edit, destroyOrderLine: destroy })(Item);

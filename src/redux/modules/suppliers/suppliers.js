@@ -129,7 +129,7 @@ export default function suppliersReducer(state = initialState, action = {}) {
 export function load(groupId) {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get(`/suppliers?group_id=${groupId}`)
+    promise: (client) => client.get(`/suppliers?group_id=${groupId}&unscoped=true`)
   };
 }
 

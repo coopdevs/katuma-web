@@ -52,6 +52,7 @@ class Input extends Component {
     setInitialFocus: PropTypes.bool,
     meta: PropTypes.object,
     isLast: PropTypes.bool,
+    size: PropTypes.string,
   }
 
   componentDidMount() {
@@ -76,7 +77,7 @@ class Input extends Component {
     const {
       input, name, type, label, placeholder,
       errorsAlways, rows, isLast, selectOptions, min,
-      meta: { touched, error }
+      meta: { touched, error }, size
     } = this.props;
 
     const element = getElement(type);
@@ -89,6 +90,7 @@ class Input extends Component {
       type,
       placeholder,
       className: 'form-control',
+      size,
     };
 
     const hasErrors = errorsAlways ? !!error : touched && !!error;
