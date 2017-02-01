@@ -7,7 +7,7 @@ const getTotal = (orderLine, product) => {
 
 export const getOrderLines = createSelector(
   [
-    (state, props) => state.orderLinesReducer.orderLines.byOrderId[props.params.order_id] || [],
+    (state, props) => state.orderLinesReducer.orderLines.byOrderId[props.order_id] || [],
     (state) => state.productsReducer.products.byId,
   ],
   (orderLines, productsById) => {

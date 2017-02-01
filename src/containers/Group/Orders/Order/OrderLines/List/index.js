@@ -1,16 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import Item from '../Item';
 import styles from './styles/index.scss';
+import { getGrandTotal } from '../../selectors';
 
 class List extends Component {
   static propTypes = {
     orderLines: PropTypes.array.isRequired,
     grandTotal: PropTypes.number.isRequired,
-  }
-
-  constructor(props) {
-    super(props);
   }
 
   render() {
@@ -46,4 +44,12 @@ class List extends Component {
   }
 }
 
-export default List;
+const mapStateToProps = (state, props) => {
+  return {
+    grandTotal: getGrandTotal(state, props),
+  };
+};
+
+export default connect(
+  mapStateToProps
+)(List);

@@ -5,15 +5,15 @@ import List from './List';
 class OrderLinesBase extends Component {
   static propTypes = {
     orderLines: PropTypes.array.isRequired,
-    grandTotal: PropTypes.number.isRequired,
   }
 
   render() {
-    const { orderLines, grandTotal } = this.props;
+    console.log('PINTATE');
+    const { orderLines } = this.props;
 
     return (
       <div>
-        <List orderLines={orderLines} grandTotal={grandTotal} />
+        <List orderLines={orderLines} />
       </div>
     );
   }

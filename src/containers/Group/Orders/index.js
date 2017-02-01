@@ -4,11 +4,13 @@ import Helmet from 'react-helmet';
 class GroupOrders extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
     group: PropTypes.object,
   }
 
   render() {
     const { group } = this.props;
+    const { order_id } = this.props.params;
 
     return (
       <div>
@@ -16,7 +18,7 @@ class GroupOrders extends Component {
 
         {React.cloneElement(
           this.props.children,
-          { group }
+          { group, order_id }
         )}
       </div>
     );

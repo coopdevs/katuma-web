@@ -62,4 +62,10 @@ class Item extends Component {
   }
 }
 
-export default connect(null, { editOrderLine: edit, destroyOrderLine: destroy })(Item);
+export default connect(
+  null,
+  {
+    editOrderLine: edit,
+    destroyOrderLine: destroy
+  }
+)(Item);
