@@ -1,3 +1,5 @@
+**ABANDONED** in favour of https://github.com/openfoodfoundation/openfoodnetwork
+
 ## What is this project?
 Front end code of katuma.org
 
